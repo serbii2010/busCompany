@@ -1,4 +1,4 @@
-package net.thumbtack.sсhool.model;
+package net.thumbtack.school.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

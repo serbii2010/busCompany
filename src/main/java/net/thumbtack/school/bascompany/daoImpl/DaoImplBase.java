@@ -1,6 +1,6 @@
-package net.thumbtack.school.daoImpl;
+package net.thumbtack.school.bascompany.daoImpl;
 
-import net.thumbtack.school.utils.MyBatisUtils;
+import net.thumbtack.school.bascompany.utils.MyBatisUtils;
 import org.apache.ibatis.session.SqlSession;
 
 public class DaoImplBase {

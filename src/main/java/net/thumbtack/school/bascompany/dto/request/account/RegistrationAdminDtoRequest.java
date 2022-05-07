@@ -1,4 +1,4 @@
-package net.thumbtack.school.dto.request.user;
+package net.thumbtack.school.bascompany.dto.request.account;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

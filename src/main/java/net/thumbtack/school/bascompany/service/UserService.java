@@ -1,6 +1,6 @@
-package net.thumbtack.school.service;
+package net.thumbtack.school.bascompany.service;
 
-import net.thumbtack.school.model.Account;
+import net.thumbtack.school.bascompany.model.Account;
 import org.springframework.stereotype.Component;
 
 @Component

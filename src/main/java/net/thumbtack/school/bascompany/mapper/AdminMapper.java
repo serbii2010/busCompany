@@ -1,8 +1,8 @@
-package net.thumbtack.school.mapper;
+package net.thumbtack.school.bascompany.mapper;
 
-import net.thumbtack.school.dto.request.user.RegistrationAdminDtoRequest;
-import net.thumbtack.school.dto.response.user.RegistrationAdminDtoResponse;
-import net.thumbtack.school.model.Account;
+import net.thumbtack.school.bascompany.dto.request.account.RegistrationAdminDtoRequest;
+import net.thumbtack.school.bascompany.dto.response.account.RegistrationAdminDtoResponse;
+import net.thumbtack.school.bascompany.model.Account;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

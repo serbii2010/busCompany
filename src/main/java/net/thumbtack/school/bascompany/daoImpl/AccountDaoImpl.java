@@ -1,6 +1,6 @@
-package net.thumbtack.school.daoImpl;
+package net.thumbtack.school.bascompany.daoImpl;
 
-import net.thumbtack.school.dao.Dao;
+import net.thumbtack.school.bascompany.dao.Dao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,4 +1,4 @@
-package net.thumbtack.school.dao;
+package net.thumbtack.school.bascompany.dao;
 
 import java.util.List;
 

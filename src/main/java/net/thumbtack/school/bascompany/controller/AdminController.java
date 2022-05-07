@@ -1,10 +1,10 @@
-package net.thumbtack.school.controller;
+package net.thumbtack.school.bascompany.controller;
 
-import net.thumbtack.school.dto.request.user.RegistrationAdminDtoRequest;
-import net.thumbtack.school.dto.response.user.RegistrationAdminDtoResponse;
-import net.thumbtack.school.mapper.AdminMapper;
-import net.thumbtack.school.model.Account;
-import net.thumbtack.school.service.UserService;
+import net.thumbtack.school.bascompany.dto.request.account.RegistrationAdminDtoRequest;
+import net.thumbtack.school.bascompany.dto.response.account.RegistrationAdminDtoResponse;
+import net.thumbtack.school.bascompany.mapper.AdminMapper;
+import net.thumbtack.school.bascompany.model.Account;
+import net.thumbtack.school.bascompany.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

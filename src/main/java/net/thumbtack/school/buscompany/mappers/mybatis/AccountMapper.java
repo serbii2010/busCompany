@@ -4,6 +4,7 @@ import net.thumbtack.school.buscompany.model.Account;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 public interface AccountMapper {
     @Insert("INSERT INTO `account` (login, password, first_name, last_name, patronymic, " +
@@ -12,4 +13,7 @@ public interface AccountMapper {
                 "#{account.email}, #{account.phone}, #{account.position}, #{account.userType} )")
     @Options(useGeneratedKeys = true, keyProperty = "account.id")
     Integer insert(@Param("account") Account account);
+
+    @Select("SELECT * FROM account WHERE login=#{login}")
+    Account getByLogin(String login);
 }

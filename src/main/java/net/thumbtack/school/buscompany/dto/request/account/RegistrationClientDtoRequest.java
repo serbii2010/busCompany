@@ -3,6 +3,7 @@ package net.thumbtack.school.buscompany.dto.request.account;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.thumbtack.school.buscompany.validator.UniqueLogin;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -23,7 +24,7 @@ public class RegistrationClientDtoRequest {
     ///@todo проверка на телефон
     private String phone;
     @NotNull
-    ///@todo проверка уникальности без учета регистра
+    @UniqueLogin
     ///@todo проверка русские буквы и знак тире
     private String login;
     @NotNull

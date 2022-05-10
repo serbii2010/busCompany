@@ -8,7 +8,6 @@ import net.thumbtack.school.buscompany.service.AccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,11 +22,10 @@ public class AdminController {
     private AccountService accountService;
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
     public RegistrationAdminDtoResponse insertUser(@Valid @RequestBody RegistrationAdminDtoRequest adminDtoRequest) {
         Account admin = AdminMapper.INSTANCE.registrationAdminDtoToAccount(adminDtoRequest);
         accountService.registrationAdmin(admin);
-        LOGGER.debug("user registered");
+        LOGGER.debug("administrator registered");
         return AdminMapper.INSTANCE.accountToDto(admin);
     }
 }

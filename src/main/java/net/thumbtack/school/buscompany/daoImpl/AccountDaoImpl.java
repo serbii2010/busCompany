@@ -44,4 +44,14 @@ public class AccountDaoImpl extends DaoImplBase implements Dao<Account> {
     public void remove(Account account) {
 
     }
+
+    public Account findByLogin(String login) {
+        LOGGER.debug("DAO get Account {}", login);
+        try (SqlSession sqlSession = getSession()) {
+            return getAccountMapper(sqlSession).getByLogin(login);
+        } catch (RuntimeException ex) {
+            LOGGER.info("not found account {} {}", login, ex);
+            throw ex;
+        }
+    }
 }

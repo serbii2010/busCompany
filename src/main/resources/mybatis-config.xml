@@ -25,7 +25,8 @@
     </environments>
 
     <mappers>
-
+        <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.AccountMapper"/>
+        <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.UserTypeMapper"/>
     </mappers>
 
 </configuration>

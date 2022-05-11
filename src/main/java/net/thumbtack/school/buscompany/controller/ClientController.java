@@ -11,25 +11,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@Controller
-@RequestMapping("/api/clients")
+@RestController
+@RequestMapping("/api")
 public class ClientController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientController.class);
 
     @Autowired
     private AccountService accountService;
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/clients", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public RegistrationClientDtoResponse insertUser(@Valid @RequestBody RegistrationClientDtoRequest clientDtoRequest) {
-        Account client = ClientMapper.INSTANCE.registrationClientDtoToAccount(clientDtoRequest);
+    public RegistrationClientDtoResponse insertClient(@Valid @RequestBody RegistrationClientDtoRequest clientDtoRequest) {
+        Account client = ClientMapper.INSTANCE.registrationDtoToAccount(clientDtoRequest);
         accountService.registrationClient(client);
         LOGGER.debug("client registered");
         return ClientMapper.INSTANCE.accountToDto(client);

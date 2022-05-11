@@ -14,6 +14,5 @@ public class RegistrationClientDtoResponse {
     private String patronymic;
     private String email;
     private String phone;
-    private String login;
-    private String password;
+    private String userType;
 }

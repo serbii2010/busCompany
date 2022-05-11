@@ -26,6 +26,7 @@ public class AccountService {
     public Account registrationClient(Account account) {
         UserType userType = userTypeDao.findByType(UserTypeEnum.CLIENT);
         account.setUserType(userType.getId());
+        account.setPassword(convertToMd5(account.getPassword()));
         return accountDao.insert(account);
     }
 

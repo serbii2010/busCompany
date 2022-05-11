@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/admins")
+@RequestMapping("/api")
 public class AdminController {
     private static final Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
 
     @Autowired
     private AccountService accountService;
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public RegistrationAdminDtoResponse insertUser(@Valid @RequestBody RegistrationAdminDtoRequest adminDtoRequest) {
+    @PostMapping(path = "/admins", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public RegistrationAdminDtoResponse insertAdmin(@Valid @RequestBody RegistrationAdminDtoRequest adminDtoRequest) {
         Account admin = AdminMapper.INSTANCE.registrationAdminDtoToAccount(adminDtoRequest);
         accountService.registrationAdmin(admin);
         LOGGER.debug("administrator registered");

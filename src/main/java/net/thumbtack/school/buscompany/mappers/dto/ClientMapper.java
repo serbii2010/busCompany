@@ -10,7 +10,7 @@ import org.mapstruct.factory.Mappers;
 public interface ClientMapper {
     ClientMapper INSTANCE = Mappers.getMapper(ClientMapper.class);
 
-    Account registrationClientDtoToAccount(RegistrationClientDtoRequest response);
+    Account registrationDtoToAccount(RegistrationClientDtoRequest response);
 
     RegistrationClientDtoResponse accountToDto(Account account);
 }

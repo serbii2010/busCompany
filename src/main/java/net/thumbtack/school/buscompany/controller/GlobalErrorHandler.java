@@ -1,5 +1,8 @@
 package net.thumbtack.school.buscompany.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import net.thumbtack.school.buscompany.dto.response.account.ErrorDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +25,7 @@ public class GlobalErrorHandler {
     @ResponseBody
     public MyError handleDbError(ServerException exception) {
         final MyError error = new MyError();
-        error.getAllErrors().add(String.format("Error: %s", exception.getErrorCode().getErrorString()));
+        error.getErrors().add(String.format("Error: %s", exception.getErrorCode().getErrorString()));
         return error;
     }
 
@@ -32,23 +35,33 @@ public class GlobalErrorHandler {
     public MyError handleValidation(MethodArgumentNotValidException exc) {
         final MyError error = new MyError();
         exc.getBindingResult().getFieldErrors().forEach(fieldError-> {
-            error.getAllErrors().add(String.format("%s:%s", fieldError.getField(), fieldError.getDefaultMessage()));
+            ErrorDtoResponse errorDtoResponse = new ErrorDtoResponse();
+            errorDtoResponse.setErrorCode(fieldError.getCode());
+            errorDtoResponse.setField(fieldError.getField());
+            errorDtoResponse.setMessage(fieldError.getDefaultMessage());
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                String jsonError = mapper.writeValueAsString(errorDtoResponse);
+                error.getErrors().add(jsonError);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
         });
         exc.getBindingResult().getGlobalErrors().forEach(err-> {
-            error.getAllErrors().add(String.format("global:%s", err.getDefaultMessage()));
+            error.getErrors().add(String.format("global:%s", err.getDefaultMessage()));
         });
         return error;
     }
 
     public static class MyError {
-        private List<String> allErrors = new ArrayList<>();
+        private List<String> errors = new ArrayList<>();
 
-        public List<String> getAllErrors() {
-            return allErrors;
+        public List<String> getErrors() {
+            return errors;
         }
 
-        public void setAllErrors(List<String> allErrors) {
-            this.allErrors = allErrors;
+        public void setAllErrors(List<String> Errors) {
+            this.errors = Errors;
         }
     }
 }

@@ -2,9 +2,7 @@ package net.thumbtack.school.buscompany.controller;
 
 import net.thumbtack.school.buscompany.dto.request.account.LoginDtoRequest;
 import net.thumbtack.school.buscompany.dto.response.account.BaseAccountDtoResponse;
-import net.thumbtack.school.buscompany.dto.response.account.RegistrationAdminDtoResponse;
-import net.thumbtack.school.buscompany.dto.response.account.RegistrationClientDtoResponse;
-import net.thumbtack.school.buscompany.exception.ServerErrorCode;
+import net.thumbtack.school.buscompany.dto.response.account.EmptyDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.mappers.dto.AdminMapper;
 import net.thumbtack.school.buscompany.mappers.dto.ClientMapper;
@@ -16,10 +14,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/session")
@@ -43,6 +43,16 @@ public class SessionController {
             LOGGER.debug("client log in");
             return ClientMapper.INSTANCE.accountToDto(account);
         }
+    }
+
+    @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public EmptyDtoResponse logout(@CookieValue("JAVASESSIONID") String javaSessionId)
+            throws ServerException {
+        UUID uuid = UUID.fromString(javaSessionId);
+        accountService.logout(uuid);
+        //@todo не отправлять куки
+        return new EmptyDtoResponse();
     }
 
 }

@@ -7,24 +7,27 @@ import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.Account;
 import net.thumbtack.school.buscompany.model.UserType;
 import net.thumbtack.school.buscompany.utils.UserTypeEnum;
+import org.apache.commons.collections4.BidiMap;
+import org.apache.commons.collections4.bidimap.DualHashBidiMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 @Component
 public class AccountService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class);
     @Autowired
     private AccountDaoImpl accountDao;
     @Autowired
     private UserTypeDaoImpl userTypeDao;
 
-    private Map<Account, UUID> authUsers = new HashMap<>();
+    private BidiMap<Account, UUID> authUsers = new DualHashBidiMap<>();;
 
 
     public Account registrationAdmin(Account account) {
@@ -49,6 +52,11 @@ public class AccountService {
         return result;
     }
 
+    public Account getAuthAccount(UUID uuid) {
+        Account account = authUsers.getKey(uuid);
+        return account;
+    }
+
     public void login(Account user, HttpServletResponse response) {
         if(user.getId() == 0) {
             return;
@@ -60,6 +68,14 @@ public class AccountService {
         }
         Cookie cookie = new Cookie("JAVASESSIONID", result.toString());
         response.addCookie(cookie);
+    }
+
+    public void logout(UUID uuid) {
+        if (!authUsers.containsValue(uuid)) {
+            return;
+        }
+        LOGGER.debug(String.format("User {} logout", authUsers.getKey(uuid).getLogin()));
+        authUsers.remove(uuid);
     }
 
     public void checkPassword(Account account, String password) throws ServerException {

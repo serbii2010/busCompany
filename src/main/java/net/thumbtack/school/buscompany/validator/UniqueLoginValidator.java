@@ -1,5 +1,6 @@
 package net.thumbtack.school.buscompany.validator;
 
+import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,11 @@ public class UniqueLoginValidator implements ConstraintValidator<UniqueLogin, St
 
     @Override
     public boolean isValid(String login, ConstraintValidatorContext constraintValidatorContext) {
-        return accountService.getAccountByLogin(login) == null;
+        try {
+            accountService.getAccountByLogin(login);
+            return false;
+        } catch (ServerException e) {
+            return true;
+        }
     }
 }

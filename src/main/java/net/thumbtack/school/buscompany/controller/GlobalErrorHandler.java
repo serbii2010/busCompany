@@ -33,7 +33,7 @@ public class GlobalErrorHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public MyError handleValidation(MethodArgumentNotValidException exc, HttpServletResponse response) {
+    public MyError handleValidation(MethodArgumentNotValidException exc) {
         final MyError error = new MyError();
         exc.getBindingResult().getFieldErrors().forEach(fieldError-> {
             ErrorDtoResponse errorDtoResponse = new ErrorDtoResponse();

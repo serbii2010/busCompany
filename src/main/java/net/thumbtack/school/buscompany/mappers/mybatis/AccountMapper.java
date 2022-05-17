@@ -14,6 +14,8 @@ public interface AccountMapper {
     @Options(useGeneratedKeys = true, keyProperty = "account.id")
     Integer insert(@Param("account") Account account);
 
-    @Select("SELECT * FROM account WHERE login=#{login}")
+    @Select("SELECT id, login, password, first_name as firstName, last_name as lastName, patronymic, " +
+                "email, phone, position, user_type_id as userType " +
+            "FROM account WHERE login=#{login}")
     Account getByLogin(String login);
 }

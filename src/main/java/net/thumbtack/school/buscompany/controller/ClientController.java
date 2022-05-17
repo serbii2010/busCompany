@@ -29,23 +29,11 @@ public class ClientController {
     @ResponseStatus(HttpStatus.OK)
     public RegistrationClientDtoResponse insertClient(@Valid @RequestBody RegistrationClientDtoRequest clientDtoRequest, HttpServletResponse response) {
         Account client = ClientMapper.INSTANCE.registrationDtoToAccount(clientDtoRequest);
-        LOGGER.debug("------------" + client.getId());
         accountService.registrationClient(client);
         LOGGER.debug("client registered");
-        login(client, response);
+        accountService.login(client, response);
         return ClientMapper.INSTANCE.accountToDto(client);
     }
 
-    private void login(Account client, HttpServletResponse response) {
-        if(client.getId() == 0) {
-            return;
-        }
-        UUID uuid = UUID.randomUUID();
-        UUID result = accountService.getClients().putIfAbsent(client, uuid);
-        if (result == null) {
-            result = uuid;
-        }
-        Cookie cookie = new Cookie("JAVASESSIONID", result.toString());
-        response.addCookie(cookie);
-    }
+
 }

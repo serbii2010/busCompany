@@ -29,20 +29,8 @@ public class AdminController {
         Account admin = AdminMapper.INSTANCE.registrationAdminDtoToAccount(adminDtoRequest);
         accountService.registrationAdmin(admin);
         LOGGER.debug("administrator registered");
-        login(admin, response);
+        accountService.login(admin, response);
         return AdminMapper.INSTANCE.accountToDto(admin);
     }
 
-    private void login(Account admin, HttpServletResponse response) {
-        if (admin.getId() == 0) {
-            return;
-        }
-        UUID uuid = UUID.randomUUID();
-        UUID result = accountService.getAdmins().putIfAbsent(admin, uuid);
-        if (result == null) {
-            result = uuid;
-        }
-        Cookie cookie = new Cookie("JAVASESSIONID", result.toString());
-        response.addCookie(cookie);
-    }
 }

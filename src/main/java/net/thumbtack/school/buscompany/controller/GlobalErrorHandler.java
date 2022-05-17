@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class GlobalErrorHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public MyError handleValidation(MethodArgumentNotValidException exc) {
+    public MyError handleValidation(MethodArgumentNotValidException exc, HttpServletResponse response) {
         final MyError error = new MyError();
         exc.getBindingResult().getFieldErrors().forEach(fieldError-> {
             ErrorDtoResponse errorDtoResponse = new ErrorDtoResponse();

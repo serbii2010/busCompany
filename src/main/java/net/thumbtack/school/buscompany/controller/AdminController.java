@@ -11,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
@@ -22,10 +25,24 @@ public class AdminController {
     private AccountService accountService;
 
     @PostMapping(path = "/admins", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public RegistrationAdminDtoResponse insertAdmin(@Valid @RequestBody RegistrationAdminDtoRequest adminDtoRequest) {
+    public RegistrationAdminDtoResponse insertAdmin(@Valid @RequestBody RegistrationAdminDtoRequest adminDtoRequest, HttpServletResponse response) {
         Account admin = AdminMapper.INSTANCE.registrationAdminDtoToAccount(adminDtoRequest);
         accountService.registrationAdmin(admin);
         LOGGER.debug("administrator registered");
+        login(admin, response);
         return AdminMapper.INSTANCE.accountToDto(admin);
+    }
+
+    private void login(Account admin, HttpServletResponse response) {
+        if (admin.getId() == 0) {
+            return;
+        }
+        UUID uuid = UUID.randomUUID();
+        UUID result = accountService.getAdmins().putIfAbsent(admin, uuid);
+        if (result == null) {
+            result = uuid;
+        }
+        Cookie cookie = new Cookie("JAVASESSIONID", result.toString());
+        response.addCookie(cookie);
     }
 }

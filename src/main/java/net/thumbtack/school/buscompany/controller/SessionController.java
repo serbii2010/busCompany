@@ -51,7 +51,6 @@ public class SessionController {
             throws ServerException {
         UUID uuid = UUID.fromString(javaSessionId);
         accountService.logout(uuid);
-        //@todo не отправлять куки
         return new EmptyDtoResponse();
     }
 

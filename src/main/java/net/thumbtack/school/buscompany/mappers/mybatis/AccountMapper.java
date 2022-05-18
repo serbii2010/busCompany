@@ -1,10 +1,7 @@
 package net.thumbtack.school.buscompany.mappers.mybatis;
 
 import net.thumbtack.school.buscompany.model.Account;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 public interface AccountMapper {
     @Insert("INSERT INTO `account` (login, password, first_name, last_name, patronymic, " +
@@ -18,4 +15,7 @@ public interface AccountMapper {
                 "email, phone, position, user_type_id as userType " +
             "FROM account WHERE login=#{login}")
     Account getByLogin(String login);
+
+    @Delete("DELETE FROM account WHERE id=#{account.id}")
+    void delete(@Param("account")Account account);
 }

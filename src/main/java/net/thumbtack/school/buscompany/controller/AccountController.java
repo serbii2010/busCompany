@@ -1,6 +1,7 @@
 package net.thumbtack.school.buscompany.controller;
 
 import net.thumbtack.school.buscompany.dto.response.account.BaseAccountInfoDtoResponse;
+import net.thumbtack.school.buscompany.dto.response.account.EmptyDtoResponse;
 import net.thumbtack.school.buscompany.dto.response.account.InfoClientDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
@@ -10,11 +11,9 @@ import net.thumbtack.school.buscompany.model.Account;
 import net.thumbtack.school.buscompany.service.AccountService;
 import net.thumbtack.school.buscompany.utils.UserTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -36,5 +35,16 @@ public class AccountController {
         } else {
             throw new ServerException(ServerErrorCode.USER_NOT_AUTHORIZATION);
         }
+    }
+
+    @DeleteMapping(path = "/accounts", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public EmptyDtoResponse deleteAccount(@CookieValue("JAVASESSIONID") String javaSessionId)
+            throws ServerException {
+        UUID uuid = UUID.fromString(javaSessionId);
+        Account account = accountService.getAuthAccount(uuid);
+        accountService.logout(uuid);
+        accountService.deleteAccount(account);
+        return new EmptyDtoResponse();
     }
 }

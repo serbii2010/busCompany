@@ -42,7 +42,17 @@ public class AccountDaoImpl extends DaoImplBase implements Dao<Account> {
 
     @Override
     public void remove(Account account) {
-
+        LOGGER.debug("DAO delete Account {}", account);
+        try (SqlSession sqlSession = getSession()) {
+            try {
+                getAccountMapper(sqlSession).delete(account);
+            } catch (RuntimeException ex) {
+                LOGGER.info("Can't delete account {} {}", account, ex);
+                sqlSession.rollback();
+                throw ex;
+            }
+            sqlSession.commit();
+        }
     }
 
     public Account findByLogin(String login) {

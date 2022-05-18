@@ -44,6 +44,10 @@ public class AccountService {
         return accountDao.insert(account);
     }
 
+    public void deleteAccount(Account account) {
+        accountDao.remove(account);
+    }
+
     public Account getAccountByLogin(String login) throws ServerException {
         Account result = accountDao.findByLogin(login);
         if (result == null) {
@@ -78,7 +82,7 @@ public class AccountService {
             return;
         }
         LOGGER.debug(String.format("User {} logout", authUsers.getKey(uuid).getLogin()));
-        authUsers.remove(uuid);
+        authUsers.removeValue(uuid);
     }
 
     public void checkPassword(Account account, String password) throws ServerException {

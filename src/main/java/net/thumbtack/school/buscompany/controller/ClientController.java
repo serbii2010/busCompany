@@ -1,7 +1,10 @@
 package net.thumbtack.school.buscompany.controller;
 
+import net.thumbtack.school.buscompany.dto.request.account.EditClientDtoRequest;
 import net.thumbtack.school.buscompany.dto.request.account.RegistrationClientDtoRequest;
+import net.thumbtack.school.buscompany.dto.response.account.EditClientDtoResponse;
 import net.thumbtack.school.buscompany.dto.response.account.RegistrationClientDtoResponse;
+import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.mappers.dto.ClientMapper;
 import net.thumbtack.school.buscompany.model.Account;
 import net.thumbtack.school.buscompany.service.AccountService;
@@ -12,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.UUID;
@@ -35,5 +37,15 @@ public class ClientController {
         return ClientMapper.INSTANCE.accountToDto(client);
     }
 
-
+    @PutMapping(path = "/clients", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public EditClientDtoResponse updateClient(@Valid @RequestBody EditClientDtoRequest request,
+                                              @CookieValue("JAVASESSIONID") String javaSessionId)
+            throws ServerException {
+        Account account = accountService.getAuthAccount(UUID.fromString(javaSessionId));
+        ClientMapper.INSTANCE.update(account, request, accountService);
+        accountService.updateAccount(account);
+        LOGGER.debug("client updated");
+        return ClientMapper.INSTANCE.accountEditToDto(account);
+    }
 }

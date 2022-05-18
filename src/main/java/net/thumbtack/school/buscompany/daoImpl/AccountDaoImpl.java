@@ -1,6 +1,8 @@
 package net.thumbtack.school.buscompany.daoImpl;
 
 import net.thumbtack.school.buscompany.dao.Dao;
+import net.thumbtack.school.buscompany.exception.ServerErrorCode;
+import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.Account;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
@@ -14,9 +16,16 @@ public class AccountDaoImpl extends DaoImplBase implements Dao<Account> {
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountDaoImpl.class);
 
     @Override
-    public Account findById(String id) {
-
-        return null;
+    public Account findById(String id) throws ServerException {
+        LOGGER.debug("DAO find Account {}", id);
+        try (SqlSession sqlSession = getSession()) {
+            try {
+                return getAccountMapper(sqlSession).getById(id);
+            } catch (RuntimeException ex) {
+                LOGGER.info("Can't get account {} {}", id, ex);
+                throw new ServerException(ServerErrorCode.USER_NOT_FOUND);
+            }
+        }
     }
 
     @Override
@@ -55,13 +64,28 @@ public class AccountDaoImpl extends DaoImplBase implements Dao<Account> {
         }
     }
 
-    public Account findByLogin(String login) {
+    @Override
+    public void update(Account account) {
+        LOGGER.debug("DAO update Account {}", account);
+        try (SqlSession sqlSession = getSession()) {
+            try {
+                getAccountMapper(sqlSession).update(account);
+            } catch (RuntimeException ex) {
+                LOGGER.info("Can't update account {} {}", account, ex);
+                sqlSession.rollback();
+                throw ex;
+            }
+            sqlSession.commit();
+        }
+    }
+
+    public Account findByLogin(String login) throws ServerException {
         LOGGER.debug("DAO get Account {}", login);
         try (SqlSession sqlSession = getSession()) {
             return getAccountMapper(sqlSession).getByLogin(login);
         } catch (RuntimeException ex) {
             LOGGER.info("not found account {} {}", login, ex);
-            throw ex;
+            throw new ServerException(ServerErrorCode.USER_NOT_FOUND);
         }
     }
 }

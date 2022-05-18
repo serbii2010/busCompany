@@ -44,6 +44,10 @@ public class AccountService {
         return accountDao.insert(account);
     }
 
+    public void updateAccount(Account account) {
+        accountDao.update(account);
+    }
+
     public void deleteAccount(Account account) {
         accountDao.remove(account);
     }
@@ -93,6 +97,10 @@ public class AccountService {
 
     public int getUserTypeId(UserTypeEnum type) {
         return userTypeDao.findByType(type).getId();
+    }
+
+    public void setPassword(Account account, String newPassword) {
+        account.setPassword(convertToMd5(newPassword));
     }
 
     private String convertToMd5(String text) {

@@ -48,4 +48,9 @@ public class UserTypeDaoImpl extends DaoImplBase implements Dao<UserType> {
     public void remove(UserType object) {
 
     }
+
+    @Override
+    public void update(UserType object) {
+
+    }
 }

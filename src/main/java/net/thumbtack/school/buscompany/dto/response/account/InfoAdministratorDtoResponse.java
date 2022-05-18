@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class InfoAdministratorDtoResponse {
+public class InfoAdministratorDtoResponse implements BaseAccountInfoDtoResponse {
     private int id;
     private String firstName;
     private String lastName;

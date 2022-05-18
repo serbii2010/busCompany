@@ -52,8 +52,11 @@ public class AccountService {
         return result;
     }
 
-    public Account getAuthAccount(UUID uuid) {
+    public Account getAuthAccount(UUID uuid) throws ServerException {
         Account account = authUsers.getKey(uuid);
+        if (account == null) {
+            throw new ServerException(ServerErrorCode.USER_NOT_AUTHORIZATION);
+        }
         return account;
     }
 

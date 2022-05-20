@@ -21,8 +21,8 @@ CREATE TABLE account
     id           INT(11)     NOT NULL AUTO_INCREMENT,
     login        VARCHAR(50) NOT NULL,
     password     VARCHAR(50) NOT NULL,
-    first_name    VARCHAR(50) NOT NULL,
-    last_name     VARCHAR(50) NOT NULL,
+    first_name   VARCHAR(50) NOT NULL,
+    last_name    VARCHAR(50) NOT NULL,
     patronymic   VARCHAR(50) NULL DEFAULT NULL,
     email        VARCHAR(50) NULL DEFAULT NULL,
     phone        VARCHAR(50) NULL DEFAULT NULL,
@@ -32,5 +32,102 @@ CREATE TABLE account
     UNIQUE KEY login (login),
     INDEX (login),
     FOREIGN KEY (user_type_id) REFERENCES user_type (id) ON DELETE SET NULL
+) ENGINE = INNODB
+  DEFAULT CHARSET = utf8;
+
+####### Tables from tickets ########
+CREATE TABLE bus
+(
+    id          INT(11)     NOT NULL AUTO_INCREMENT,
+    name        VARCHAR(50) NOT NULL,
+    place_count INT(3)      NOT NULL DEFAULT 30,
+    PRIMARY KEY (id)
+) ENGINE = INNODB
+  DEFAULT CHARSET = utf8;
+
+CREATE TABLE station
+(
+    id   INT(11)     NOT NULL AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    PRIMARY KEY (id)
+) ENGINE = INNODB
+  DEFAULT CHARSET = utf8;
+
+CREATE TABLE trip
+(
+    id              INT(11)     NOT NULL AUTO_INCREMENT,
+    bus_id          INT(11)     NULL     DEFAULT NULL,
+    from_station_id INT(11)     NULL     DEFAULT NULL,
+    to_station_id   INT(11)     NULL     DEFAULT NULL,
+    start           VARCHAR(30) NOT NULL,
+    duration        VARCHAR(30) NOT NULL,
+    price           INT(11),
+    approved        BOOLEAN     NOT NULL DEFAULT FALSE,
+    PRIMARY KEY (id)
+) ENGINE = INNODB
+  DEFAULT CHARSET = utf8;
+
+CREATE TABLE schedule
+(
+    id        INT(11)     NOT NULL AUTO_INCREMENT,
+    from_date VARCHAR(30) NOT NULL,
+    to_date   VARCHAR(30) NOT NULL,
+    periods   VARCHAR(30) NOT NULL,
+    PRIMARY KEY (id)
+) ENGINE = INNODB
+  DEFAULT CHARSET = utf8;
+
+CREATE TABLE trip_schedule
+(
+    id          INT(11) NOT NULL AUTO_INCREMENT,
+    trip_id     INT(11) NOT NULL,
+    schedule_id INT(11) NOT NULL,
+    PRIMARY KEY (id)
+) ENGINE = INNODB
+  DEFAULT CHARSET = utf8;
+
+CREATE TABLE date_trip
+(
+    id      INT(11)     NOT NULL AUTO_INCREMENT,
+    trip_id INT(11)     NOT NULL,
+    date    VARCHAR(30) NOT NULL,
+    PRIMARY KEY (id)
+) ENGINE = INNODB
+  DEFAULT CHARSET = utf8;
+
+CREATE TABLE orders
+(
+    id      INT(11)     NOT NULL AUTO_INCREMENT,
+    trip_id INT(11)     NOT NULL,
+    date    VARCHAR(30) NOT NULL,
+    PRIMARY KEY (id)
+) ENGINE = INNODB
+  DEFAULT CHARSET = utf8;
+
+CREATE TABLE passenger
+(
+    id         INT(11)     NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(30) NOT NULL,
+    last_name  VARCHAR(30) NOT NULL,
+    passport   VARCHAR(20) NOT NULL,
+    PRIMARY KEY (id)
+) ENGINE = INNODB
+  DEFAULT CHARSET = utf8;
+
+CREATE TABLE order_passenger
+(
+    id           INT(11) NOT NULL AUTO_INCREMENT,
+    order_id     INT(11) NOT NULL,
+    passenger_id INT(11) NOT NULL,
+    PRIMARY KEY (id)
+) ENGINE = INNODB
+  DEFAULT CHARSET = utf8;
+
+CREATE TABLE ticket
+(
+    id                 INT(11) NOT NULL AUTO_INCREMENT,
+    order_passenger_id INT(11) NOT NULL,
+    place              INT(3),
+    PRIMARY KEY (id)
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;

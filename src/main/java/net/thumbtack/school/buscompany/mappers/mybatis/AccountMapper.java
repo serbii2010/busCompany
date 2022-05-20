@@ -3,6 +3,8 @@ package net.thumbtack.school.buscompany.mappers.mybatis;
 import net.thumbtack.school.buscompany.model.Account;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+
 public interface AccountMapper {
     @Insert("INSERT INTO `account` (login, password, first_name, last_name, patronymic, " +
                 "email, phone, position, user_type_id) " +
@@ -15,6 +17,11 @@ public interface AccountMapper {
                 "email, phone, position, user_type_id as userType " +
             "FROM account WHERE id=#{id}")
     Account getById(String id);
+
+    @Select("SELECT id, login, password, first_name as firstName, last_name as lastName, patronymic, " +
+            "email, phone, position, user_type_id as userType " +
+            "FROM account WHERE user_type_id=#{userType}")
+    List<Account> getByUserType(Integer userType);
 
     @Select("SELECT id, login, password, first_name as firstName, last_name as lastName, patronymic, " +
                 "email, phone, position, user_type_id as userType " +

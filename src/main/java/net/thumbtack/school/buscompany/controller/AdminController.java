@@ -41,7 +41,7 @@ public class AdminController {
     public EditAdministratorDtoResponse updateAdmin(@Valid @RequestBody EditAdministratorDtoRequest request,
                                                      @CookieValue("JAVASESSIONID") String javaSessionId)
             throws ServerException {
-        Account account = accountService.getAuthAccount(UUID.fromString(javaSessionId));
+        Account account = accountService.getAuthAccount(javaSessionId);
         AdminMapper.INSTANCE.update(account, request, accountService);
         accountService.updateAccount(account);
         LOGGER.debug("client updated");

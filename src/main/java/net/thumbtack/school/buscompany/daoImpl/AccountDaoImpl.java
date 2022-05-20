@@ -33,6 +33,18 @@ public class AccountDaoImpl extends DaoImplBase implements Dao<Account> {
         return null;
     }
 
+    public List<Account> findByUserType(Integer userType) throws ServerException {
+        LOGGER.debug(String.format("DAO find all account by userType {}", userType));
+        try (SqlSession sqlSession = getSession()){
+            try {
+                return getAccountMapper(sqlSession).getByUserType(userType);
+            } catch (RuntimeException ex) {
+                LOGGER.info("Can't get account {} {}", userType, ex);
+                throw new ServerException(ServerErrorCode.USER_NOT_FOUND);
+            }
+        }
+    }
+
     @Override
     public Account insert(Account account) {
         LOGGER.debug("DAO insert Account {}", account);

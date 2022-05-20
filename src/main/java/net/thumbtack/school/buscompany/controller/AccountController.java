@@ -26,7 +26,7 @@ public class AccountController {
 
     @GetMapping(path = "/accounts", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public BaseAccountInfoDtoResponse getInfo(@CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
-        Account account = accountService.getAuthAccount(UUID.fromString(javaSessionId));
+        Account account = accountService.getAuthAccount(javaSessionId);
 
         if (account.getUserType() == accountService.getUserTypeId(UserTypeEnum.CLIENT)) {
             return ClientMapper.INSTANCE.accountToDtoInfo(account);
@@ -41,9 +41,8 @@ public class AccountController {
     @ResponseStatus(HttpStatus.OK)
     public EmptyDtoResponse deleteAccount(@CookieValue("JAVASESSIONID") String javaSessionId)
             throws ServerException {
-        UUID uuid = UUID.fromString(javaSessionId);
-        Account account = accountService.getAuthAccount(uuid);
-        accountService.logout(uuid);
+        Account account = accountService.getAuthAccount(javaSessionId);
+        accountService.logout(javaSessionId);
         accountService.deleteAccount(account);
         return new EmptyDtoResponse();
     }

@@ -3,6 +3,7 @@ package net.thumbtack.school.buscompany.controller;
 import net.thumbtack.school.buscompany.dto.request.account.EditClientDtoRequest;
 import net.thumbtack.school.buscompany.dto.request.account.RegistrationClientDtoRequest;
 import net.thumbtack.school.buscompany.dto.response.account.EditClientDtoResponse;
+import net.thumbtack.school.buscompany.dto.response.account.InfoClientDtoResponse;
 import net.thumbtack.school.buscompany.dto.response.account.RegistrationClientDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.mappers.dto.ClientMapper;
@@ -17,17 +18,19 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/clients")
 public class ClientController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientController.class);
 
     @Autowired
     private AccountService accountService;
 
-    @PostMapping(path = "/clients", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public RegistrationClientDtoResponse insertClient(@Valid @RequestBody RegistrationClientDtoRequest clientDtoRequest, HttpServletResponse response) {
         Account client = ClientMapper.INSTANCE.registrationDtoToAccount(clientDtoRequest);
@@ -37,15 +40,29 @@ public class ClientController {
         return ClientMapper.INSTANCE.accountToDto(client);
     }
 
-    @PutMapping(path = "/clients", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public EditClientDtoResponse updateClient(@Valid @RequestBody EditClientDtoRequest request,
                                               @CookieValue("JAVASESSIONID") String javaSessionId)
             throws ServerException {
-        Account account = accountService.getAuthAccount(UUID.fromString(javaSessionId));
+        Account account = accountService.getAuthAccount(javaSessionId);
         ClientMapper.INSTANCE.update(account, request, accountService);
         accountService.updateAccount(account);
         LOGGER.debug("client updated");
         return ClientMapper.INSTANCE.accountEditToDto(account);
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    public List<InfoClientDtoResponse> getClients(@CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
+        Account account = accountService.getAuthAccount(javaSessionId);
+        List<InfoClientDtoResponse> result = new ArrayList<>();
+        accountService.checkIfAdmin(account);
+
+        List<Account> accountsClient = accountService.getClients();
+        for (Account acc: accountsClient) {
+            result.add(ClientMapper.INSTANCE.accountToDtoInfo(acc));
+        }
+        return result;
     }
 }

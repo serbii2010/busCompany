@@ -47,10 +47,8 @@ public class SessionController {
 
     @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public EmptyDtoResponse logout(@CookieValue("JAVASESSIONID") String javaSessionId)
-            throws ServerException {
-        UUID uuid = UUID.fromString(javaSessionId);
-        accountService.logout(uuid);
+    public EmptyDtoResponse logout(@CookieValue("JAVASESSIONID") String javaSessionId) {
+        accountService.logout(javaSessionId);
         return new EmptyDtoResponse();
     }
 

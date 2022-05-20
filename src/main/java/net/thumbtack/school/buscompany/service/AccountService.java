@@ -17,6 +17,7 @@ import org.springframework.util.DigestUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -60,12 +61,16 @@ public class AccountService {
         return result;
     }
 
-    public Account getAuthAccount(UUID uuid) throws ServerException {
-        Account account = authUsers.getKey(uuid);
+    public Account getAuthAccount(String uuid) throws ServerException {
+        Account account = authUsers.getKey(UUID.fromString(uuid));
         if (account == null) {
             throw new ServerException(ServerErrorCode.USER_NOT_AUTHORIZATION);
         }
         return account;
+    }
+
+    public List<Account> getClients() throws ServerException {
+        return accountDao.findByUserType(userTypeDao.findByType(UserTypeEnum.CLIENT).getId());
     }
 
     public void login(Account user, HttpServletResponse response) {
@@ -81,7 +86,8 @@ public class AccountService {
         response.addCookie(cookie);
     }
 
-    public void logout(UUID uuid) {
+    public void logout(String javaSessionId) {
+        UUID uuid = UUID.fromString(javaSessionId);
         if (!authUsers.containsValue(uuid)) {
             return;
         }
@@ -92,6 +98,12 @@ public class AccountService {
     public void checkPassword(Account account, String password) throws ServerException {
         if (!account.getPassword().equals(convertToMd5(password))) {
             throw new ServerException(ServerErrorCode.BAD_PASSWORD);
+        }
+    }
+
+    public void checkIfAdmin(Account account) throws ServerException {
+        if (account.getUserType() != getUserTypeId(UserTypeEnum.ADMIN)) {
+            throw new ServerException(ServerErrorCode.ACTION_FORBIDDEN);
         }
     }
 

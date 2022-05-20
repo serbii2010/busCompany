@@ -14,4 +14,5 @@ public class InfoClientDtoResponse implements BaseAccountInfoDtoResponse {
     private String patronymic;
     private String email;
     private String phone;
+    private String userType;
 }

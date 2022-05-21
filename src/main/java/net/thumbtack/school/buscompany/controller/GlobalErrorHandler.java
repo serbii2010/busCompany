@@ -1,4 +1,4 @@
-package net.thumbtack.school.buscompany.controller.account;
+package net.thumbtack.school.buscompany.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,13 +25,17 @@ public class GlobalErrorHandler {
     @ExceptionHandler(ServerException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public MyError handleDbError(ServerException exception) {
+    public MyError handleMyServerError(ServerException exception) {
         final MyError error = new MyError();
         ErrorDtoResponse dtoResponse = new ErrorDtoResponse();
         dtoResponse.setErrorCode(exception.getErrorCode().getErrorString());
-        dtoResponse.setMessage(exception.getMessage());
-        dtoResponse.setField(exception.getErrorCode().name());
-        error.getErrors().add(String.format("Error: %s", exception.getErrorCode().getErrorString()));
+        dtoResponse.setMessage(exception.getErrorCode().getErrorString());
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            error.getErrors().add(mapper.writeValueAsString(dtoResponse));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         return error;
     }
 

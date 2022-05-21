@@ -1,6 +1,7 @@
-package net.thumbtack.school.buscompany.daoImpl;
+package net.thumbtack.school.buscompany.daoImpl.account;
 
 import net.thumbtack.school.buscompany.dao.Dao;
+import net.thumbtack.school.buscompany.daoImpl.DaoImplBase;
 import net.thumbtack.school.buscompany.model.UserType;
 import net.thumbtack.school.buscompany.utils.UserTypeEnum;
 import org.apache.ibatis.session.SqlSession;
@@ -19,7 +20,7 @@ public class UserTypeDaoImpl extends DaoImplBase implements Dao<UserType> {
         try (SqlSession sqlSession = getSession()) {
             return getUserTypeMapper(sqlSession).findById(Integer.parseInt(id));
         } catch (RuntimeException ex) {
-            LOGGER.info("Can't get School by Id {} {}", id, ex);
+            LOGGER.info("Can't get UserType by Id {} {}", id, ex);
             throw ex;
         }
     }
@@ -29,7 +30,7 @@ public class UserTypeDaoImpl extends DaoImplBase implements Dao<UserType> {
         try (SqlSession sqlSession = getSession()) {
             return getUserTypeMapper(sqlSession).findByType(userTypeEnum.getType());
         } catch (RuntimeException ex) {
-            LOGGER.info("Can't get School by type {} {}", userTypeEnum.getType(), ex);
+            LOGGER.info("Can't get UserType by type {} {}", userTypeEnum.getType(), ex);
             throw ex;
         }
     }

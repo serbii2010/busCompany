@@ -1,4 +1,4 @@
-package net.thumbtack.school.buscompany.mappers.dto;
+package net.thumbtack.school.buscompany.mappers.dto.account;
 
 import net.thumbtack.school.buscompany.dto.request.account.EditClientDtoRequest;
 import net.thumbtack.school.buscompany.dto.request.account.RegistrationClientDtoRequest;

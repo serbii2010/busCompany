@@ -1,6 +1,7 @@
-package net.thumbtack.school.buscompany.daoImpl;
+package net.thumbtack.school.buscompany.daoImpl.account;
 
 import net.thumbtack.school.buscompany.dao.Dao;
+import net.thumbtack.school.buscompany.daoImpl.DaoImplBase;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.Account;

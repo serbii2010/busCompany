@@ -6,7 +6,7 @@ import net.thumbtack.school.buscompany.dto.response.account.EditClientDtoRespons
 import net.thumbtack.school.buscompany.dto.response.account.InfoClientDtoResponse;
 import net.thumbtack.school.buscompany.dto.response.account.RegistrationClientDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerException;
-import net.thumbtack.school.buscompany.mappers.dto.ClientMapper;
+import net.thumbtack.school.buscompany.mappers.dto.account.ClientMapper;
 import net.thumbtack.school.buscompany.model.Account;
 import net.thumbtack.school.buscompany.service.AccountService;
 import org.slf4j.Logger;

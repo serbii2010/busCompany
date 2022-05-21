@@ -1,7 +1,7 @@
 package net.thumbtack.school.buscompany.service;
 
-import net.thumbtack.school.buscompany.daoImpl.AccountDaoImpl;
-import net.thumbtack.school.buscompany.daoImpl.UserTypeDaoImpl;
+import net.thumbtack.school.buscompany.daoImpl.account.AccountDaoImpl;
+import net.thumbtack.school.buscompany.daoImpl.account.UserTypeDaoImpl;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.Account;
@@ -28,7 +28,7 @@ public class AccountService {
     @Autowired
     private UserTypeDaoImpl userTypeDao;
 
-    private BidiMap<Account, UUID> authUsers = new DualHashBidiMap<>();;
+    private final BidiMap<Account, UUID> authUsers = new DualHashBidiMap<>();
 
 
     public Account registrationAdmin(Account account) {
@@ -105,10 +105,6 @@ public class AccountService {
         if (!account.getUserType().getType().equals(UserTypeEnum.ADMIN.getType())) {
             throw new ServerException(ServerErrorCode.ACTION_FORBIDDEN);
         }
-    }
-
-    public int getUserTypeId(UserTypeEnum type) {
-        return userTypeDao.findByType(type).getId();
     }
 
     public void setPassword(Account account, String newPassword) {

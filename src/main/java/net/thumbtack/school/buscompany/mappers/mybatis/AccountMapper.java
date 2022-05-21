@@ -2,7 +2,6 @@ package net.thumbtack.school.buscompany.mappers.mybatis;
 
 import net.thumbtack.school.buscompany.model.Account;
 import net.thumbtack.school.buscompany.model.UserType;
-import org.apache.catalina.User;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

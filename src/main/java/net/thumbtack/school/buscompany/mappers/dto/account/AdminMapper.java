@@ -1,10 +1,8 @@
-package net.thumbtack.school.buscompany.mappers.dto;
+package net.thumbtack.school.buscompany.mappers.dto.account;
 
 import net.thumbtack.school.buscompany.dto.request.account.EditAdministratorDtoRequest;
-import net.thumbtack.school.buscompany.dto.request.account.EditClientDtoRequest;
 import net.thumbtack.school.buscompany.dto.request.account.RegistrationAdminDtoRequest;
 import net.thumbtack.school.buscompany.dto.response.account.EditAdministratorDtoResponse;
-import net.thumbtack.school.buscompany.dto.response.account.EditClientDtoResponse;
 import net.thumbtack.school.buscompany.dto.response.account.InfoAdministratorDtoResponse;
 import net.thumbtack.school.buscompany.dto.response.account.RegistrationAdminDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerException;

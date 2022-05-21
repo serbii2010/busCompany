@@ -1,4 +1,4 @@
-package net.thumbtack.school.buscompany.controller;
+package net.thumbtack.school.buscompany.controller.account;
 
 import net.thumbtack.school.buscompany.dto.request.account.LoginDtoRequest;
 import net.thumbtack.school.buscompany.dto.response.account.BaseAccountDtoResponse;
@@ -14,12 +14,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/session")
@@ -36,7 +34,7 @@ public class SessionController {
         accountService.checkPassword(account, loginDto.getPassword());
         accountService.login(account, response);
 
-        if (account.getUserType() == accountService.getUserTypeId(UserTypeEnum.ADMIN)) {
+        if (account.getUserType().getType().equals(UserTypeEnum.ADMIN.getType())) {
             LOGGER.debug("admin log in");
             return AdminMapper.INSTANCE.accountToDto(account);
         } else {

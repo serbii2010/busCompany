@@ -17,5 +17,5 @@ public class Account {
     private String email;
     private String phone;
     private String position;
-    private int userType;
+    private UserType userType;
 }

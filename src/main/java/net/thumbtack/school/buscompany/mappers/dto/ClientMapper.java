@@ -10,7 +10,6 @@ import net.thumbtack.school.buscompany.model.Account;
 import net.thumbtack.school.buscompany.service.AccountService;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,8 +19,10 @@ public interface ClientMapper {
 
     Account registrationDtoToAccount(RegistrationClientDtoRequest request);
 
+    @Mapping(target = "userType", source = "userType.type")
     RegistrationClientDtoResponse accountToDto(Account account);
 
+    @Mapping(target = "userType", source = "userType.type")
     EditClientDtoResponse accountEditToDto(Account account);
 
     void update(@MappingTarget Account account, EditClientDtoRequest request, @Context AccountService service) throws ServerException;
@@ -32,5 +33,6 @@ public interface ClientMapper {
         service.setPassword(account, request.getNewPassword());
     }
 
+    @Mapping(target = "userType", source = "userType.type")
     InfoClientDtoResponse accountToDtoInfo(Account account);
 }

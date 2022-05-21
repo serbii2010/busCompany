@@ -33,14 +33,14 @@ public class AccountService {
 
     public Account registrationAdmin(Account account) {
         UserType userType = userTypeDao.findByType(UserTypeEnum.ADMIN);
-        account.setUserType(userType.getId());
+        account.setUserType(userType);
         account.setPassword(convertToMd5(account.getPassword()));
         return accountDao.insert(account);
     }
 
     public Account registrationClient(Account account) {
         UserType userType = userTypeDao.findByType(UserTypeEnum.CLIENT);
-        account.setUserType(userType.getId());
+        account.setUserType(userType);
         account.setPassword(convertToMd5(account.getPassword()));
         return accountDao.insert(account);
     }
@@ -102,7 +102,7 @@ public class AccountService {
     }
 
     public void checkIfAdmin(Account account) throws ServerException {
-        if (account.getUserType() != getUserTypeId(UserTypeEnum.ADMIN)) {
+        if (!account.getUserType().getType().equals(UserTypeEnum.ADMIN.getType())) {
             throw new ServerException(ServerErrorCode.ACTION_FORBIDDEN);
         }
     }

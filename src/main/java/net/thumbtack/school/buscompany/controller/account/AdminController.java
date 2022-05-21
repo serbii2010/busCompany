@@ -1,4 +1,4 @@
-package net.thumbtack.school.buscompany.controller;
+package net.thumbtack.school.buscompany.controller.account;
 
 import net.thumbtack.school.buscompany.dto.request.account.EditAdministratorDtoRequest;
 import net.thumbtack.school.buscompany.dto.request.account.RegistrationAdminDtoRequest;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")

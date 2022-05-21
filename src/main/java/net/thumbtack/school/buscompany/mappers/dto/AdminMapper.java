@@ -10,10 +10,7 @@ import net.thumbtack.school.buscompany.dto.response.account.RegistrationAdminDto
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.Account;
 import net.thumbtack.school.buscompany.service.AccountService;
-import org.mapstruct.AfterMapping;
-import org.mapstruct.Context;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
@@ -22,8 +19,10 @@ public interface AdminMapper {
 
     Account registrationAdminDtoToAccount(RegistrationAdminDtoRequest response);
 
+    @Mapping(target = "userType", source = "userType.type")
     RegistrationAdminDtoResponse accountToDto(Account account);
 
+    @Mapping(target = "userType", source = "userType.type")
     EditAdministratorDtoResponse accountEditToDto(Account account);
 
     void update(@MappingTarget Account account, EditAdministratorDtoRequest request, @Context AccountService service) throws ServerException;
@@ -34,5 +33,6 @@ public interface AdminMapper {
         service.setPassword(account, request.getNewPassword());
     }
 
+    @Mapping(target = "userType", source = "userType.type")
     InfoAdministratorDtoResponse accountToDtoInfo(Account account);
 }

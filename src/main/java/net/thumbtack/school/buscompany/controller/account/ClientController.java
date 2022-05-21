@@ -1,4 +1,4 @@
-package net.thumbtack.school.buscompany.controller;
+package net.thumbtack.school.buscompany.controller.account;
 
 import net.thumbtack.school.buscompany.dto.request.account.EditClientDtoRequest;
 import net.thumbtack.school.buscompany.dto.request.account.RegistrationClientDtoRequest;
@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/clients")

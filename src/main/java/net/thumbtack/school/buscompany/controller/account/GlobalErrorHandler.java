@@ -1,4 +1,4 @@
-package net.thumbtack.school.buscompany.controller;
+package net.thumbtack.school.buscompany.controller.account;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

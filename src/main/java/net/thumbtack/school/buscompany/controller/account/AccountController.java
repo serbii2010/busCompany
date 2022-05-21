@@ -1,4 +1,4 @@
-package net.thumbtack.school.buscompany.controller;
+package net.thumbtack.school.buscompany.controller.account;
 
 import net.thumbtack.school.buscompany.dto.response.account.BaseAccountInfoDtoResponse;
 import net.thumbtack.school.buscompany.dto.response.account.EmptyDtoResponse;
@@ -28,9 +28,9 @@ public class AccountController {
     public BaseAccountInfoDtoResponse getInfo(@CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
         Account account = accountService.getAuthAccount(javaSessionId);
 
-        if (account.getUserType() == accountService.getUserTypeId(UserTypeEnum.CLIENT)) {
+        if (account.getUserType().getType().equals(UserTypeEnum.CLIENT.getType())) {
             return ClientMapper.INSTANCE.accountToDtoInfo(account);
-        } else if (account.getUserType() == accountService.getUserTypeId(UserTypeEnum.ADMIN)) {
+        } else if (account.getUserType().getType().equals(UserTypeEnum.ADMIN.getType())) {
             return AdminMapper.INSTANCE.accountToDtoInfo(account);
         } else {
             throw new ServerException(ServerErrorCode.USER_NOT_AUTHORIZATION);

@@ -4,6 +4,7 @@ CREATE
     DATABASE `buscompany`;
 USE `buscompany`;
 
+####### Tables from accounts ########
 CREATE TABLE user_type
 (
     id   INT(11)     NOT NULL AUTO_INCREMENT,
@@ -63,7 +64,10 @@ CREATE TABLE trip
     duration        VARCHAR(30) NOT NULL,
     price           INT(11),
     approved        BOOLEAN     NOT NULL DEFAULT FALSE,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (bus_id) REFERENCES bus (id) ON DELETE SET NULL,
+    FOREIGN KEY (from_station_id) REFERENCES station (id) ON DELETE SET NULL,
+    FOREIGN KEY (to_station_id) REFERENCES station (id) ON DELETE SET NULL
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;
 
@@ -82,25 +86,30 @@ CREATE TABLE trip_schedule
     id          INT(11) NOT NULL AUTO_INCREMENT,
     trip_id     INT(11) NOT NULL,
     schedule_id INT(11) NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    UNIQUE KEY trip_id_schedule_id (trip_id, schedule_id),
+    FOREIGN KEY (trip_id) REFERENCES trip (id) ON DELETE CASCADE,
+    FOREIGN KEY (schedule_id) REFERENCES schedule (id) ON DELETE CASCADE
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;
 
 CREATE TABLE date_trip
 (
     id      INT(11)     NOT NULL AUTO_INCREMENT,
-    trip_id INT(11)     NOT NULL,
+    trip_id INT(11)     NULL DEFAULT NULL,
     date    VARCHAR(30) NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (trip_id) REFERENCES trip (id) ON DELETE SET NULL
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;
 
 CREATE TABLE orders
 (
     id      INT(11)     NOT NULL AUTO_INCREMENT,
-    trip_id INT(11)     NOT NULL,
-    date    VARCHAR(30) NOT NULL,
-    PRIMARY KEY (id)
+    trip_id INT(11)     NULL DEFAULT NULL,
+    date    DATETIME NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (id),
+    FOREIGN KEY (trip_id) REFERENCES trip (id) ON DELETE SET NULL
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;
 
@@ -119,15 +128,19 @@ CREATE TABLE order_passenger
     id           INT(11) NOT NULL AUTO_INCREMENT,
     order_id     INT(11) NOT NULL,
     passenger_id INT(11) NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    UNIQUE KEY order_id_passenger_id (order_id, passenger_id),
+    FOREIGN KEY (order_id) REFERENCES orders (id) ON DELETE CASCADE,
+    FOREIGN KEY (passenger_id) REFERENCES passenger (id) ON DELETE CASCADE
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;
 
 CREATE TABLE ticket
 (
     id                 INT(11) NOT NULL AUTO_INCREMENT,
-    order_passenger_id INT(11) NOT NULL,
+    order_passenger_id INT(11) NULL DEFAULT NULL,
     place              INT(3),
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    FOREIGN KEY (order_passenger_id) REFERENCES order_passenger (id) ON DELETE SET NULL
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;

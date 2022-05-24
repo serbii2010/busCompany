@@ -4,16 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Schedule {
+public class OrderPassenger {
     private int id;
-    private String fromDate;
-    private String toDate;
-    private String periods;
-
-    private List<Trip> trips;
+    private Orders order;
+    private Passenger passenger;
 }

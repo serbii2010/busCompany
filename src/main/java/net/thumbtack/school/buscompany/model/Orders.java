@@ -9,11 +9,10 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Schedule {
+public class Orders {
     private int id;
-    private String fromDate;
-    private String toDate;
-    private String periods;
+    private Trip trip;
+    private String date;
 
-    private List<Trip> trips;
+    private List<Passenger> passengers;
 }

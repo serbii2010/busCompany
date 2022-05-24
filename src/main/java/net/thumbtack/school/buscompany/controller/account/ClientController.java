@@ -55,8 +55,9 @@ public class ClientController {
     @ResponseStatus(HttpStatus.OK)
     public List<InfoClientDtoResponse> getClients(@CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
         Account account = accountService.getAuthAccount(javaSessionId);
-        List<InfoClientDtoResponse> result = new ArrayList<>();
         accountService.checkIfAdmin(account);
+
+        List<InfoClientDtoResponse> result = new ArrayList<>();
 
         List<Account> accountsClient = accountService.getClients();
         for (Account acc: accountsClient) {

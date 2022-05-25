@@ -50,6 +50,8 @@ CREATE TABLE station
 (
     id   INT(11)     NOT NULL AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL,
+    UNIQUE KEY login (name),
+    INDEX (name),
     PRIMARY KEY (id)
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;

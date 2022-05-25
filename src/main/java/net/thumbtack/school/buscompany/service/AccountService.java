@@ -12,7 +12,7 @@ import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import javax.servlet.http.Cookie;
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.UUID;
 
-@Component
+@Service
 public class AccountService {
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class);
     @Autowired

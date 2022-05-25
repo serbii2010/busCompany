@@ -1,4 +1,4 @@
-package net.thumbtack.school.buscompany.dto.request.shop;
+package net.thumbtack.school.buscompany.dto.response.shop;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,13 +9,15 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddTripDtoRequest {
-    private String busName;
+public class CreateTripDtoResponse {
+    private int tripId;
     private String fromStation;
     private String toStation;
     private String start;
     private String duration;
     private int price;
-    private ScheduleDto schedule;
+    private BusDtoResponse bus;
+    private Boolean approved;
+    private ScheduleDtoResponse schedule;
     private List<String> dates;
 }

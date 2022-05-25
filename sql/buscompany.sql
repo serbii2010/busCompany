@@ -56,6 +56,10 @@ CREATE TABLE station
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;
 
+## insert default station
+INSERT INTO station (name) VALUE ('Omsk');
+INSERT INTO station (name) VALUE ('Новосибирск');
+
 CREATE TABLE trip
 (
     id              INT(11)     NOT NULL AUTO_INCREMENT,

@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BusDtoResponse {
     private String busName;
-    private int placeCount;
+    private int places;
 
 }

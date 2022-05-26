@@ -46,6 +46,10 @@ CREATE TABLE bus
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;
 
+#### insert default bus
+INSERT INTO bus (name, place_count) VALUES ('Пазик', 21);
+INSERT INTO bus (name, place_count) VALUES ('Икарус', 41);
+
 CREATE TABLE station
 (
     id   INT(11)     NOT NULL AUTO_INCREMENT,
@@ -83,7 +87,11 @@ CREATE TABLE schedule
     from_date VARCHAR(30) NOT NULL,
     to_date   VARCHAR(30) NOT NULL,
     periods   VARCHAR(30) NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    UNIQUE KEY uniq_schedule (from_date, to_date, periods),
+    INDEX (from_date),
+    INDEX (to_date),
+    INDEX (periods)
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;
 

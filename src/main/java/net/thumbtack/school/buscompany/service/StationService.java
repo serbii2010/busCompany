@@ -1,6 +1,7 @@
 package net.thumbtack.school.buscompany.service;
 
 import net.thumbtack.school.buscompany.daoImpl.shop.StationDaoImpl;
+import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.Station;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,10 @@ public class StationService {
     private StationDaoImpl stationDao;
 
     public Station findStationByName(String name) throws ServerException {
-        return stationDao.findByName(name);
+        Station station = stationDao.findByName(name);
+        if (station == null) {
+            throw new ServerException(ServerErrorCode.STATION_NOT_FOUND);
+        }
+        return station;
     }
 }

@@ -2,6 +2,7 @@ package net.thumbtack.school.buscompany.daoImpl.shop;
 
 import net.thumbtack.school.buscompany.dao.Dao;
 import net.thumbtack.school.buscompany.daoImpl.DaoImplBase;
+import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.Bus;
 import org.apache.ibatis.session.SqlSession;
@@ -18,6 +19,16 @@ public class BusDaoImpl extends DaoImplBase implements Dao<Bus> {
     @Override
     public Bus findById(String id) throws ServerException {
         return null;
+    }
+
+    public Bus findByName(String name) throws ServerException {
+        LOGGER.debug("DAO get Bus");
+        try (SqlSession sqlSession = getSession()) {
+            return getBusMapper(sqlSession).findByName(name);
+        } catch (RuntimeException ex) {
+            LOGGER.info("Can't get Bus {}", ex);
+            throw new ServerException(ServerErrorCode.BUS_NOT_FOUND);
+        }
     }
 
     @Override

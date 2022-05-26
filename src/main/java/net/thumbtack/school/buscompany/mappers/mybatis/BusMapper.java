@@ -10,4 +10,8 @@ public interface BusMapper {
     @Select("SELECT * FROM bus")
     @Result(property = "placeCount", column = "place_count")
     List<Bus> findAll();
+
+    @Select("SELECT * FROM bus WHERE name=#{name}")
+    @Result(property = "placeCount", column = "place_count")
+    Bus findByName(String name);
 }

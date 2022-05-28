@@ -3,10 +3,11 @@ package net.thumbtack.school.buscompany.dto.request.shop;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.thumbtack.school.buscompany.validator.BusExist;
-import net.thumbtack.school.buscompany.validator.StationExist;
+import net.thumbtack.school.buscompany.validator.IsBusExist;
+import net.thumbtack.school.buscompany.validator.IsStationExist;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 
 @Data
@@ -14,14 +15,17 @@ import java.util.List;
 @NoArgsConstructor
 public class CreateTripDtoRequest {
     @NotBlank
-    @BusExist(message = "Bus not found")
+    @IsBusExist
     private String busName;
-    @StationExist(message = "Station not found")
+    @IsStationExist
     private String fromStation;
-    @StationExist(message = "Station not found")
+    @IsStationExist
     private String toStation;
+    @Pattern(regexp = "^([01]?[0-9]|2[0-3]):[0-5][0-9]", message = "format field \'HH:MM\'")
     private String start;
+    @Pattern(regexp = "^([01]?[0-9]|2[0-3]):[0-5][0-9]", message = "format field \'HH:MM\'")
     private String duration;
+    @NotBlank
     private int price;
     private ScheduleDto schedule;
     private List<String> dates;

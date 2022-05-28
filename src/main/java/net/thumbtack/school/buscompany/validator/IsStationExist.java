@@ -8,8 +8,8 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = StationExistValidator.class)
 @Target( { ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface StationExist {
-    String message() default "Field length is less than allowed";
+public @interface IsStationExist {
+    String message() default "Station not found";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

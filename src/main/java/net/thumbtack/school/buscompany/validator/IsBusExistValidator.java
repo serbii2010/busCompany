@@ -9,7 +9,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 @Component
-public class BusExistValidator implements ConstraintValidator<IsBusExist, String> {
+public class IsBusExistValidator implements ConstraintValidator<IsBusExist, String> {
     @Autowired
     private BusService busService;
 

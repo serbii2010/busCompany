@@ -5,11 +5,11 @@ import javax.validation.Payload;
 import java.lang.annotation.*;
 
 @Documented
-@Constraint(validatedBy = IsStationExistValidator.class)
-@Target( { ElementType.METHOD, ElementType.FIELD })
+@Constraint(validatedBy = IsSetScheduleOrDatesFieldValidator.class)
+@Target( { ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface IsStationExist {
-    String message() default "Station not found";
+public @interface IsSetScheduleOrDatesField {
+    String message() default "Set field schedule or dates";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

@@ -77,7 +77,17 @@ public class GlobalErrorHandler {
             }
         });
         exc.getBindingResult().getGlobalErrors().forEach(err-> {
-            error.getErrors().add(String.format("global:%s", err.getDefaultMessage()));
+            ErrorDtoResponse errorDtoResponse = new ErrorDtoResponse();
+            errorDtoResponse.setErrorCode(err.getCode());
+            errorDtoResponse.setField("Global");
+            errorDtoResponse.setMessage(err.getDefaultMessage());
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                String jsonError = mapper.writeValueAsString(errorDtoResponse);
+                error.getErrors().add(jsonError);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
         });
         return error;
     }

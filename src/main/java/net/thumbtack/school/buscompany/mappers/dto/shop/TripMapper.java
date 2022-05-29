@@ -30,5 +30,7 @@ public interface TripMapper {
     @Mapping(target = "tripId", source = "id")
     @Mapping(target = "bus.busName", source = "bus.name")
     @Mapping(target = "bus.places", source = "bus.placeCount")
+    @Mapping(target = "schedule.fromDate", dateFormat = "yyyy-MM-dd")
+    @Mapping(target = "schedule.toDate", dateFormat = "yyyy-MM-dd")
     CreateTripDtoResponse tripToDtoCreate(Trip trip);
 }

@@ -41,6 +41,10 @@ public class ScheduleService {
         for (String day: list) {
             try {
                 formatDayOfWeek.parse(day);
+                if (day.length() != 3) {
+                    isDayOfWeek = false;
+                    break;
+                }
             } catch (ParseException e) {
                 isDayOfWeek = false;
                 break;

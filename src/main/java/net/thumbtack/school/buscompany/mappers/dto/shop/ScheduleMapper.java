@@ -1,6 +1,6 @@
 package net.thumbtack.school.buscompany.mappers.dto.shop;
 
-import net.thumbtack.school.buscompany.dto.request.shop.ScheduleDto;
+import net.thumbtack.school.buscompany.dto.request.shop.ScheduleDtoRequest;
 import net.thumbtack.school.buscompany.model.Schedule;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -12,5 +12,5 @@ public interface ScheduleMapper {
 
     @Mapping(target = "fromDate", dateFormat = "yyyy-MM-dd")
     @Mapping(target = "toDate", dateFormat = "yyyy-MM-dd")
-    Schedule scheduleDtoToSchedule(ScheduleDto request);
+    Schedule scheduleDtoToSchedule(ScheduleDtoRequest request);
 }

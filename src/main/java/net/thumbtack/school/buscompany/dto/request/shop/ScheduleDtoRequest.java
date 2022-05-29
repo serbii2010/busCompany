@@ -9,7 +9,7 @@ import net.thumbtack.school.buscompany.validator.Period;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ScheduleDto {
+public class ScheduleDtoRequest {
     @DateFormat
     private String fromDate;
     @DateFormat

@@ -30,6 +30,6 @@ public class CreateTripDtoRequest {
     private String duration;
     private int price;
     @Valid
-    private ScheduleDto schedule;
+    private ScheduleDtoRequest schedule;
     private List<String> dates;
 }

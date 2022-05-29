@@ -7,6 +7,7 @@ import net.thumbtack.school.buscompany.validator.IsBusExist;
 import net.thumbtack.school.buscompany.validator.IsSetScheduleOrDatesField;
 import net.thumbtack.school.buscompany.validator.IsStationExist;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.List;
@@ -28,6 +29,7 @@ public class CreateTripDtoRequest {
     @Pattern(regexp = "^([01]?[0-9]|2[0-3]):[0-5][0-9]", message = "format field \'HH:MM\'")
     private String duration;
     private int price;
+    @Valid
     private ScheduleDto schedule;
     private List<String> dates;
 }

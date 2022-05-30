@@ -13,4 +13,8 @@ public class DateTrip {
     private int id;
     private Trip trip;
     private Date date;
+
+    public DateTrip(Trip trip, Date date) {
+        this(0, trip, date);
+    }
 }

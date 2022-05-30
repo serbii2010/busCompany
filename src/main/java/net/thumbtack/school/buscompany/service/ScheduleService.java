@@ -23,6 +23,9 @@ public class ScheduleService {
     private ScheduleDaoImpl scheduleDao;
 
     public Schedule findOrInsert(Schedule schedule) throws ServerException {
+        if (schedule == null) {
+            return null;
+        }
         Schedule result = scheduleDao.find(schedule);
         if (result == null) {
             result = scheduleDao.insert(schedule);

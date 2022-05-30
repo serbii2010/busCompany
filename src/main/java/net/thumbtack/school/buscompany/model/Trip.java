@@ -20,6 +20,5 @@ public class Trip {
     private int price;
     private boolean approved;
     private Schedule schedule;
-    //@todo изменить тип на дату
-    private List<String> dates;
+    private List<DateTrip> dates;
 }

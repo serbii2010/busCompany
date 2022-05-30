@@ -3,6 +3,7 @@ package net.thumbtack.school.buscompany.service;
 import net.thumbtack.school.buscompany.daoImpl.shop.ScheduleDaoImpl;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.Schedule;
+import org.apache.commons.validator.GenericValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class ScheduleService {
 
         boolean isDayOfWeek = true;
         SimpleDateFormat formatDayOfWeek = new SimpleDateFormat("EEE", Locale.ENGLISH);
-        for (String day: list) {
+        for (String day : list) {
             try {
                 formatDayOfWeek.parse(day);
                 if (day.length() != 3) {
@@ -53,11 +54,8 @@ public class ScheduleService {
         if (isDayOfWeek) return true;
 
         boolean isDayOfMonth = true;
-        SimpleDateFormat formatDayOfMonth = new SimpleDateFormat("dd");
-        for (String day: list) {
-            try {
-                formatDayOfMonth.parse(day);
-            } catch (ParseException e) {
+        for (String day : list) {
+            if (!GenericValidator.isDate(day, "dd", true)) {
                 isDayOfMonth = false;
                 break;
             }

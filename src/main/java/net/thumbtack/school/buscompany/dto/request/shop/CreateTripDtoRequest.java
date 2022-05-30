@@ -3,9 +3,7 @@ package net.thumbtack.school.buscompany.dto.request.shop;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.thumbtack.school.buscompany.validator.IsBusExist;
-import net.thumbtack.school.buscompany.validator.IsSetScheduleOrDatesField;
-import net.thumbtack.school.buscompany.validator.IsStationExist;
+import net.thumbtack.school.buscompany.validator.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -31,5 +29,6 @@ public class CreateTripDtoRequest {
     private int price;
     @Valid
     private ScheduleDtoRequest schedule;
+    @ListDateFormat
     private List<String> dates;
 }

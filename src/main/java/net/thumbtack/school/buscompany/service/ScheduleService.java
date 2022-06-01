@@ -58,7 +58,7 @@ public class ScheduleService {
 
         boolean isDayOfMonth = true;
         for (String day : list) {
-            if (!GenericValidator.isDate(day, "dd", true)) {
+            if (!GenericValidator.isDate(day, "dd", false)) {
                 isDayOfMonth = false;
                 break;
             }

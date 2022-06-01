@@ -1,8 +1,6 @@
 package net.thumbtack.school.buscompany.mappers.mybatis;
 
-import net.thumbtack.school.buscompany.model.DateTrip;
-import net.thumbtack.school.buscompany.model.Schedule;
-import net.thumbtack.school.buscompany.model.Trip;
+import net.thumbtack.school.buscompany.model.*;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -17,6 +15,12 @@ public interface TripMapper {
     @Select("SELECT * FROM trip WHERE id = #{id}")
     @Results(value = {
             @Result(property = "id", column = "id"),
+            @Result(property = "bus", javaType = Bus.class, column = "bus_id",
+                    one = @One(select = "getBus")),
+            @Result(property = "fromStation", javaType = Station.class, column = "from_station_id",
+                    one = @One(select = "getStation")),
+            @Result(property = "toStation", javaType = Station.class, column = "to_station_id",
+                    one = @One(select = "getStation")),
             @Result(property = "schedule", javaType = Schedule.class, column = "schedule_id",
                     one = @One(select = "getSchedule")),
             @Result(property = "dates", javaType = List.class, column = "id",
@@ -37,4 +41,13 @@ public interface TripMapper {
 
     @Select("SELECT * FROM date_trip WHERE trip_id = #{tripId}")
     List<DateTrip> getDates(String tripId);
+
+    @Select("SELECT * FROM station where id = #{stationId} ")
+    Station getStation(String stationId);
+
+    @Select("SELECT * FROM bus where id = #{busId} ")
+    @Results(value = {
+            @Result(property = "placeCount", column = "place_count")
+    })
+    Bus getBus(String busId);
 }

@@ -41,8 +41,10 @@ public class TripController {
         Trip trip = TripMapper.INSTANCE.createTripDtoToTrip(request, stationService, busService, scheduleService);
         tripService.insert(trip);
 
-        return TripMapper.INSTANCE.tripToDtoCreate(trip);
+        return TripMapper.INSTANCE.tripToDtoResponse(trip);
     }
+
+    //@todo изменение рейса
 
     @DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public EmptyDtoResponse deleteTrip(@PathVariable String id,
@@ -55,4 +57,16 @@ public class TripController {
 
         return new EmptyDtoResponse();
     }
+
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public CreateTripDtoResponse getTrip(@PathVariable String id,
+                                       @CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
+        Account account = accountService.getAuthAccount(javaSessionId);
+        accountService.checkIfAdmin(account);
+
+        Trip trip = tripService.findById(id);
+
+        return TripMapper.INSTANCE.tripToDtoResponse(trip);
+    }
+
 }

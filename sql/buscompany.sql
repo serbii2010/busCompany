@@ -64,23 +64,6 @@ CREATE TABLE station
 INSERT INTO station (name) VALUE ('Omsk');
 INSERT INTO station (name) VALUE ('Новосибирск');
 
-CREATE TABLE trip
-(
-    id              INT(11)     NOT NULL AUTO_INCREMENT,
-    bus_id          INT(11)     NULL     DEFAULT NULL,
-    from_station_id INT(11)     NULL     DEFAULT NULL,
-    to_station_id   INT(11)     NULL     DEFAULT NULL,
-    start           VARCHAR(30) NOT NULL,
-    duration        VARCHAR(30) NOT NULL,
-    price           INT(11),
-    approved        BOOLEAN     NOT NULL DEFAULT FALSE,
-    PRIMARY KEY (id),
-    FOREIGN KEY (bus_id) REFERENCES bus (id) ON DELETE SET NULL,
-    FOREIGN KEY (from_station_id) REFERENCES station (id) ON DELETE SET NULL,
-    FOREIGN KEY (to_station_id) REFERENCES station (id) ON DELETE SET NULL
-) ENGINE = INNODB
-  DEFAULT CHARSET = utf8;
-
 CREATE TABLE schedule
 (
     id        INT(11)     NOT NULL AUTO_INCREMENT,
@@ -95,15 +78,22 @@ CREATE TABLE schedule
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;
 
-CREATE TABLE trip_schedule
+CREATE TABLE trip
 (
-    id          INT(11) NOT NULL AUTO_INCREMENT,
-    trip_id     INT(11) NOT NULL,
-    schedule_id INT(11) NOT NULL,
+    id              INT(11)     NOT NULL AUTO_INCREMENT,
+    bus_id          INT(11)     NULL     DEFAULT NULL,
+    from_station_id INT(11)     NULL     DEFAULT NULL,
+    to_station_id   INT(11)     NULL     DEFAULT NULL,
+    schedule_id     INT(11)     NULL     DEFAULT NULL,
+    start           VARCHAR(30) NOT NULL,
+    duration        VARCHAR(30) NOT NULL,
+    price           INT(11),
+    approved        BOOLEAN     NOT NULL DEFAULT FALSE,
     PRIMARY KEY (id),
-    UNIQUE KEY trip_id_schedule_id (trip_id, schedule_id),
-    FOREIGN KEY (trip_id) REFERENCES trip (id) ON DELETE CASCADE,
-    FOREIGN KEY (schedule_id) REFERENCES schedule (id) ON DELETE CASCADE
+    FOREIGN KEY (bus_id) REFERENCES bus (id) ON DELETE SET NULL,
+    FOREIGN KEY (from_station_id) REFERENCES station (id) ON DELETE SET NULL,
+    FOREIGN KEY (to_station_id) REFERENCES station (id) ON DELETE SET NULL,
+    FOREIGN KEY (schedule_id) REFERENCES schedule (id) ON DELETE SET NULL
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;
 

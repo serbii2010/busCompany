@@ -3,8 +3,8 @@ package net.thumbtack.school.buscompany.daoImpl.shop;
 import net.thumbtack.school.buscompany.dao.Dao;
 import net.thumbtack.school.buscompany.daoImpl.DaoImplBase;
 import net.thumbtack.school.buscompany.exception.ServerException;
+import net.thumbtack.school.buscompany.model.DateTrip;
 import net.thumbtack.school.buscompany.model.Trip;
-import net.thumbtack.school.buscompany.model.TripSchedule;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,13 @@ public class TripDaoImpl extends DaoImplBase implements Dao<Trip> {
 
     @Override
     public Trip findById(String id) throws ServerException {
-        return null;
+        LOGGER.debug("DAO get Trip by Id {}", id);
+        try (SqlSession sqlSession = getSession()) {
+            return getTripMapper(sqlSession).findById(id);
+        } catch (RuntimeException ex) {
+            LOGGER.info("Can't get Trip by Id {} {}", id, ex);
+            throw ex;
+        }
     }
 
     @Override
@@ -32,11 +38,7 @@ public class TripDaoImpl extends DaoImplBase implements Dao<Trip> {
         try (SqlSession sqlSession = getSession()) {
             try {
                 getTripMapper(sqlSession).insert(trip);
-                if (trip.getSchedule() != null) {
-                    TripSchedule tripSchedule = new TripSchedule(trip);
-                    getTripScheduleMapper(sqlSession).insert(tripSchedule);
-                    //@todo сохранить даты
-                }
+                //@todo сохранить даты
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't insert Trip {} {}", trip, ex);
                 sqlSession.rollback();
@@ -48,12 +50,25 @@ public class TripDaoImpl extends DaoImplBase implements Dao<Trip> {
     }
 
     @Override
-    public void remove(Trip object) {
+    public void remove(Trip trip) {
+        LOGGER.debug("DAO delete Trip {}", trip);
+        try (SqlSession sqlSession = getSession()) {
+            try {
+                String id = String.valueOf(trip.getId());
+                getDateTripMapper(sqlSession).deleteByTripId(id);
+                getTripMapper(sqlSession).delete(trip);
 
+            } catch (RuntimeException ex) {
+                LOGGER.info("Can't delete Trip {}", ex);
+                sqlSession.rollback();
+                throw ex;
+            }
+            sqlSession.commit();
+        }
     }
 
     @Override
-    public void update(Trip object) {
+    public void update(Trip trip) {
 
     }
 }

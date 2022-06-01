@@ -38,10 +38,6 @@ public class DaoImplBase {
         return sqlSession.getMapper(TripMapper.class);
     }
 
-    protected TripScheduleMapper getTripScheduleMapper(SqlSession sqlSession) {
-        return sqlSession.getMapper(TripScheduleMapper.class);
-    }
-
     protected DateTripMapper getDateTripMapper(SqlSession sqlSession) {
         return sqlSession.getMapper(DateTripMapper.class);
     }

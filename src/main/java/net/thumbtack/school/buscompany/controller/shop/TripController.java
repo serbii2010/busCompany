@@ -1,6 +1,7 @@
 package net.thumbtack.school.buscompany.controller.shop;
 
 import net.thumbtack.school.buscompany.dto.request.shop.CreateTripDtoRequest;
+import net.thumbtack.school.buscompany.dto.response.account.EmptyDtoResponse;
 import net.thumbtack.school.buscompany.dto.response.shop.CreateTripDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.mappers.dto.shop.TripMapper;
@@ -41,5 +42,17 @@ public class TripController {
         tripService.insert(trip);
 
         return TripMapper.INSTANCE.tripToDtoCreate(trip);
+    }
+
+    @DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public EmptyDtoResponse deleteTrip(@PathVariable String id,
+                                       @CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
+        Account account = accountService.getAuthAccount(javaSessionId);
+        accountService.checkIfAdmin(account);
+
+        Trip trip = tripService.findById(id);
+        tripService.delete(trip);
+
+        return new EmptyDtoResponse();
     }
 }

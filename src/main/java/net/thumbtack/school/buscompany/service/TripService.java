@@ -3,6 +3,7 @@ package net.thumbtack.school.buscompany.service;
 import net.thumbtack.school.buscompany.daoImpl.shop.DateTripDaoImpl;
 import net.thumbtack.school.buscompany.daoImpl.shop.ScheduleDaoImpl;
 import net.thumbtack.school.buscompany.daoImpl.shop.TripDaoImpl;
+import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.DateTrip;
 import net.thumbtack.school.buscompany.model.Trip;
@@ -26,6 +27,15 @@ public class TripService {
     private ScheduleDaoImpl scheduleDao;
     @Autowired
     private DateTripDaoImpl dateTripDao;
+
+    public Trip findById(String id) throws ServerException {
+        Trip trip = tripDao.findById(id);
+        if (trip == null) {
+            throw new ServerException(ServerErrorCode.TRIP_NOT_FOUND);
+        }
+        return trip;
+    }
+
 
     public Trip insert(Trip trip) {
         if (trip.getDates() == null) {
@@ -78,5 +88,9 @@ public class TripService {
         }
 
         return trip;
+    }
+
+    public void delete(Trip trip) {
+        tripDao.remove(trip);
     }
 }

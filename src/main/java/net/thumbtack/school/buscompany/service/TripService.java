@@ -6,6 +6,7 @@ import net.thumbtack.school.buscompany.daoImpl.shop.TripDaoImpl;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.DateTrip;
+import net.thumbtack.school.buscompany.model.Schedule;
 import net.thumbtack.school.buscompany.model.Trip;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,39 +45,9 @@ public class TripService {
             } catch (ServerException exception) {
                 scheduleDao.insert(trip.getSchedule());
             }
-            LocalDate dateStart = trip.getSchedule().getFromDate().toInstant().
-                    atZone(ZoneId.systemDefault()).toLocalDate();
-            LocalDate dateEnd = trip.getSchedule().getToDate().toInstant().
-                    atZone(ZoneId.systemDefault()).toLocalDate();
 
+            List<DateTrip> dates = this.generateDates(trip);
 
-            List<DateTrip> dates = new ArrayList<>();
-            for (LocalDate date = dateStart; date.isBefore(dateEnd.plusDays(1)); date = date.plusDays(1)) {
-                if (trip.getSchedule().getPeriod().equals("daily")) {
-                    dates.add(new DateTrip(trip, Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())));
-                    continue;
-                }
-                if (trip.getSchedule().getPeriod().equals("odd")) {
-                    if (date.getDayOfMonth() % 2 == 1) {
-                        dates.add(new DateTrip(trip, Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())));
-                        continue;
-                    }
-                }
-                if (trip.getSchedule().getPeriod().equals("even")) {
-                    if (date.getDayOfMonth() % 2 == 0) {
-                        dates.add(new DateTrip(trip, Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())));
-                        continue;
-                    }
-                }
-                if (Arrays.asList(trip.getSchedule().getPeriod().split(","))
-                        .contains(date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH))) {
-                    dates.add(new DateTrip(trip, Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())));
-                    continue;
-                }
-                if (Arrays.asList(trip.getSchedule().getPeriod().split(",")).contains(String.valueOf(date.getDayOfMonth()))) {
-                    dates.add(new DateTrip(trip, Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())));
-                }
-            }
             trip.setDates(dates);
         }
 
@@ -90,7 +61,59 @@ public class TripService {
         return trip;
     }
 
+    public void update(Trip trip) {
+        tripDao.update(trip);
+        for (DateTrip date: trip.getDates()) {
+            DateTrip dateTrip = new DateTrip(trip, date.getDate());
+            dateTripDao.insert(dateTrip);
+        }
+    }
+
+    public List<DateTrip> updateDates(Trip trip) {
+        for (DateTrip dateTrip: trip.getDates()) {
+            dateTripDao.remove(dateTrip);
+        }
+        return this.generateDates(trip);
+    }
+
     public void delete(Trip trip) {
         tripDao.remove(trip);
+    }
+
+    private List<DateTrip> generateDates(Trip trip) {
+        List<DateTrip> dates = new ArrayList<>();
+
+        LocalDate dateStart = trip.getSchedule().getFromDate().toInstant().
+                atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate dateEnd = trip.getSchedule().getToDate().toInstant().
+                atZone(ZoneId.systemDefault()).toLocalDate();
+
+        for (LocalDate date = dateStart; date.isBefore(dateEnd.plusDays(1)); date = date.plusDays(1)) {
+            if (trip.getSchedule().getPeriod().equals("daily")) {
+                dates.add(new DateTrip(trip, Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())));
+                continue;
+            }
+            if (trip.getSchedule().getPeriod().equals("odd")) {
+                if (date.getDayOfMonth() % 2 == 1) {
+                    dates.add(new DateTrip(trip, Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())));
+                    continue;
+                }
+            }
+            if (trip.getSchedule().getPeriod().equals("even")) {
+                if (date.getDayOfMonth() % 2 == 0) {
+                    dates.add(new DateTrip(trip, Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())));
+                    continue;
+                }
+            }
+            if (Arrays.asList(trip.getSchedule().getPeriod().split(","))
+                    .contains(date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH))) {
+                dates.add(new DateTrip(trip, Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())));
+                continue;
+            }
+            if (Arrays.asList(trip.getSchedule().getPeriod().split(",")).contains(String.valueOf(date.getDayOfMonth()))) {
+                dates.add(new DateTrip(trip, Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant())));
+            }
+        }
+        return dates;
     }
 }

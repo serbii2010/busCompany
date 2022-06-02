@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @IsSetScheduleOrDatesField
-public class CreateTripDtoRequest {
+public class TripDtoRequest {
     @NotBlank
     @IsBusExist
     private String busName;

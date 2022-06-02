@@ -69,6 +69,16 @@ public class TripDaoImpl extends DaoImplBase implements Dao<Trip> {
 
     @Override
     public void update(Trip trip) {
-
+        LOGGER.debug("DAO update Account {}", trip);
+        try (SqlSession sqlSession = getSession()) {
+            try {
+                getTripMapper(sqlSession).update(trip);
+            } catch (RuntimeException ex) {
+                LOGGER.info("Can't update account {} {}", trip, ex);
+                sqlSession.rollback();
+                throw ex;
+            }
+            sqlSession.commit();
+        }
     }
 }

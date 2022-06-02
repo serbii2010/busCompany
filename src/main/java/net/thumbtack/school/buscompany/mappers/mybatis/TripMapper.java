@@ -50,4 +50,16 @@ public interface TripMapper {
             @Result(property = "placeCount", column = "place_count")
     })
     Bus getBus(String busId);
+
+    @Update("UPDATE trip SET " +
+            "bus_id=#{bus.id}, " +
+            "from_station_id=#{fromStation.id}, " +
+            "to_station_id=#{toStation.id}, " +
+            "schedule_id=#{schedule.id}, " +
+            "start=#{start}, " +
+            "duration=#{duration}, " +
+            "price=#{price}, " +
+            "approved=#{approved} " +
+            "WHERE id=#{id}")
+    void update(Trip trip);
 }

@@ -1,21 +1,21 @@
 package net.thumbtack.school.buscompany.mappers.dto.shop;
 
-import net.thumbtack.school.buscompany.dto.request.shop.CreateTripDtoRequest;
-import net.thumbtack.school.buscompany.dto.response.shop.CreateTripDtoResponse;
+import net.thumbtack.school.buscompany.dto.request.shop.TripDtoRequest;
+import net.thumbtack.school.buscompany.dto.response.shop.TripDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.DateTrip;
 import net.thumbtack.school.buscompany.model.Trip;
 import net.thumbtack.school.buscompany.service.BusService;
 import net.thumbtack.school.buscompany.service.ScheduleService;
 import net.thumbtack.school.buscompany.service.StationService;
+import net.thumbtack.school.buscompany.service.TripService;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
-@Mapper(componentModel = "spring", imports = {StationService.class, BusService.class, ScheduleService.class})
+@Mapper(componentModel = "spring", imports = {StationService.class, BusService.class,
+        ScheduleService.class, TripService.class})
 public interface TripMapper {
     TripMapper INSTANCE = Mappers.getMapper(TripMapper.class);
 
@@ -25,10 +25,10 @@ public interface TripMapper {
     @Mapping(target = "schedule", expression =
             "java(scheduleService.findOrInsert(ScheduleMapper.INSTANCE.scheduleDtoToSchedule(request.getSchedule())))")
     @Mapping(target = "dates", dateFormat = "yyyy-MM-dd")
-    Trip createTripDtoToTrip(CreateTripDtoRequest request,
-                             @Context StationService stationService,
-                             @Context BusService busService,
-                             @Context ScheduleService scheduleService) throws ServerException;
+    Trip tripDtoToTrip(TripDtoRequest request,
+                       @Context StationService stationService,
+                       @Context BusService busService,
+                       @Context ScheduleService scheduleService) throws ServerException;
 
 
     @Mapping(target = "fromStation", source = "fromStation.name")
@@ -38,12 +38,25 @@ public interface TripMapper {
     @Mapping(target = "bus.places", source = "bus.placeCount")
     @Mapping(target = "schedule.fromDate", dateFormat = "yyyy-MM-dd")
     @Mapping(target = "schedule.toDate", dateFormat = "yyyy-MM-dd")
-    CreateTripDtoResponse tripToDtoResponse(Trip trip);
+    TripDtoResponse tripToDtoResponse(Trip trip);
+
+
+    @Mapping(target = "bus", expression = "java(busService.findByName(request.getBusName()))")
+    @Mapping(target = "fromStation", expression = "java(stationService.findStationByName(request.getFromStation()))")
+    @Mapping(target = "toStation", expression = "java(stationService.findStationByName(request.getToStation()))")
+    @Mapping(target = "schedule", expression =
+            "java(scheduleService.findOrInsert(ScheduleMapper.INSTANCE.scheduleDtoToSchedule(request.getSchedule())))")
+    @Mapping(target = "dates", expression = "java(tripService.updateDates(trip))")
+    void update(@MappingTarget Trip trip, TripDtoRequest request,
+                @Context StationService stationService,
+                @Context BusService busService,
+                @Context ScheduleService scheduleService,
+                @Context TripService tripService) throws ServerException;
 
     @Mapping(target = "date", dateFormat = "yyyy-MM-dd")
     DateTrip stringToDate(String date);
 
     default String map(DateTrip value) {
-        return new SimpleDateFormat( "yyyy-MM-dd" ).format(value.getDate());
+        return new SimpleDateFormat("yyyy-MM-dd").format(value.getDate());
     }
 }

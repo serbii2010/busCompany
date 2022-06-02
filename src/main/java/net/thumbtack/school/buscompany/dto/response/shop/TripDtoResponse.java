@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateTripDtoResponse {
+public class TripDtoResponse {
     private int tripId;
     private String fromStation;
     private String toStation;

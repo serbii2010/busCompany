@@ -6,7 +6,6 @@ import net.thumbtack.school.buscompany.daoImpl.shop.TripDaoImpl;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.DateTrip;
-import net.thumbtack.school.buscompany.model.Schedule;
 import net.thumbtack.school.buscompany.model.Trip;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +34,10 @@ public class TripService {
             throw new ServerException(ServerErrorCode.TRIP_NOT_FOUND);
         }
         return trip;
+    }
+
+    public List<Trip> getListTrip(String fromStation, String toStation, String busName, String fromDate, String toDate) throws ServerException{
+        return tripDao.filter(fromStation, toStation, busName, fromDate, toDate);
     }
 
 

@@ -62,4 +62,20 @@ public interface TripMapper {
             "approved=#{approved} " +
             "WHERE id=#{id}")
     void update(Trip trip);
+
+//    @Select("SELECT * FROM trip")
+//    @Results(value = {
+//            @Result(property = "id", column = "id"),
+//            @Result(property = "bus", javaType = Bus.class, column = "bus_id",
+//                    one = @One(select = "getBus")),
+//            @Result(property = "fromStation", javaType = Station.class, column = "from_station_id",
+//                    one = @One(select = "getStation")),
+//            @Result(property = "toStation", javaType = Station.class, column = "to_station_id",
+//                    one = @One(select = "getStation")),
+//            @Result(property = "schedule", javaType = Schedule.class, column = "schedule_id",
+//                    one = @One(select = "getSchedule")),
+//            @Result(property = "dates", javaType = List.class, column = "id",
+//                    many = @Many(select = "getDates"))
+//    })
+    List<Trip> filter(String fromStation, String toStation, String busName, String fromDate, String toDate);
 }

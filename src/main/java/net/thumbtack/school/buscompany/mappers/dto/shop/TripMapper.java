@@ -13,6 +13,7 @@ import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 @Mapper(componentModel = "spring", imports = {StationService.class, BusService.class,
         ScheduleService.class, TripService.class})
@@ -39,6 +40,8 @@ public interface TripMapper {
     @Mapping(target = "schedule.fromDate", dateFormat = "yyyy-MM-dd")
     @Mapping(target = "schedule.toDate", dateFormat = "yyyy-MM-dd")
     TripDtoResponse tripToDtoResponse(Trip trip);
+
+    List<TripDtoResponse> tripListToDtoResponse(List<Trip> trips);
 
 
     @Mapping(target = "bus", expression = "java(busService.findByName(request.getBusName()))")

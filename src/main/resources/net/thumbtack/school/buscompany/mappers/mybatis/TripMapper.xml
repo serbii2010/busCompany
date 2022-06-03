@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.thumbtack.school.buscompany.mappers.mybatis.TripMapper">
+    <resultMap id="resultTrip" type="net.thumbtack.school.buscompany.model.Trip">
+        <id property="id" column="id"/>
+<!--        <result property="bus" javaType="net.thumbtack.school.buscompany.model.Bus" column="bus_id"/>-->
+<!--        <collection property="dates" column="id" javaType="java.util.List"-->
+<!--                    ofType="net.thumbtack.school.buscompany.model.DateTrip">-->
+<!--            <result property="id" column="date_trip_id"/>-->
+<!--            <result property="date" column="date_trip_date"/>-->
+<!--        </collection>-->
+    </resultMap>
+
+    <select id="filterTrip" resultMap="resultTrip">
+        SELECT * FROM trip
+        <where>
+            <if test="fromStation != null">
+                fromStation = #{fromStation}
+            </if>
+        </where>
+    </select>
+
+</mapper>

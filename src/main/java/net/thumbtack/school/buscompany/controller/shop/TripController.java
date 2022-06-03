@@ -15,6 +15,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/trips")
@@ -70,8 +72,6 @@ public class TripController {
         return TripMapper.INSTANCE.tripToDtoResponse(trip);
     }
 
-    //@todo изменение рейса
-
     @DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public EmptyDtoResponse deleteTrip(@PathVariable String id,
                                        @CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
@@ -93,6 +93,22 @@ public class TripController {
         Trip trip = tripService.findById(id);
 
         return TripMapper.INSTANCE.tripToDtoResponse(trip);
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public List<TripDtoResponse> getTrips(@CookieValue("JAVASESSIONID") String javaSessionId,
+                                          @RequestParam(value = "fromStation", required = false) String fromStation,
+                                          @RequestParam(value = "toStation", required = false) String toStation,
+                                          @RequestParam(value = "busName", required = false) String busName,
+                                          @RequestParam(value = "fromDate", required = false) String fromDate,
+                                          @RequestParam(value = "fromStation", required = false) String toDate
+                                          ) throws ServerException {
+        accountService.getAuthAccount(javaSessionId);
+
+        List<Trip> listTrip = tripService.getListTrip(fromStation, toStation, busName, fromDate, toDate);
+
+        List<TripDtoResponse> result = TripMapper.INSTANCE.tripListToDtoResponse(listTrip);
+        return result;
     }
 
 }

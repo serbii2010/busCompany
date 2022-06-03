@@ -3,7 +3,6 @@ package net.thumbtack.school.buscompany.daoImpl.shop;
 import net.thumbtack.school.buscompany.dao.Dao;
 import net.thumbtack.school.buscompany.daoImpl.DaoImplBase;
 import net.thumbtack.school.buscompany.exception.ServerException;
-import net.thumbtack.school.buscompany.model.DateTrip;
 import net.thumbtack.school.buscompany.model.Trip;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
@@ -23,6 +22,16 @@ public class TripDaoImpl extends DaoImplBase implements Dao<Trip> {
             return getTripMapper(sqlSession).findById(id);
         } catch (RuntimeException ex) {
             LOGGER.info("Can't get Trip by Id {} {}", id, ex);
+            throw ex;
+        }
+    }
+
+    public List<Trip> filter(String fromStation, String toStation, String busName, String fromDate, String toDate) {
+        LOGGER.debug("DAO get Trip list from filter");
+        try (SqlSession sqlSession = getSession()) {
+            return getTripMapper(sqlSession).filter(fromStation, toStation, busName, fromDate, toDate);
+        } catch (RuntimeException ex) {
+            LOGGER.info("Can't get Trip list from filter");
             throw ex;
         }
     }

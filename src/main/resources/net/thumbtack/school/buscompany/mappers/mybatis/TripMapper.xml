@@ -56,7 +56,7 @@
                 AND `date` &gt;= DATE(#{fromDate})
             </if>
             <if test="toDate != null">
-                AND `date` &lt;= #{toDate}
+                AND `date` &lt;= DATE(#{toDate})
             </if>
         </where>
     </select>

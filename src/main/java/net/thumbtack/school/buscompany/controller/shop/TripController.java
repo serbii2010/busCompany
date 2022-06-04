@@ -101,14 +101,11 @@ public class TripController {
                                           @RequestParam(value = "toStation", required = false) String toStation,
                                           @RequestParam(value = "busName", required = false) String busName,
                                           @RequestParam(value = "fromDate", required = false) String fromDate,
-                                          @RequestParam(value = "fromStation", required = false) String toDate
+                                          @RequestParam(value = "toDate", required = false) String toDate
                                           ) throws ServerException {
         accountService.getAuthAccount(javaSessionId);
-
         List<Trip> listTrip = tripService.getListTrip(fromStation, toStation, busName, fromDate, toDate);
-
-        List<TripDtoResponse> result = TripMapper.INSTANCE.tripListToDtoResponse(listTrip);
-        return result;
+        return TripMapper.INSTANCE.tripListToDtoResponse(listTrip);
     }
 
 }

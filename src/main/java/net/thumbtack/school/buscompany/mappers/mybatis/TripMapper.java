@@ -77,5 +77,5 @@ public interface TripMapper {
 //            @Result(property = "dates", javaType = List.class, column = "id",
 //                    many = @Many(select = "getDates"))
 //    })
-    List<Trip> filter(String fromStation, String toStation, String busName, String fromDate, String toDate);
+    List<Trip> filterTrip(String fromStation, String toStation, String busName, String fromDate, String toDate);
 }

@@ -29,7 +29,7 @@ public class TripDaoImpl extends DaoImplBase implements Dao<Trip> {
     public List<Trip> filter(String fromStation, String toStation, String busName, String fromDate, String toDate) {
         LOGGER.debug("DAO get Trip list from filter");
         try (SqlSession sqlSession = getSession()) {
-            return getTripMapper(sqlSession).filter(fromStation, toStation, busName, fromDate, toDate);
+            return getTripMapper(sqlSession).filterTrip(fromStation, toStation, busName, fromDate, toDate);
         } catch (RuntimeException ex) {
             LOGGER.info("Can't get Trip list from filter");
             throw ex;

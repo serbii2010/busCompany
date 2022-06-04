@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,7 +37,7 @@ public class TripService {
         return trip;
     }
 
-    public List<Trip> getListTrip(String fromStation, String toStation, String busName, String fromDate, String toDate) throws ServerException{
+    public List<Trip> getListTrip(String fromStation, String toStation, String busName, String fromDate, String toDate) {
         return tripDao.filter(fromStation, toStation, busName, fromDate, toDate);
     }
 

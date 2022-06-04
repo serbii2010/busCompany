@@ -67,8 +67,8 @@ INSERT INTO station (name) VALUE ('Новосибирск');
 CREATE TABLE schedule
 (
     id        INT(11)     NOT NULL AUTO_INCREMENT,
-    from_date VARCHAR(30) NOT NULL,
-    to_date   VARCHAR(30) NOT NULL,
+    from_date DATE NOT NULL,
+    to_date   DATE NOT NULL,
     periods   VARCHAR(30) NOT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY uniq_schedule (from_date, to_date, periods),
@@ -101,7 +101,7 @@ CREATE TABLE date_trip
 (
     id      INT(11)     NOT NULL AUTO_INCREMENT,
     trip_id INT(11)     NULL DEFAULT NULL,
-    date    VARCHAR(30) NOT NULL,
+    date    DATE NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (trip_id) REFERENCES trip (id) ON DELETE SET NULL
 ) ENGINE = INNODB

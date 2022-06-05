@@ -1,8 +1,8 @@
 package net.thumbtack.school.buscompany.service;
 
-import net.thumbtack.school.buscompany.daoImpl.shop.DateTripDaoImpl;
-import net.thumbtack.school.buscompany.daoImpl.shop.ScheduleDaoImpl;
-import net.thumbtack.school.buscompany.daoImpl.shop.TripDaoImpl;
+import net.thumbtack.school.buscompany.daoImpl.trip.DateTripDaoImpl;
+import net.thumbtack.school.buscompany.daoImpl.trip.ScheduleDaoImpl;
+import net.thumbtack.school.buscompany.daoImpl.trip.TripDaoImpl;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.DateTrip;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,6 +1,6 @@
 package net.thumbtack.school.buscompany.service;
 
-import net.thumbtack.school.buscompany.daoImpl.shop.ScheduleDaoImpl;
+import net.thumbtack.school.buscompany.daoImpl.trip.ScheduleDaoImpl;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.Schedule;
 import org.apache.commons.validator.GenericValidator;

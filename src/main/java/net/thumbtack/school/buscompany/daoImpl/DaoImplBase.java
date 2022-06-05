@@ -1,6 +1,8 @@
 package net.thumbtack.school.buscompany.daoImpl;
 
-import net.thumbtack.school.buscompany.mappers.mybatis.*;
+import net.thumbtack.school.buscompany.mappers.mybatis.account.AccountMapper;
+import net.thumbtack.school.buscompany.mappers.mybatis.account.UserTypeMapper;
+import net.thumbtack.school.buscompany.mappers.mybatis.trip.*;
 import net.thumbtack.school.buscompany.utils.MyBatisUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;

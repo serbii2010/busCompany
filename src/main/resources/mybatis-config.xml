@@ -25,14 +25,14 @@
     </environments>
 
     <mappers>
-        <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.AccountMapper"/>
-        <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.UserTypeMapper"/>
-        <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.BusMapper"/>
-        <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.TripMapper"/>
-        <mapper resource="net/thumbtack/school/buscompany/mappers/mybatis/TripMapper.xml"/>
-        <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.StationMapper"/>
-        <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.ScheduleMapper"/>
-        <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.DateTripMapper"/>
+        <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.account.AccountMapper"/>
+        <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.account.UserTypeMapper"/>
+        <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.trip.BusMapper"/>
+        <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.trip.TripMapper"/>
+        <mapper resource="net/thumbtack/school/buscompany/mappers/mybatis/trip/TripMapper.xml"/>
+        <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.trip.StationMapper"/>
+        <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.trip.ScheduleMapper"/>
+        <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.trip.DateTripMapper"/>
     </mappers>
 
 </configuration>

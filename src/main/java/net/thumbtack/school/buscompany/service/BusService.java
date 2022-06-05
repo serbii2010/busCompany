@@ -1,6 +1,6 @@
 package net.thumbtack.school.buscompany.service;
 
-import net.thumbtack.school.buscompany.daoImpl.shop.BusDaoImpl;
+import net.thumbtack.school.buscompany.daoImpl.trip.BusDaoImpl;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.Bus;

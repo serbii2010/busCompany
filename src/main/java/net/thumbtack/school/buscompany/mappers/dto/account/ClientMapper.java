@@ -7,7 +7,7 @@ import net.thumbtack.school.buscompany.dto.response.account.InfoClientDtoRespons
 import net.thumbtack.school.buscompany.dto.response.account.RegistrationClientDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.Account;
-import net.thumbtack.school.buscompany.service.AccountService;
+import net.thumbtack.school.buscompany.service.account.AccountService;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;

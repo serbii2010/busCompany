@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Orders {
+public class Order {
     private int id;
     private Trip trip;
     private String date;

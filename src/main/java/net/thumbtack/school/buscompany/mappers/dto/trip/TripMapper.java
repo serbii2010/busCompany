@@ -5,10 +5,10 @@ import net.thumbtack.school.buscompany.dto.response.trip.TripDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.DateTrip;
 import net.thumbtack.school.buscompany.model.Trip;
-import net.thumbtack.school.buscompany.service.BusService;
-import net.thumbtack.school.buscompany.service.ScheduleService;
-import net.thumbtack.school.buscompany.service.StationService;
-import net.thumbtack.school.buscompany.service.TripService;
+import net.thumbtack.school.buscompany.service.trip.BusService;
+import net.thumbtack.school.buscompany.service.trip.ScheduleService;
+import net.thumbtack.school.buscompany.service.trip.StationService;
+import net.thumbtack.school.buscompany.service.trip.TripService;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 

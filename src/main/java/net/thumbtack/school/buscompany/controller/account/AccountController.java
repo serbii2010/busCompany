@@ -7,7 +7,7 @@ import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.mappers.dto.account.AdminMapper;
 import net.thumbtack.school.buscompany.mappers.dto.account.ClientMapper;
 import net.thumbtack.school.buscompany.model.Account;
-import net.thumbtack.school.buscompany.service.AccountService;
+import net.thumbtack.school.buscompany.service.account.AccountService;
 import net.thumbtack.school.buscompany.utils.UserTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

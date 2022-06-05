@@ -123,6 +123,7 @@ CREATE TABLE passenger
     first_name VARCHAR(30) NOT NULL,
     last_name  VARCHAR(30) NOT NULL,
     passport   VARCHAR(20) NOT NULL,
+    UNIQUE KEY uniq_passenger (first_name, last_name, passport),
     PRIMARY KEY (id)
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;

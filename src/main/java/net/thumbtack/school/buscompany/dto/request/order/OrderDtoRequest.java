@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDtoRequest {
+    //@todo добавить валидацию
     private int tripId;
     private Date date;
     private List<PassengerDtoRequest> passengers;

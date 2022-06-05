@@ -1,7 +1,7 @@
 package net.thumbtack.school.buscompany.validator;
 
 
-import net.thumbtack.school.buscompany.service.ScheduleService;
+import net.thumbtack.school.buscompany.service.trip.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

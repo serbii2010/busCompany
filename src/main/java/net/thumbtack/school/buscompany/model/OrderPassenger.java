@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderPassenger {
     private int id;
-    private Orders order;
+    private Order order;
     private Passenger passenger;
 }

@@ -1,4 +1,4 @@
-package net.thumbtack.school.buscompany.service;
+package net.thumbtack.school.buscompany.service.account;
 
 import net.thumbtack.school.buscompany.daoImpl.account.AccountDaoImpl;
 import net.thumbtack.school.buscompany.daoImpl.account.UserTypeDaoImpl;

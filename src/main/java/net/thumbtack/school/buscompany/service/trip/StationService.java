@@ -1,4 +1,4 @@
-package net.thumbtack.school.buscompany.service;
+package net.thumbtack.school.buscompany.service.trip;
 
 import net.thumbtack.school.buscompany.daoImpl.trip.StationDaoImpl;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;

@@ -1,7 +1,7 @@
 package net.thumbtack.school.buscompany.validator;
 
 import net.thumbtack.school.buscompany.exception.ServerException;
-import net.thumbtack.school.buscompany.service.AccountService;
+import net.thumbtack.school.buscompany.service.account.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

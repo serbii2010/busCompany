@@ -2,6 +2,7 @@ package net.thumbtack.school.buscompany.daoImpl;
 
 import net.thumbtack.school.buscompany.mappers.mybatis.account.AccountMapper;
 import net.thumbtack.school.buscompany.mappers.mybatis.account.UserTypeMapper;
+import net.thumbtack.school.buscompany.mappers.mybatis.order.OrderMapper;
 import net.thumbtack.school.buscompany.mappers.mybatis.trip.*;
 import net.thumbtack.school.buscompany.utils.MyBatisUtils;
 import org.apache.ibatis.session.SqlSession;
@@ -42,5 +43,9 @@ public class DaoImplBase {
 
     protected DateTripMapper getDateTripMapper(SqlSession sqlSession) {
         return sqlSession.getMapper(DateTripMapper.class);
+    }
+
+    protected OrderMapper getOrderMapper(SqlSession sqlSession) {
+        return sqlSession.getMapper(OrderMapper.class);
     }
 }

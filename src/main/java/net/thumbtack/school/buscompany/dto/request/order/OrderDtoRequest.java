@@ -1,19 +1,17 @@
 package net.thumbtack.school.buscompany.dto.request.order;
 
+import lombok.*;
+import net.thumbtack.school.buscompany.validator.DateFormat;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.Date;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDtoRequest {
-    //@todo добавить валидацию
     private int tripId;
-    private Date date;
+    @DateFormat
+    private String date;
     private List<PassengerDtoRequest> passengers;
 }

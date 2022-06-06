@@ -4,6 +4,8 @@ import net.thumbtack.school.buscompany.dao.Dao;
 import net.thumbtack.school.buscompany.daoImpl.DaoImplBase;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.Order;
+import net.thumbtack.school.buscompany.model.OrderPassenger;
+import net.thumbtack.school.buscompany.model.Passenger;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,12 +29,20 @@ public class OrderDaoImpl extends DaoImplBase implements Dao<Order> {
 
     @Override
     public Order insert(Order order) {
-        LOGGER.debug("DAO insert DateTrip {}", order);
+        LOGGER.debug("DAO insert Order {}", order);
         try (SqlSession sqlSession = getSession()) {
             try {
                 getOrderMapper(sqlSession).insert(order);
+                for (Passenger passenger: order.getPassengers()) {
+                    Passenger newPassenger = getPassengerMapper(sqlSession).find(passenger);
+                    if (newPassenger == null) {
+                        getPassengerMapper(sqlSession).insert(passenger);
+                        newPassenger = passenger;
+                    }
+                    getOrderPassengerMapper(sqlSession).insert(new OrderPassenger(order, newPassenger));
+                }
             } catch (RuntimeException ex) {
-                LOGGER.info("Can't insert DateTrip {} {}", order, ex);
+                LOGGER.info("Can't insert Order {} {}", order, ex);
                 sqlSession.rollback();
                 throw ex;
             }

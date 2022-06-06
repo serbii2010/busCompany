@@ -101,8 +101,16 @@ public class AccountService {
         }
     }
 
-    public void checkIfAdmin(Account account) throws ServerException {
+    public void checkAdmin(String javaSessionId) throws ServerException {
+        Account account = getAuthAccount(javaSessionId);
         if (!account.getUserType().getType().equals(UserTypeEnum.ADMIN.getType())) {
+            throw new ServerException(ServerErrorCode.ACTION_FORBIDDEN);
+        }
+    }
+
+    public void checkClient(String javaSessionId) throws ServerException {
+        Account account = getAuthAccount(javaSessionId);
+        if (!account.getUserType().getType().equals(UserTypeEnum.CLIENT.getType())) {
             throw new ServerException(ServerErrorCode.ACTION_FORBIDDEN);
         }
     }

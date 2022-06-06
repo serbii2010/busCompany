@@ -27,12 +27,17 @@
     <mappers>
         <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.account.AccountMapper"/>
         <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.account.UserTypeMapper"/>
+
         <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.trip.BusMapper"/>
         <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.trip.TripMapper"/>
         <mapper resource="net/thumbtack/school/buscompany/mappers/mybatis/trip/TripMapper.xml"/>
         <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.trip.StationMapper"/>
         <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.trip.ScheduleMapper"/>
         <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.trip.DateTripMapper"/>
+
+        <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.order.OrderMapper"/>
+        <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.order.PassengerMapper"/>
+        <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.order.OrderPassengerMapper"/>
     </mappers>
 
 </configuration>

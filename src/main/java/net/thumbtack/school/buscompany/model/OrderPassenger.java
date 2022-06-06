@@ -11,4 +11,8 @@ public class OrderPassenger {
     private int id;
     private Order order;
     private Passenger passenger;
+
+    public OrderPassenger(Order order, Passenger passenger) {
+        this(0, order, passenger);
+    }
 }

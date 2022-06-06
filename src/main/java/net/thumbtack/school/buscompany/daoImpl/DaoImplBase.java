@@ -3,6 +3,8 @@ package net.thumbtack.school.buscompany.daoImpl;
 import net.thumbtack.school.buscompany.mappers.mybatis.account.AccountMapper;
 import net.thumbtack.school.buscompany.mappers.mybatis.account.UserTypeMapper;
 import net.thumbtack.school.buscompany.mappers.mybatis.order.OrderMapper;
+import net.thumbtack.school.buscompany.mappers.mybatis.order.OrderPassengerMapper;
+import net.thumbtack.school.buscompany.mappers.mybatis.order.PassengerMapper;
 import net.thumbtack.school.buscompany.mappers.mybatis.trip.*;
 import net.thumbtack.school.buscompany.utils.MyBatisUtils;
 import org.apache.ibatis.session.SqlSession;
@@ -47,5 +49,13 @@ public class DaoImplBase {
 
     protected OrderMapper getOrderMapper(SqlSession sqlSession) {
         return sqlSession.getMapper(OrderMapper.class);
+    }
+
+    protected PassengerMapper getPassengerMapper(SqlSession sqlSession) {
+        return sqlSession.getMapper(PassengerMapper.class);
+    }
+
+    protected OrderPassengerMapper getOrderPassengerMapper(SqlSession sqlSession) {
+        return sqlSession.getMapper(OrderPassengerMapper.class);
     }
 }

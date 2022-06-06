@@ -19,5 +19,6 @@ public class OrderDtoResponse {
     private String date;
     private String start;
     private int price;
+    private int totalPrice;
     List<PassengerDtoResponse> passengers;
 }

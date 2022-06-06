@@ -40,8 +40,7 @@ public class TripController {
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public TripDtoResponse addTrip(@Valid @RequestBody TripDtoRequest request,
                                    @CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
-        Account account = accountService.getAuthAccount(javaSessionId);
-        accountService.checkIfAdmin(account);
+        accountService.checkAdmin(javaSessionId);
 
         Trip trip = TripMapper.INSTANCE.tripDtoToTrip(request, stationService, busService, scheduleService);
         tripService.insert(trip);
@@ -53,8 +52,7 @@ public class TripController {
     public TripDtoResponse update(@Valid @RequestBody TripDtoRequest tripDtoRequest,
             @PathVariable String id,
             @CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
-        Account account = accountService.getAuthAccount(javaSessionId);
-        accountService.checkIfAdmin(account);
+        accountService.checkAdmin(javaSessionId);
 
         Trip trip = tripService.findById(id);
         TripMapper.INSTANCE.update(trip, tripDtoRequest, stationService, busService, scheduleService, tripService);
@@ -66,8 +64,7 @@ public class TripController {
     @PutMapping(path = "/{id}/approve", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public TripDtoResponse approveTrip(@PathVariable String id,
                        @CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
-        Account account = accountService.getAuthAccount(javaSessionId);
-        accountService.checkIfAdmin(account);
+        accountService.checkAdmin(javaSessionId);
 
         Trip trip = tripService.findById(id);
         trip.setApproved(true);
@@ -78,8 +75,7 @@ public class TripController {
     @DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public EmptyDtoResponse deleteTrip(@PathVariable String id,
                                        @CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
-        Account account = accountService.getAuthAccount(javaSessionId);
-        accountService.checkIfAdmin(account);
+        accountService.checkAdmin(javaSessionId);
 
         Trip trip = tripService.findById(id);
         tripService.delete(trip);
@@ -90,8 +86,7 @@ public class TripController {
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public TripDtoResponse getTrip(@PathVariable String id,
                                    @CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
-        Account account = accountService.getAuthAccount(javaSessionId);
-        accountService.checkIfAdmin(account);
+        accountService.checkAdmin(javaSessionId);
 
         Trip trip = tripService.findById(id);
 

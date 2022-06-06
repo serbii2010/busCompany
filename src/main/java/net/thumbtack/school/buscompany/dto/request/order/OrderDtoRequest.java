@@ -2,6 +2,7 @@ package net.thumbtack.school.buscompany.dto.request.order;
 
 import lombok.*;
 import net.thumbtack.school.buscompany.validator.DateFormat;
+import net.thumbtack.school.buscompany.validator.DateOrderInDatesTrip;
 
 import java.util.List;
 
@@ -9,6 +10,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@DateOrderInDatesTrip
 public class OrderDtoRequest {
     private int tripId;
     @DateFormat

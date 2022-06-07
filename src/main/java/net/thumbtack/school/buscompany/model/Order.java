@@ -12,6 +12,7 @@ import java.util.List;
 public class Order {
     private int id;
     private Trip trip;
+    private Account account;
     private String date;
 
     private List<Passenger> passengers;

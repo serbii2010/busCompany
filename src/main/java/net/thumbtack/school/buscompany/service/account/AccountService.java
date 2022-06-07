@@ -102,17 +102,25 @@ public class AccountService {
     }
 
     public void checkAdmin(String javaSessionId) throws ServerException {
-        Account account = getAuthAccount(javaSessionId);
-        if (!account.getUserType().getType().equals(UserTypeEnum.ADMIN.getType())) {
+        if (!isAdmin(javaSessionId)) {
             throw new ServerException(ServerErrorCode.ACTION_FORBIDDEN);
         }
     }
 
     public void checkClient(String javaSessionId) throws ServerException {
-        Account account = getAuthAccount(javaSessionId);
-        if (!account.getUserType().getType().equals(UserTypeEnum.CLIENT.getType())) {
+        if (!isClient(javaSessionId)) {
             throw new ServerException(ServerErrorCode.ACTION_FORBIDDEN);
         }
+    }
+
+    public boolean isAdmin(String javaSessionId) throws  ServerException {
+        Account account = getAuthAccount(javaSessionId);
+        return account.getUserType().getType().equals(UserTypeEnum.ADMIN.getType());
+    }
+
+    public boolean isClient(String javaSessionId) throws  ServerException {
+        Account account = getAuthAccount(javaSessionId);
+        return account.getUserType().getType().equals(UserTypeEnum.CLIENT.getType());
     }
 
     public void setPassword(Account account, String newPassword) {

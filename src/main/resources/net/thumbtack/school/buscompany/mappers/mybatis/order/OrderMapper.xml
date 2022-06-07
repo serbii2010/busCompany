@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.thumbtack.school.buscompany.mappers.mybatis.order.OrderMapper">
+    <resultMap id="resultOrder" type="net.thumbtack.school.buscompany.model.Order">
+        <id property="id" column="id"/>
+        <result property="date" column="date"/>
+        <association property="trip" resultMap="resultTrip"/>
+        <association property="account" javaType="net.thumbtack.school.buscompany.model.Account" column="account_id"
+                     select="selectAccount"/>
+        <collection property="passengers" column="id" javaType="java.util.List"
+                    ofType="net.thumbtack.school.buscompany.model.Passenger">
+            <id property="id" column="passenger.id"/>
+            <result property="firstName" column="first_name"/>
+            <result property="lastName" column="last_name"/>
+            <result property="passport" column="passport"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="resultTrip" type="net.thumbtack.school.buscompany.model.Trip">
+        <id property="id" column="trip_id"/>
+        <result property="start" column="start"/>
+        <result property="duration" column="duration"/>
+        <result property="price" column="price"/>
+        <result property="approved" column="approved"/>
+        <association property="bus" javaType="net.thumbtack.school.buscompany.model.Bus" column="bus_id"
+                     select="selectBus"/>
+        <association property="fromStation" javaType="net.thumbtack.school.buscompany.model.Station"
+                     column="from_station_id" select="selectStation"/>
+        <association property="toStation" javaType="net.thumbtack.school.buscompany.model.Station"
+                     column="to_station_id" select="selectStation"/>
+        <association property="schedule" javaType="net.thumbtack.school.buscompany.model.Schedule" column="schedule_id"
+                     select="selectSchedule"/>
+
+        <collection property="dates" column="id" javaType="java.util.List"
+                    ofType="net.thumbtack.school.buscompany.model.DateTrip">
+            <id property="id" column="date_trip.id"/>
+            <result property="date" column="date"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="resultSchedule" type="net.thumbtack.school.buscompany.model.Schedule">
+        <id property="id" column="id"/>
+        <result property="fromDate" column="from_date"/>
+        <result property="toDate" column="to_date"/>
+        <result property="period" column="periods"/>
+    </resultMap>
+
+    <resultMap id="resultAccount" type="net.thumbtack.school.buscompany.model.Account">
+        <id property="id" column="id"/>
+        <result property="login" column="login"/>
+        <result property="firstName" column="first_name"/>
+        <result property="lastName" column="last_name"/>
+    </resultMap>
+
+    <select id="filter" resultMap="resultOrder">
+        SELECT
+        *
+        FROM orders
+        JOIN trip ON trip.id = orders.trip_id
+        JOIN bus ON bus.id = trip.bus_id
+        JOIN station as from_station ON from_station.id = trip.from_station_id
+        JOIN station as to_station ON to_station.id = trip.to_station_id
+        LEFT JOIN schedule ON schedule.id = trip.schedule_id
+        LEFT JOIN order_passenger ON order_passenger.order_id = orders.id
+        RIGHT JOIN passenger ON order_passenger.passenger_id = passenger.id
+        <where>
+            <if test="clientId != null">
+                AND account_id=#{clientId}
+            </if>
+            <if test="fromStation != null">
+                AND from_station.name=#{fromStation}
+            </if>
+            <if test="toStation != null">
+                AND to_station.name=#{toStation}
+            </if>
+            <if test="busName != null">
+                AND bus.name=#{busName}
+            </if>
+            <if test="fromDate != null">
+                AND `date` &gt;= DATE(#{fromDate})
+            </if>
+            <if test="toDate != null">
+                AND `date` &lt;= DATE(#{toDate})
+            </if>
+        </where>
+    </select>
+
+    <select id="selectBus" resultType="net.thumbtack.school.buscompany.model.Bus">
+        SELECT name as name, place_count as placeCount
+        FROM bus
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectStation" resultType="net.thumbtack.school.buscompany.model.Station">
+        SELECT *
+        FROM station
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectSchedule" resultMap="resultSchedule">
+        SELECT *
+        FROM schedule
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectAccount" resultMap="resultAccount">
+        SELECT *
+        FROM account
+        WHERE id = #{id}
+    </select>
+
+</mapper>

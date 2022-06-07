@@ -47,8 +47,10 @@ CREATE TABLE bus
   DEFAULT CHARSET = utf8;
 
 #### insert default bus
-INSERT INTO bus (name, place_count) VALUES ('Пазик', 21);
-INSERT INTO bus (name, place_count) VALUES ('Икарус', 41);
+INSERT INTO bus (name, place_count)
+VALUES ('Пазик', 21);
+INSERT INTO bus (name, place_count)
+VALUES ('Икарус', 41);
 
 CREATE TABLE station
 (
@@ -67,8 +69,8 @@ INSERT INTO station (name) VALUE ('Новосибирск');
 CREATE TABLE schedule
 (
     id        INT(11)     NOT NULL AUTO_INCREMENT,
-    from_date DATE NOT NULL,
-    to_date   DATE NOT NULL,
+    from_date DATE        NOT NULL,
+    to_date   DATE        NOT NULL,
     periods   VARCHAR(30) NOT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY uniq_schedule (from_date, to_date, periods),
@@ -99,9 +101,9 @@ CREATE TABLE trip
 
 CREATE TABLE date_trip
 (
-    id      INT(11)     NOT NULL AUTO_INCREMENT,
-    trip_id INT(11)     NULL DEFAULT NULL,
-    date    DATE NOT NULL,
+    id      INT(11) NOT NULL AUTO_INCREMENT,
+    trip_id INT(11) NULL DEFAULT NULL,
+    date    DATE    NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (trip_id) REFERENCES trip (id) ON DELETE SET NULL
 ) ENGINE = INNODB
@@ -109,11 +111,13 @@ CREATE TABLE date_trip
 
 CREATE TABLE orders
 (
-    id      INT(11)     NOT NULL AUTO_INCREMENT,
-    trip_id INT(11)     NULL DEFAULT NULL,
-    date    DATETIME NOT NULL DEFAULT NOW(),
+    id         INT(11) NOT NULL AUTO_INCREMENT,
+    trip_id    INT(11) NULL DEFAULT NULL,
+    account_id INT(11) NULL DEFAULT NULL,
+    date       DATE    NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (trip_id) REFERENCES trip (id) ON DELETE SET NULL
+    FOREIGN KEY (trip_id) REFERENCES trip (id) ON DELETE SET NULL,
+    FOREIGN KEY (account_id) REFERENCES account (id) ON DELETE SET NULL
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;
 

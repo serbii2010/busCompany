@@ -14,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -28,11 +30,32 @@ public class OrderController {
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public OrderDtoResponse createOrder(@Valid @RequestBody OrderDtoRequest request,
                                         @CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
+        Account account = accountService.getAuthAccount(javaSessionId);
         accountService.checkClient(javaSessionId);
 
-        Order order = OrderMapper.INSTANCE.dtoToOrder(request, tripService);
+        Order order = OrderMapper.INSTANCE.dtoToOrder(request, tripService, account);
         orderService.insert(order);
 
         return OrderMapper.INSTANCE.orderToDto(order);
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public List<OrderDtoResponse> filter(
+            @CookieValue("JAVASESSIONID") String javaSessionId,
+            @RequestParam(value = "fromStation", required = false) String fromStation,
+            @RequestParam(value = "toStation", required = false) String toStation,
+            @RequestParam(value = "busName", required = false) String busName,
+            @RequestParam(value = "fromDate", required = false) String fromDate,
+            @RequestParam(value = "toDate", required = false) String toDate,
+            @RequestParam(value = "clintId", required = false) String clientId
+    ) throws ServerException {
+        Account account = accountService.getAuthAccount(javaSessionId);
+        List<Order> orderList = new ArrayList<>();
+        if (accountService.isAdmin(javaSessionId)) {
+            orderList.addAll(orderService.getListOrder(fromStation, toStation, busName, fromDate, toDate, clientId));
+        } else {
+            orderList.addAll(orderService.getListOrder(fromStation, toStation, busName, fromDate, toDate, String.valueOf(account.getId())));
+        }
+        return OrderMapper.INSTANCE.orderListToDtoResponse(orderList);
     }
 }

@@ -6,6 +6,7 @@ import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.Order;
 import net.thumbtack.school.buscompany.model.OrderPassenger;
 import net.thumbtack.school.buscompany.model.Passenger;
+import net.thumbtack.school.buscompany.model.Trip;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,5 +61,15 @@ public class OrderDaoImpl extends DaoImplBase implements Dao<Order> {
     @Override
     public void update(Order object) {
 
+    }
+
+    public List<Order> filter(String fromStation, String toStation, String busName, String fromDate, String toDate, String clientId) {
+        LOGGER.debug("DAO get Order list from filter");
+        try (SqlSession sqlSession = getSession()) {
+            return getOrderMapper(sqlSession).filter(fromStation, toStation, busName, fromDate, toDate, clientId);
+        } catch (RuntimeException ex) {
+            LOGGER.info("Can't get Order list from filter");
+            throw ex;
+        }
     }
 }

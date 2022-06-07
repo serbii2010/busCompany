@@ -21,7 +21,13 @@ public class OrderDaoImpl extends DaoImplBase implements Dao<Order> {
 
     @Override
     public Order findById(String id) throws ServerException {
-        return null;
+        LOGGER.debug("DAO get Order by Id {}", id);
+        try (SqlSession sqlSession = getSession()) {
+            return getOrderMapper(sqlSession).findById(id);
+        } catch (RuntimeException ex) {
+            LOGGER.info("Can't get Order by Id {} {}", id, ex);
+            throw ex;
+        }
     }
 
     @Override

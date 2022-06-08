@@ -26,9 +26,9 @@ public class TicketController {
         accountService.isClient(javaSessionId);
         Account account = accountService.getAuthAccount(javaSessionId);
         Order order = orderService.findById(id);
-
+        //@todo проверить отношение заказа к клиенту
         List<Integer> freePlace = orderService.getFreePlaces(order);
-        //@todo получить список свободных мест
+
         return freePlace;
     }
 }

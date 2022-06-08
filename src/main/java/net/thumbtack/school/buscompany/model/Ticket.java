@@ -11,4 +11,8 @@ public class Ticket {
     private int id;
     private OrderPassenger orderPassenger;
     private int place;
+
+    public Ticket(OrderPassenger orderPassenger, int place) {
+        this(0, orderPassenger, place);
+    }
 }

@@ -1,9 +1,6 @@
 package net.thumbtack.school.buscompany.mappers.mybatis.order;
 
-import net.thumbtack.school.buscompany.model.Bus;
-import net.thumbtack.school.buscompany.model.Order;
-import net.thumbtack.school.buscompany.model.Passenger;
-import net.thumbtack.school.buscompany.model.Trip;
+import net.thumbtack.school.buscompany.model.*;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -15,7 +12,9 @@ public interface OrderMapper {
             @Result(property = "passengers", javaType = List.class, column = "id",
                     many = @Many(select = "getPassenger")),
             @Result(property = "trip", javaType = Trip.class, column = "trip_id",
-                    one = @One(select = "selectTrip"))
+                    one = @One(select = "selectTrip")),
+            @Result(property = "account", javaType = Account.class, column = "account_id",
+                    one = @One(select = "selectAccount"))
     })
     Order findById(String id);
 

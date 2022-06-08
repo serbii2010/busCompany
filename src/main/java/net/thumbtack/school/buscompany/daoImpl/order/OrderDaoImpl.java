@@ -6,11 +6,9 @@ import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.Order;
 import net.thumbtack.school.buscompany.model.OrderPassenger;
 import net.thumbtack.school.buscompany.model.Passenger;
-import net.thumbtack.school.buscompany.model.Trip;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

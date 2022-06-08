@@ -2,11 +2,9 @@ package net.thumbtack.school.buscompany.mappers.dto.order;
 
 import net.thumbtack.school.buscompany.dto.request.order.OrderDtoRequest;
 import net.thumbtack.school.buscompany.dto.response.order.OrderDtoResponse;
-import net.thumbtack.school.buscompany.dto.response.trip.TripDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.Account;
 import net.thumbtack.school.buscompany.model.Order;
-import net.thumbtack.school.buscompany.model.Trip;
 import net.thumbtack.school.buscompany.service.trip.TripService;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;

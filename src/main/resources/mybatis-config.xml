@@ -39,6 +39,7 @@
         <mapper resource="net/thumbtack/school/buscompany/mappers/mybatis/order/OrderMapper.xml"/>
         <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.order.PassengerMapper"/>
         <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.order.OrderPassengerMapper"/>
+        <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.order.TicketMapper"/>
     </mappers>
 
 </configuration>

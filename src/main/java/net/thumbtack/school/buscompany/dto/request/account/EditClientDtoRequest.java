@@ -8,7 +8,6 @@ import net.thumbtack.school.buscompany.validator.MinPasswordLength;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor

@@ -5,7 +5,6 @@ import net.thumbtack.school.buscompany.dto.response.account.EmptyDtoResponse;
 import net.thumbtack.school.buscompany.dto.response.trip.TripDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.mappers.dto.trip.TripMapper;
-import net.thumbtack.school.buscompany.model.Account;
 import net.thumbtack.school.buscompany.model.Trip;
 import net.thumbtack.school.buscompany.service.account.AccountService;
 import net.thumbtack.school.buscompany.service.trip.BusService;

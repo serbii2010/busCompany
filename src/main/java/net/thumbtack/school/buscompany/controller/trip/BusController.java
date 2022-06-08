@@ -3,7 +3,6 @@ package net.thumbtack.school.buscompany.controller.trip;
 import net.thumbtack.school.buscompany.dto.response.trip.BusDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.mappers.dto.trip.BusMapper;
-import net.thumbtack.school.buscompany.model.Account;
 import net.thumbtack.school.buscompany.model.Bus;
 import net.thumbtack.school.buscompany.service.account.AccountService;
 import net.thumbtack.school.buscompany.service.trip.BusService;

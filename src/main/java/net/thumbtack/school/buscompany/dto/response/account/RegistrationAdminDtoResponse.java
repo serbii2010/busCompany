@@ -2,7 +2,6 @@ package net.thumbtack.school.buscompany.dto.response.account;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data

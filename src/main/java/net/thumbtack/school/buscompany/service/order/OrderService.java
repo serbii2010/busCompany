@@ -5,7 +5,6 @@ import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.Account;
 import net.thumbtack.school.buscompany.model.Order;
-import net.thumbtack.school.buscompany.model.Passenger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

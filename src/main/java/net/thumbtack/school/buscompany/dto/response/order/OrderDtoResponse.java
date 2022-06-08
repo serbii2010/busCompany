@@ -1,6 +1,5 @@
 package net.thumbtack.school.buscompany.dto.response.order;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

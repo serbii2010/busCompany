@@ -1,5 +1,6 @@
 package net.thumbtack.school.buscompany.mappers.mybatis.order;
 
+import net.thumbtack.school.buscompany.model.Bus;
 import net.thumbtack.school.buscompany.model.Order;
 import net.thumbtack.school.buscompany.model.Passenger;
 import net.thumbtack.school.buscompany.model.Trip;
@@ -18,11 +19,28 @@ public interface OrderMapper {
     })
     Order findById(String id);
 
+    @Select("SELECT place FROM order_passenger " +
+            "RIGHT JOIN ticket ON ticket.order_passenger_id=order_passenger.id " +
+            "LEFT JOIN orders ON order_passenger.order_id=orders.id " +
+            "WHERE orders.trip_id=#{trip.id} AND orders.date=#{date}")
+    List<Integer> findPlaces(Order order);
+
     @Select("SELECT * FROM order_passenger LEFT JOIN passenger ON passenger.id = order_passenger.passenger_id WHERE order_id=#{orderId}")
     List<Passenger> getPassenger(String orderId);
 
     @Select("SELECT * from trip WHERE id=#{tripId}")
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "bus", javaType = Bus.class, column = "bus_id",
+                    one = @One(select = "getBus")),
+    })
     Trip selectTrip(String tripId);
+
+    @Select("SELECT * FROM bus where id = #{busId} ")
+    @Results(value = {
+            @Result(property = "placeCount", column = "place_count")
+    })
+    Bus getBus(String busId);
 
     @Insert("INSERT INTO orders (trip_id, account_id, date) " +
             "VALUES (#{trip.id}, #{account.id}, #{date})")

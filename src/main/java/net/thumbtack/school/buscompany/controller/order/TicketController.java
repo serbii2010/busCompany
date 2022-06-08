@@ -27,7 +27,8 @@ public class TicketController {
         Account account = accountService.getAuthAccount(javaSessionId);
         Order order = orderService.findById(id);
 
+        List<Integer> freePlace = orderService.getFreePlaces(order);
         //@todo получить список свободных мест
-        return new ArrayList<Integer>();
+        return freePlace;
     }
 }

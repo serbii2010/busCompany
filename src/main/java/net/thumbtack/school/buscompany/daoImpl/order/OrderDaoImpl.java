@@ -30,6 +30,16 @@ public class OrderDaoImpl extends DaoImplBase implements Dao<Order> {
         }
     }
 
+    public List<Integer> getPlaces(Order order) {
+        LOGGER.debug("DAO get Order by Id {}", order);
+        try (SqlSession sqlSession = getSession()) {
+            return getOrderMapper(sqlSession).findPlaces(order);
+        } catch (RuntimeException ex) {
+            LOGGER.info("Can't get Order by Id {} {}", order, ex);
+            throw ex;
+        }
+    }
+
     @Override
     public List<Order> findAll() {
         return null;

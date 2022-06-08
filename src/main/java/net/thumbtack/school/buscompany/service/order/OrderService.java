@@ -1,12 +1,15 @@
 package net.thumbtack.school.buscompany.service.order;
 
 import net.thumbtack.school.buscompany.daoImpl.order.OrderDaoImpl;
+import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 public class OrderService {
@@ -14,7 +17,11 @@ public class OrderService {
     private OrderDaoImpl orderDao;
 
     public Order findById(String id) throws ServerException {
-        return orderDao.findById(id);
+        Order result = orderDao.findById(id);
+        if (result == null) {
+            throw new ServerException(ServerErrorCode.ORDER_NOT_FOUND);
+        }
+        return result;
     }
 
     public void insert(Order order) {
@@ -23,5 +30,15 @@ public class OrderService {
 
     public List<Order> getListOrder(String fromStation, String toStation, String busName, String fromDate, String toDate, String clientId) {
         return orderDao.filter(fromStation, toStation, busName, fromDate, toDate, clientId);
+    }
+
+    public List<Integer> getFreePlaces(Order order) {
+        List<Integer> place = orderDao.getPlaces(order);
+        int countPlace = order.getTrip().getBus().getPlaceCount();
+        return IntStream.range(1, countPlace+1).filter(p -> !place.contains(p)).boxed().collect(Collectors.toList());
+    }
+
+    public List<Integer> getPlaces(Order order) {
+        return orderDao.getPlaces(order);
     }
 }

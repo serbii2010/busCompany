@@ -46,5 +46,8 @@ public interface OrderMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     Integer insert(Order order);
 
+    @Select("DELETE FROM orders WHERE id = #{id}")
+    Integer delete(Order order);
+
     List<Order> filter(String fromStation, String toStation, String busName, String fromDate, String toDate, String clientId);
 }

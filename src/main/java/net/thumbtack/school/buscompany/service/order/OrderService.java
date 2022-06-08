@@ -49,4 +49,8 @@ public class OrderService {
             throw new ServerException(ServerErrorCode.ACTION_FORBIDDEN);
         }
     }
+
+    public void delete(Order order) throws ServerException {
+        orderDao.remove(order);
+    }
 }

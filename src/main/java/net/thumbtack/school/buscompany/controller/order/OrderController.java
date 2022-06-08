@@ -1,6 +1,7 @@
 package net.thumbtack.school.buscompany.controller.order;
 
 import net.thumbtack.school.buscompany.dto.request.order.OrderDtoRequest;
+import net.thumbtack.school.buscompany.dto.response.account.EmptyDtoResponse;
 import net.thumbtack.school.buscompany.dto.response.order.OrderDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.mappers.dto.order.OrderMapper;
@@ -57,5 +58,17 @@ public class OrderController {
             orderList.addAll(orderService.getListOrder(fromStation, toStation, busName, fromDate, toDate, String.valueOf(account.getId())));
         }
         return OrderMapper.INSTANCE.orderListToDtoResponse(orderList);
+    }
+
+
+    @DeleteMapping(path = "/{orderId}",produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public EmptyDtoResponse deleteTicket(@PathVariable String orderId,
+                                         @CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
+        accountService.checkClient(javaSessionId);
+
+        Order order = orderService.findById(orderId);
+        orderService.delete(order);
+
+        return new EmptyDtoResponse();
     }
 }

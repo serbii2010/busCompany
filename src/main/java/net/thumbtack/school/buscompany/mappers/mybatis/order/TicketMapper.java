@@ -12,6 +12,9 @@ public interface TicketMapper {
     @Select("SELECT * FROM ticket WHERE id=#{id}")
     Ticket findById(String id);
 
+    @Select("SELECT * FROM ticket WHERE order_passenger_id=#{id}")
+    Ticket findByOrderPassengerId(String id);
+
     @Select("SELECT * FROM passenger WHERE first_name LIKE #{firstName} AND last_name LIKE #{lastName} AND passport LIKE #{passport}")
     @Results(value = {
             @Result(property = "id", column = "id"),
@@ -49,4 +52,10 @@ public interface TicketMapper {
 
     @Select("SELECT * FROM trip WHERE id=#{id}")
     Trip selectTrip(String id);
+
+    @Select("DELETE FROM ticket WHERE id = #{id}")
+    Integer delete(Ticket ticket);
+//
+//    @Delete("DELETE FROM ticket WHERE order_passenger_id={orderPassengerId}")
+//    Integer deleteByOrderPassengerId(String orderPassengerId);
 }

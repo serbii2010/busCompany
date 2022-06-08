@@ -150,6 +150,7 @@ CREATE TABLE ticket
     order_passenger_id INT(11) NULL DEFAULT NULL,
     place              INT(3),
     PRIMARY KEY (id),
+    UNIQUE KEY ticket (order_passenger_id),
     FOREIGN KEY (order_passenger_id) REFERENCES order_passenger (id) ON DELETE SET NULL
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;

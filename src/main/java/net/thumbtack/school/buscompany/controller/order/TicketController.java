@@ -1,6 +1,7 @@
 package net.thumbtack.school.buscompany.controller.order;
 
 import net.thumbtack.school.buscompany.dto.request.order.TicketDtoRequest;
+import net.thumbtack.school.buscompany.dto.response.account.EmptyDtoResponse;
 import net.thumbtack.school.buscompany.dto.response.order.TicketDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.mappers.dto.order.TicketMapper;
@@ -46,4 +47,5 @@ public class TicketController {
         ticketService.insert(ticket);
         return TicketMapper.INSTANCE.tickerToDto(ticket);
     }
+
 }

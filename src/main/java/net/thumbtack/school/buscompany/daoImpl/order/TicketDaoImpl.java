@@ -31,6 +31,10 @@ public class TicketDaoImpl extends DaoImplBase implements Dao<Ticket> {
         LOGGER.debug("DAO insert Order {}", ticket);
         try (SqlSession sqlSession = getSession()) {
             try {
+                Ticket ticketOld = getTicketMapper(sqlSession).findByOrderPassengerId(String.valueOf(ticket.getOrderPassenger().getId()));
+                if (ticketOld != null) {
+                    getTicketMapper(sqlSession).delete(ticketOld);
+                }
                 getTicketMapper(sqlSession).insert(ticket);
 
             } catch (RuntimeException ex) {

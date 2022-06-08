@@ -6,6 +6,7 @@ import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.Order;
 import net.thumbtack.school.buscompany.model.OrderPassenger;
 import net.thumbtack.school.buscompany.model.Passenger;
+import net.thumbtack.school.buscompany.model.Ticket;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,8 +69,25 @@ public class OrderDaoImpl extends DaoImplBase implements Dao<Order> {
     }
 
     @Override
-    public void remove(Order object) {
+    public void remove(Order order) {
+        LOGGER.debug("DAO delete Order {}", order);
+        try (SqlSession sqlSession = getSession()) {
+            try {
+                List<OrderPassenger> listOrderPassenger = getOrderPassengerMapper(sqlSession).findByOrderId(String.valueOf(order.getId()));
+                for (OrderPassenger orderPassenger: listOrderPassenger) {
+                    Ticket ticket = getTicketMapper(sqlSession).findByOrderPassengerId(String.valueOf(orderPassenger.getId()));
+                    getTicketMapper(sqlSession).delete(ticket);
+                    getOrderPassengerMapper(sqlSession).delete(orderPassenger);
+                }
+                getOrderMapper(sqlSession).delete(order);
 
+            } catch (RuntimeException ex) {
+                LOGGER.info("Can't delete Order {}", ex);
+                sqlSession.rollback();
+                throw ex;
+            }
+            sqlSession.commit();
+        }
     }
 
     @Override

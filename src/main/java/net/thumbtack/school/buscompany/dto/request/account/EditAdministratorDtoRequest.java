@@ -7,6 +7,7 @@ import net.thumbtack.school.buscompany.validator.MaxNameLength;
 import net.thumbtack.school.buscompany.validator.MinPasswordLength;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Data
 @AllArgsConstructor
@@ -14,11 +15,14 @@ import javax.validation.constraints.NotBlank;
 public class EditAdministratorDtoRequest {
     @NotBlank
     @MaxNameLength
+    @Pattern(regexp = "^[А-Яа-я \\-]+$", message = "имя содержит недопустимые симвомы")
     private String firstName;
     @NotBlank
     @MaxNameLength
+    @Pattern(regexp = "^[А-Яа-я \\-]+$", message = "фамилия содержит недопустимые симвомы")
     private String lastName;
     @MaxNameLength
+    @Pattern(regexp = "^[А-Яа-я \\-]+$", message = "отчество содержит недопустимые симвомы")
     private String patronymic;
     @NotBlank
     private String position;

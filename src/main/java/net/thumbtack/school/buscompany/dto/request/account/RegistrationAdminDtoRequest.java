@@ -8,6 +8,7 @@ import net.thumbtack.school.buscompany.validator.MinPasswordLength;
 import net.thumbtack.school.buscompany.validator.UniqueLogin;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Data
 @NoArgsConstructor
@@ -15,19 +16,21 @@ import javax.validation.constraints.NotBlank;
 public class RegistrationAdminDtoRequest {
     @NotBlank
     @MaxNameLength
+    @Pattern(regexp = "^[А-Яа-я \\-]+$", message = "имя содержит недопустимые симвомы")
     private String firstName;
     @NotBlank
     @MaxNameLength
+    @Pattern(regexp = "^[А-Яа-я \\-]+$", message = "фамилия содержит недопустимые симвомы")
     private String lastName;
     @MaxNameLength
+    @Pattern(regexp = "^[А-Яа-я \\-]+$", message = "отчество содержит недопустимые симвомы")
     private String patronymic;
     @NotBlank
     private String position;
     @NotBlank
     @MaxNameLength
-    ///@todo проверка уникальности без учета регистра
-    ///@todo проверка русские буквы и знак тире
     @UniqueLogin
+    @Pattern(regexp = "^[0-9A-Za-zА-Яа-я]+", message = "Используются недопустимые символы")
     private String login;
     @MinPasswordLength
     private String password;

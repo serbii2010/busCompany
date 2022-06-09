@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 public interface ClientMapper {
     ClientMapper INSTANCE = Mappers.getMapper(ClientMapper.class);
 
+    @Mapping(target = "phone", expression = "java(request.getPhone().replaceAll(\"-\", \"\"))")
     Account registrationDtoToAccount(RegistrationClientDtoRequest request);
 
     @Mapping(target = "userType", source = "userType.type")

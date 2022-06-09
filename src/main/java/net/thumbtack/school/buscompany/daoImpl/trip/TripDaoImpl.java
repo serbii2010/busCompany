@@ -47,7 +47,6 @@ public class TripDaoImpl extends DaoImplBase implements Dao<Trip> {
         try (SqlSession sqlSession = getSession()) {
             try {
                 getTripMapper(sqlSession).insert(trip);
-                //@todo сохранить даты
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't insert Trip {} {}", trip, ex);
                 sqlSession.rollback();

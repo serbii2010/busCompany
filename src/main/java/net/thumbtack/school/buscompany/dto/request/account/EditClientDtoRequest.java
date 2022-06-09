@@ -12,7 +12,6 @@ import javax.validation.constraints.NotBlank;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-//@todo отсутствующие поля не должны изменяться
 public class EditClientDtoRequest {
     @NotBlank
     @MaxNameLength

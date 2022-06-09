@@ -26,6 +26,7 @@ public interface ClientMapper {
     @Mapping(target = "userType", source = "userType.type")
     EditClientDtoResponse accountEditToDto(Account account);
 
+    @Mapping(target = "phone", expression = "java(request.getPhone().replaceAll(\"-\", \"\"))")
     void update(@MappingTarget Account account, EditClientDtoRequest request, @Context AccountService service) throws ServerException;
 
     @AfterMapping

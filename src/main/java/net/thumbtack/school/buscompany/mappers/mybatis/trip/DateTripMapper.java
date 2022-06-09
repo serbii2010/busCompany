@@ -16,4 +16,7 @@ public interface DateTripMapper {
 
     @Delete("DELETE FROM date_trip WHERE trip_id = #{tripId}")
     void deleteByTripId(String tripId);
+
+    @Delete("DELETE FROM date_trip")
+    Integer deleteAll();
 }

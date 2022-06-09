@@ -16,4 +16,7 @@ public interface ScheduleMapper {
             @Result(property = "period", column = "periods"),
     })
     Schedule find(Schedule schedule);
+
+    @Delete("DELETE FROM schedule")
+    Integer deleteAll();
 }

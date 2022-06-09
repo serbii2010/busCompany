@@ -55,7 +55,7 @@ public interface TicketMapper {
 
     @Select("DELETE FROM ticket WHERE id = #{id}")
     Integer delete(Ticket ticket);
-//
-//    @Delete("DELETE FROM ticket WHERE order_passenger_id={orderPassengerId}")
-//    Integer deleteByOrderPassengerId(String orderPassengerId);
+
+    @Delete("DELETE FROM ticket")
+    Integer deleteAll();
 }

@@ -1,6 +1,7 @@
 package net.thumbtack.school.buscompany.mappers.mybatis.order;
 
 import net.thumbtack.school.buscompany.model.OrderPassenger;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
@@ -18,4 +19,7 @@ public interface OrderPassengerMapper {
 
     @Select("SELECT * FROM order_passenger WHERE order_id=#{orderId}")
     List<OrderPassenger> findByOrderId(String orderId);
+
+    @Delete("DELETE FROM order_passenger")
+    Integer deleteAll();
 }

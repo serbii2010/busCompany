@@ -49,5 +49,8 @@ public interface OrderMapper {
     @Select("DELETE FROM orders WHERE id = #{id}")
     Integer delete(Order order);
 
+    @Delete("DELETE FROM orders")
+    Integer deleteAll();
+
     List<Order> filter(String fromStation, String toStation, String busName, String fromDate, String toDate, String clientId);
 }

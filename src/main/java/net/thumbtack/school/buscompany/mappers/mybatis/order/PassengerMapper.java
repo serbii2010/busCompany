@@ -17,4 +17,7 @@ public interface PassengerMapper {
             @Result(property = "passport", column = "passport"),
     })
     Passenger find(Passenger passenger);
+
+    @Delete("DELETE FROM passenger")
+    Integer deleteAll();
 }

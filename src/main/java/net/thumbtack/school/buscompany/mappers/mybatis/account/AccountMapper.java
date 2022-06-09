@@ -57,4 +57,7 @@ public interface AccountMapper {
 
     @Delete("DELETE FROM account WHERE id=#{account.id}")
     void delete(@Param("account") Account account);
+
+    @Delete("DELETE FROM account")
+    Integer deleteAll();
 }

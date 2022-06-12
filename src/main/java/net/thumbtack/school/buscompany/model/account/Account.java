@@ -1,8 +1,9 @@
-package net.thumbtack.school.buscompany.model;
+package net.thumbtack.school.buscompany.model.account;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.thumbtack.school.buscompany.utils.UserTypeEnum;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,8 +15,5 @@ public class Account {
     private String firstName;
     private String lastName;
     private String patronymic;
-    private String email;
-    private String phone;
-    private String position;
-    private UserType userType;
+    private UserTypeEnum userType;
 }

@@ -5,6 +5,7 @@ import net.thumbtack.school.buscompany.dto.response.order.TicketDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.mappers.dto.order.TicketMapper;
 import net.thumbtack.school.buscompany.model.*;
+import net.thumbtack.school.buscompany.model.account.Account;
 import net.thumbtack.school.buscompany.service.account.AccountService;
 import net.thumbtack.school.buscompany.service.order.OrderService;
 import net.thumbtack.school.buscompany.service.order.TicketService;

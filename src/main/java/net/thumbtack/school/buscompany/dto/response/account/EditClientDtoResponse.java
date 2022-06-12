@@ -13,6 +13,5 @@ public class EditClientDtoResponse {
     private String patronymic;
     private String email;
     private String phone;
-    private String password;
     private String userType;
 }

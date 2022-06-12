@@ -1,6 +1,7 @@
 package net.thumbtack.school.buscompany.mappers.mybatis.order;
 
 import net.thumbtack.school.buscompany.model.*;
+import net.thumbtack.school.buscompany.model.account.Account;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

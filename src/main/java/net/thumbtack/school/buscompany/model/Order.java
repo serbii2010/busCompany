@@ -3,6 +3,7 @@ package net.thumbtack.school.buscompany.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.thumbtack.school.buscompany.model.account.Account;
 
 import java.util.List;
 

@@ -6,7 +6,7 @@ import net.thumbtack.school.buscompany.dto.response.account.EmptyDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.mappers.dto.account.AdminMapper;
 import net.thumbtack.school.buscompany.mappers.dto.account.ClientMapper;
-import net.thumbtack.school.buscompany.model.Account;
+import net.thumbtack.school.buscompany.model.account.Account;
 import net.thumbtack.school.buscompany.service.account.AccountService;
 import net.thumbtack.school.buscompany.utils.UserTypeEnum;
 import org.slf4j.Logger;
@@ -28,18 +28,23 @@ public class SessionController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public BaseAccountDtoResponse login(@Valid @RequestBody LoginDtoRequest loginDto, HttpServletResponse response)
+    public BaseAccountDtoResponse login(@CookieValue(value = "JAVASESSIONID", required = false) String javaSessionId,
+                                        @Valid @RequestBody LoginDtoRequest loginDto,
+                                        HttpServletResponse response)
                 throws ServerException {
+        if (javaSessionId != null && accountService.isAuth(javaSessionId)) {
+           accountService.logout(javaSessionId);
+        }
         Account account = accountService.getAccountByLogin(loginDto.getLogin());
         accountService.checkPassword(account, loginDto.getPassword());
         accountService.login(account, response);
 
-        if (account.getUserType().getType().equals(UserTypeEnum.ADMIN.getType())) {
+        if (account.getUserType() == UserTypeEnum.ADMIN) {
             LOGGER.debug("admin log in");
-            return AdminMapper.INSTANCE.accountToDto(account);
+            return AdminMapper.INSTANCE.accountToDto(accountService.findAdmin(account));
         } else {
             LOGGER.debug("client log in");
-            return ClientMapper.INSTANCE.accountToDto(account);
+            return ClientMapper.INSTANCE.accountToDto(accountService.findClient(account));
         }
     }
 

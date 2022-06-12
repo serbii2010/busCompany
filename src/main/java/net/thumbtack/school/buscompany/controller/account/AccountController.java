@@ -6,7 +6,7 @@ import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.mappers.dto.account.AdminMapper;
 import net.thumbtack.school.buscompany.mappers.dto.account.ClientMapper;
-import net.thumbtack.school.buscompany.model.Account;
+import net.thumbtack.school.buscompany.model.account.Account;
 import net.thumbtack.school.buscompany.service.account.AccountService;
 import net.thumbtack.school.buscompany.utils.UserTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +25,10 @@ public class AccountController {
     public BaseAccountInfoDtoResponse getInfo(@CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
         Account account = accountService.getAuthAccount(javaSessionId);
 
-        if (account.getUserType().getType().equals(UserTypeEnum.CLIENT.getType())) {
-            return ClientMapper.INSTANCE.accountToDtoInfo(account);
-        } else if (account.getUserType().getType().equals(UserTypeEnum.ADMIN.getType())) {
-            return AdminMapper.INSTANCE.accountToDtoInfo(account);
+        if (account.getUserType() == UserTypeEnum.CLIENT) {
+            return ClientMapper.INSTANCE.accountToDtoInfo(accountService.findClient(account));
+        } else if (account.getUserType() == UserTypeEnum.ADMIN) {
+            return AdminMapper.INSTANCE.accountToDtoInfo(accountService.findAdmin(account));
         } else {
             throw new ServerException(ServerErrorCode.USER_NOT_AUTHORIZATION);
         }

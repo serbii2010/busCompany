@@ -5,34 +5,39 @@ CREATE
 USE `buscompany`;
 
 ####### Tables from accounts ########
-CREATE TABLE user_type
+CREATE TABLE account
 (
-    id   INT(11)     NOT NULL AUTO_INCREMENT,
-    type VARCHAR(45) NOT NULL,
-    PRIMARY KEY (id)
+    id         INT(11)                  NOT NULL AUTO_INCREMENT,
+    login      VARCHAR(50)              NOT NULL,
+    password   VARCHAR(50)              NOT NULL,
+    first_name VARCHAR(50)              NOT NULL,
+    last_name  VARCHAR(50)              NOT NULL,
+    patronymic VARCHAR(50)              NULL     DEFAULT NULL,
+    user_type  ENUM ('ADMIN', 'CLIENT') NOT NULL DEFAULT 'client',
+    PRIMARY KEY (id),
+    UNIQUE KEY login (login),
+    INDEX (login)
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;
 
-#default value insert
-INSERT INTO user_type (type) VALUE ('admin');
-INSERT INTO user_type (type) VALUE ('client');
-
-CREATE TABLE account
+CREATE TABLE admin
 (
-    id           INT(11)     NOT NULL AUTO_INCREMENT,
-    login        VARCHAR(50) NOT NULL,
-    password     VARCHAR(50) NOT NULL,
-    first_name   VARCHAR(50) NOT NULL,
-    last_name    VARCHAR(50) NOT NULL,
-    patronymic   VARCHAR(50) NULL DEFAULT NULL,
-    email        VARCHAR(50) NULL DEFAULT NULL,
-    phone        VARCHAR(50) NULL DEFAULT NULL,
-    position     VARCHAR(50) NULL DEFAULT NULL,
-    user_type_id INT(11)     NULL DEFAULT NULL,
+    id         INT(11)     NOT NULL AUTO_INCREMENT,
+    account_id INT(11)     NOT NULL,
+    position   VARCHAR(50) NULL DEFAULT NULL,
     PRIMARY KEY (id),
-    UNIQUE KEY login (login),
-    INDEX (login),
-    FOREIGN KEY (user_type_id) REFERENCES user_type (id) ON DELETE SET NULL
+    FOREIGN KEY (account_id) REFERENCES account (id) ON DELETE CASCADE
+) ENGINE = INNODB
+  DEFAULT CHARSET = utf8;
+
+CREATE TABLE client
+(
+    id         INT(11)     NOT NULL AUTO_INCREMENT,
+    account_id INT(11)     NOT NULL,
+    email      VARCHAR(50) NULL DEFAULT NULL,
+    phone      VARCHAR(50) NULL DEFAULT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (account_id) REFERENCES account (id) ON DELETE CASCADE
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;
 

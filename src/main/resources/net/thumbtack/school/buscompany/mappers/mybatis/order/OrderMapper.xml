@@ -7,7 +7,7 @@
         <id property="id" column="id"/>
         <result property="date" column="date"/>
         <association property="trip" resultMap="resultTrip"/>
-        <association property="account" javaType="net.thumbtack.school.buscompany.model.Account" column="account_id"
+        <association property="account" javaType="net.thumbtack.school.buscompany.model.account.Account" column="account_id"
                      select="selectAccount"/>
         <collection property="passengers" column="id" javaType="java.util.List"
                     ofType="net.thumbtack.school.buscompany.model.Passenger">
@@ -47,7 +47,7 @@
         <result property="period" column="periods"/>
     </resultMap>
 
-    <resultMap id="resultAccount" type="net.thumbtack.school.buscompany.model.Account">
+    <resultMap id="resultAccount" type="net.thumbtack.school.buscompany.model.account.Account">
         <id property="id" column="id"/>
         <result property="login" column="login"/>
         <result property="firstName" column="first_name"/>

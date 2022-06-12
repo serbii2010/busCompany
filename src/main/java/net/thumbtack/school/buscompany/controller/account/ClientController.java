@@ -7,7 +7,8 @@ import net.thumbtack.school.buscompany.dto.response.account.InfoClientDtoRespons
 import net.thumbtack.school.buscompany.dto.response.account.RegistrationClientDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.mappers.dto.account.ClientMapper;
-import net.thumbtack.school.buscompany.model.Account;
+import net.thumbtack.school.buscompany.model.account.Account;
+import net.thumbtack.school.buscompany.model.account.Client;
 import net.thumbtack.school.buscompany.service.account.AccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,7 @@ public class ClientController {
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public RegistrationClientDtoResponse insertClient(@Valid @RequestBody RegistrationClientDtoRequest clientDtoRequest, HttpServletResponse response) {
-        Account client = ClientMapper.INSTANCE.registrationDtoToAccount(clientDtoRequest);
+        Client client = ClientMapper.INSTANCE.registrationDtoToAccount(clientDtoRequest);
         accountService.registrationClient(client);
         LOGGER.debug("client registered");
         accountService.login(client, response);
@@ -44,7 +45,7 @@ public class ClientController {
     public EditClientDtoResponse updateClient(@Valid @RequestBody EditClientDtoRequest request,
                                               @CookieValue("JAVASESSIONID") String javaSessionId)
             throws ServerException {
-        Account account = accountService.getAuthAccount(javaSessionId);
+        Client account = accountService.findClient(accountService.getAuthAccount(javaSessionId));
         ClientMapper.INSTANCE.update(account, request, accountService);
         accountService.updateAccount(account);
         LOGGER.debug("client updated");
@@ -58,9 +59,9 @@ public class ClientController {
 
         List<InfoClientDtoResponse> result = new ArrayList<>();
 
-        List<Account> accountsClient = accountService.getClients();
+        List<Client> accountsClient = accountService.getClients();
         for (Account acc: accountsClient) {
-            result.add(ClientMapper.INSTANCE.accountToDtoInfo(acc));
+            result.add(ClientMapper.INSTANCE.accountToDtoInfo(accountService.findClient(acc)));
         }
         return result;
     }

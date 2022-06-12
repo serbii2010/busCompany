@@ -24,7 +24,6 @@ public class DebugDaoImpl extends DaoImplBase {
                 getStationMapper(sqlSession).deleteAll();
                 getBusMapper(sqlSession).deleteAll();
                 getAccountMapper(sqlSession).deleteAll();
-                getUserTypeMapper(sqlSession).deleteAll();
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't clear database");
                 sqlSession.rollback();

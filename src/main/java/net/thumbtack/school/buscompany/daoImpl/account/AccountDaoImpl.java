@@ -4,7 +4,10 @@ import net.thumbtack.school.buscompany.dao.Dao;
 import net.thumbtack.school.buscompany.daoImpl.DaoImplBase;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
-import net.thumbtack.school.buscompany.model.Account;
+import net.thumbtack.school.buscompany.model.account.Account;
+import net.thumbtack.school.buscompany.model.account.Admin;
+import net.thumbtack.school.buscompany.model.account.Client;
+import net.thumbtack.school.buscompany.utils.UserTypeEnum;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,13 +37,13 @@ public class AccountDaoImpl extends DaoImplBase implements Dao<Account> {
         return null;
     }
 
-    public List<Account> findByUserType(Integer userType) throws ServerException {
-        LOGGER.debug(String.format("DAO find all account by userType {}", userType));
+    public List<Client> findClients() throws ServerException {
+        LOGGER.debug("DAO find all client");
         try (SqlSession sqlSession = getSession()){
             try {
-                return getAccountMapper(sqlSession).getByUserType(userType);
+                return getAccountMapper(sqlSession).getClients();
             } catch (RuntimeException ex) {
-                LOGGER.info("Can't get account {} {}", userType, ex);
+                LOGGER.info("Can't get client {}", ex);
                 throw new ServerException(ServerErrorCode.USER_NOT_FOUND);
             }
         }
@@ -52,6 +55,11 @@ public class AccountDaoImpl extends DaoImplBase implements Dao<Account> {
         try (SqlSession sqlSession = getSession()) {
             try {
                 getAccountMapper(sqlSession).insert(account);
+                if (account.getClass() == Client.class) {
+                    getClientMapper(sqlSession).insert((Client) account);
+                } else if (account.getClass() == Admin.class) {
+                    getAdminMapper(sqlSession).insert((Admin) account);
+                }
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't insert account {} {}", account, ex);
                 sqlSession.rollback();
@@ -67,7 +75,11 @@ public class AccountDaoImpl extends DaoImplBase implements Dao<Account> {
         LOGGER.debug("DAO delete Account {}", account);
         try (SqlSession sqlSession = getSession()) {
             try {
-                getAccountMapper(sqlSession).delete(account);
+                if (account.getUserType() == UserTypeEnum.CLIENT) {
+                    getClientMapper(sqlSession).deleteByAccount(account);
+                } else if (account.getUserType() == UserTypeEnum.ADMIN) {
+                    getAdminMapper(sqlSession).deleteByAccount(account);
+                }
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't delete account {} {}", account, ex);
                 sqlSession.rollback();
@@ -82,7 +94,15 @@ public class AccountDaoImpl extends DaoImplBase implements Dao<Account> {
         LOGGER.debug("DAO update Account {}", account);
         try (SqlSession sqlSession = getSession()) {
             try {
-                getAccountMapper(sqlSession).update(account);
+                if (account.getClass() == Client.class) {
+                    Client client = (Client) account;
+                    getAccountMapper(sqlSession).update(client, String.valueOf(client.getAccountId()));
+                    getClientMapper(sqlSession).update(client);
+                } else if (account.getClass() == Admin.class) {
+                    Admin admin = (Admin) account;
+                    getAccountMapper(sqlSession).update(admin, String.valueOf(admin.getAccountId()));
+                    getAdminMapper(sqlSession).update(admin);
+                }
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't update account {} {}", account, ex);
                 sqlSession.rollback();
@@ -98,6 +118,36 @@ public class AccountDaoImpl extends DaoImplBase implements Dao<Account> {
             return getAccountMapper(sqlSession).getByLogin(login);
         } catch (RuntimeException ex) {
             LOGGER.info("not found account {} {}", login, ex);
+            throw new ServerException(ServerErrorCode.USER_NOT_FOUND);
+        }
+    }
+
+    public Admin findAdmin(Account account) throws ServerException {
+        LOGGER.debug("DAO get Admin {}", account);
+        try (SqlSession sqlSession = getSession()) {
+            return getAdminMapper(sqlSession).findAdmin(account);
+        } catch (RuntimeException ex) {
+            LOGGER.info("not found Admin {} {}", account, ex);
+            throw new ServerException(ServerErrorCode.USER_NOT_FOUND);
+        }
+    }
+
+    public Client findClient(Account account) throws ServerException {
+        LOGGER.debug("DAO get Client {}", account);
+        try (SqlSession sqlSession = getSession()) {
+            return getClientMapper(sqlSession).findClient(account);
+        } catch (RuntimeException ex) {
+            LOGGER.info("not found Client {} {}", account, ex);
+            throw new ServerException(ServerErrorCode.USER_NOT_FOUND);
+        }
+    }
+
+    public int getCountAdmins() throws ServerException {
+        LOGGER.debug("DAO get count Admins");
+        try (SqlSession sqlSession = getSession()) {
+            return getAdminMapper(sqlSession).getCount();
+        } catch (RuntimeException ex) {
+            LOGGER.info("not found Admin");
             throw new ServerException(ServerErrorCode.USER_NOT_FOUND);
         }
     }

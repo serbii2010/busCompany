@@ -1,11 +1,11 @@
 package net.thumbtack.school.buscompany.service.account;
 
 import net.thumbtack.school.buscompany.daoImpl.account.AccountDaoImpl;
-import net.thumbtack.school.buscompany.daoImpl.account.UserTypeDaoImpl;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
-import net.thumbtack.school.buscompany.model.Account;
-import net.thumbtack.school.buscompany.model.UserType;
+import net.thumbtack.school.buscompany.model.account.Account;
+import net.thumbtack.school.buscompany.model.account.Admin;
+import net.thumbtack.school.buscompany.model.account.Client;
 import net.thumbtack.school.buscompany.utils.UserTypeEnum;
 import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualHashBidiMap;
@@ -25,31 +25,31 @@ public class AccountService {
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class);
     @Autowired
     private AccountDaoImpl accountDao;
-    @Autowired
-    private UserTypeDaoImpl userTypeDao;
 
     private final BidiMap<Account, UUID> authUsers = new DualHashBidiMap<>();
 
 
-    public Account registrationAdmin(Account account) {
-        UserType userType = userTypeDao.findByType(UserTypeEnum.ADMIN);
-        account.setUserType(userType);
+    public Admin registrationAdmin(Admin account) {
+        account.setUserType(UserTypeEnum.ADMIN);
         account.setPassword(convertToMd5(account.getPassword()));
-        return accountDao.insert(account);
+        return (Admin) accountDao.insert(account);
     }
 
-    public Account registrationClient(Account account) {
-        UserType userType = userTypeDao.findByType(UserTypeEnum.CLIENT);
-        account.setUserType(userType);
+    public Client registrationClient(Client account) {
+        account.setUserType(UserTypeEnum.CLIENT);
         account.setPassword(convertToMd5(account.getPassword()));
-        return accountDao.insert(account);
+        return (Client) accountDao.insert(account);
     }
 
     public void updateAccount(Account account) {
         accountDao.update(account);
     }
 
-    public void deleteAccount(Account account) {
+    public void deleteAccount(Account account) throws ServerException {
+        if (account.getUserType() == UserTypeEnum.ADMIN
+                && accountDao.getCountAdmins() == 1) {
+            throw new ServerException(ServerErrorCode.ACTION_FORBIDDEN);
+        }
         accountDao.remove(account);
     }
 
@@ -69,12 +69,21 @@ public class AccountService {
         return account;
     }
 
-    public List<Account> getClients() throws ServerException {
-        return accountDao.findByUserType(userTypeDao.findByType(UserTypeEnum.CLIENT).getId());
+    public Admin findAdmin(Account account) throws ServerException {
+        return accountDao.findAdmin(account);
+    }
+
+    public Client findClient(Account account) throws ServerException {
+        return accountDao.findClient(account);
+    }
+
+
+    public List<Client> getClients() throws ServerException {
+        return accountDao.findClients();
     }
 
     public void login(Account user, HttpServletResponse response) {
-        if(user.getId() == 0) {
+        if (user.getId() == 0) {
             return;
         }
         UUID uuid = UUID.randomUUID();
@@ -91,7 +100,7 @@ public class AccountService {
         if (!authUsers.containsValue(uuid)) {
             return;
         }
-        LOGGER.debug(String.format("User {} logout", authUsers.getKey(uuid).getLogin()));
+        LOGGER.debug("User {} logout", authUsers.getKey(uuid).getLogin());
         authUsers.removeValue(uuid);
     }
 
@@ -113,14 +122,18 @@ public class AccountService {
         }
     }
 
-    public boolean isAdmin(String javaSessionId) throws  ServerException {
+    public boolean isAdmin(String javaSessionId) throws ServerException {
         Account account = getAuthAccount(javaSessionId);
         return account.getUserType().getType().equals(UserTypeEnum.ADMIN.getType());
     }
 
-    public boolean isClient(String javaSessionId) throws  ServerException {
+    public boolean isClient(String javaSessionId) throws ServerException {
         Account account = getAuthAccount(javaSessionId);
         return account.getUserType().getType().equals(UserTypeEnum.CLIENT.getType());
+    }
+
+    public boolean isAuth(String javaSessionId) {
+        return authUsers.containsValue(UUID.fromString(javaSessionId));
     }
 
     public void setPassword(Account account, String newPassword) {

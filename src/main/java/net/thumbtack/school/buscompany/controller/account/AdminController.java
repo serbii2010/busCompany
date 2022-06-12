@@ -6,14 +6,16 @@ import net.thumbtack.school.buscompany.dto.response.account.EditAdministratorDto
 import net.thumbtack.school.buscompany.dto.response.account.RegistrationAdminDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.mappers.dto.account.AdminMapper;
-import net.thumbtack.school.buscompany.model.Account;
+import net.thumbtack.school.buscompany.model.account.Admin;
 import net.thumbtack.school.buscompany.service.account.AccountService;
+import net.thumbtack.school.buscompany.utils.UserTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -28,7 +30,7 @@ public class AdminController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public RegistrationAdminDtoResponse insertAdmin(@Valid @RequestBody RegistrationAdminDtoRequest adminDtoRequest, HttpServletResponse response) {
-        Account admin = AdminMapper.INSTANCE.registrationAdminDtoToAccount(adminDtoRequest);
+        Admin admin = AdminMapper.INSTANCE.registrationAdminDtoToAccount(adminDtoRequest);
         accountService.registrationAdmin(admin);
         LOGGER.debug("administrator registered");
         accountService.login(admin, response);
@@ -40,7 +42,10 @@ public class AdminController {
     public EditAdministratorDtoResponse updateAdmin(@Valid @RequestBody EditAdministratorDtoRequest request,
                                                      @CookieValue("JAVASESSIONID") String javaSessionId)
             throws ServerException {
-        Account account = accountService.getAuthAccount(javaSessionId);
+        Admin account = accountService.findAdmin(accountService.getAuthAccount(javaSessionId));
+        if (account.getUserType() != UserTypeEnum.ADMIN) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
         AdminMapper.INSTANCE.update(account, request, accountService);
         accountService.updateAccount(account);
         LOGGER.debug("client updated");

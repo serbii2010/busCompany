@@ -1,16 +1,16 @@
 package net.thumbtack.school.buscompany.mappers.mybatis.account;
 
-import net.thumbtack.school.buscompany.model.Account;
+import net.thumbtack.school.buscompany.model.account.Account;
 import net.thumbtack.school.buscompany.model.UserType;
+import net.thumbtack.school.buscompany.model.account.Client;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
 public interface AccountMapper {
-    @Insert("INSERT INTO `account` (login, password, first_name, last_name, patronymic, " +
-            "email, phone, position, user_type_id) " +
-            "VALUES ( #{account.login}, #{account.password}, #{account.firstName}, #{account.lastName}, #{account.patronymic}, " +
-            "#{account.email}, #{account.phone}, #{account.position}, #{account.userType.id} )")
+    @Insert("INSERT INTO `account` (login, password, first_name, last_name, patronymic, user_type) " +
+            "VALUES ( #{account.login}, #{account.password}, #{account.firstName}, #{account.lastName}, " +
+            "#{account.patronymic}, #{account.userType} )")
     @Options(useGeneratedKeys = true, keyProperty = "account.id")
     Integer insert(@Param("account") Account account);
 
@@ -23,21 +23,20 @@ public interface AccountMapper {
     })
     Account getById(String id);
 
-    @Select("SELECT * FROM account WHERE user_type_id=#{userType}")
+    @Select("SELECT * FROM account WHERE user_type='client'")
     @Results(value = {
             @Result(property = "firstName", column = "first_name"),
             @Result(property = "lastName", column = "last_name"),
             @Result(property = "userType", javaType = UserType.class, column = "user_type_id",
                     one = @One(select = "getUserType"))
     })
-    List<Account> getByUserType(Integer userType);
+    List<Client> getClients();
 
     @Select("SELECT * FROM account WHERE login=#{login}")
     @Results(value = {
             @Result(property = "firstName", column = "first_name"),
             @Result(property = "lastName", column = "last_name"),
-            @Result(property = "userType", javaType = UserType.class, column = "user_type_id",
-                    one = @One(select = "getUserType"))
+            @Result(property = "userType", column = "user_type")
     })
     Account getByLogin(String login);
 
@@ -48,12 +47,9 @@ public interface AccountMapper {
             "first_name=#{account.firstName}, " +
             "last_name=#{account.lastName}, " +
             "patronymic=#{account.patronymic}, " +
-            "position=#{account.position}, " +
-            "password=#{account.password}, " +
-            "email=#{account.email}, " +
-            "phone=#{account.phone} " +
-            "WHERE id=#{account.id}")
-    Integer update(@Param("account") Account account);
+            "password=#{account.password} " +
+            "WHERE id=#{accountId}")
+    Integer update(@Param("account") Account account, String accountId);
 
     @Delete("DELETE FROM account WHERE id=#{account.id}")
     void delete(@Param("account") Account account);

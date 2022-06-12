@@ -12,6 +12,5 @@ public class EditAdministratorDtoResponse {
     private String lastName;
     private String patronymic;
     private String position;
-    private String password;
     private String userType;
 }

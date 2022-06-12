@@ -6,7 +6,8 @@ import net.thumbtack.school.buscompany.dto.response.account.EditClientDtoRespons
 import net.thumbtack.school.buscompany.dto.response.account.InfoClientDtoResponse;
 import net.thumbtack.school.buscompany.dto.response.account.RegistrationClientDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerException;
-import net.thumbtack.school.buscompany.model.Account;
+import net.thumbtack.school.buscompany.model.account.Account;
+import net.thumbtack.school.buscompany.model.account.Client;
 import net.thumbtack.school.buscompany.service.account.AccountService;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
@@ -18,23 +19,23 @@ public interface ClientMapper {
     ClientMapper INSTANCE = Mappers.getMapper(ClientMapper.class);
 
     @Mapping(target = "phone", expression = "java(request.getPhone().replaceAll(\"-\", \"\"))")
-    Account registrationDtoToAccount(RegistrationClientDtoRequest request);
+    Client registrationDtoToAccount(RegistrationClientDtoRequest request);
 
     @Mapping(target = "userType", source = "userType.type")
-    RegistrationClientDtoResponse accountToDto(Account account);
+    RegistrationClientDtoResponse accountToDto(Client account);
 
     @Mapping(target = "userType", source = "userType.type")
-    EditClientDtoResponse accountEditToDto(Account account);
+    EditClientDtoResponse accountEditToDto(Client account);
 
     @Mapping(target = "phone", expression = "java(request.getPhone().replaceAll(\"-\", \"\"))")
-    void update(@MappingTarget Account account, EditClientDtoRequest request, @Context AccountService service) throws ServerException;
+    void update(@MappingTarget Client account, EditClientDtoRequest request, @Context AccountService service) throws ServerException;
 
     @AfterMapping
-    default void setPassword(@MappingTarget Account account, EditClientDtoRequest request, @Context AccountService service) throws ServerException {
+    default void setPassword(@MappingTarget Client account, EditClientDtoRequest request, @Context AccountService service) throws ServerException {
         service.checkPassword(account, request.getOldPassword());
         service.setPassword(account, request.getNewPassword());
     }
 
     @Mapping(target = "userType", source = "userType.type")
-    InfoClientDtoResponse accountToDtoInfo(Account account);
+    InfoClientDtoResponse accountToDtoInfo(Client account);
 }

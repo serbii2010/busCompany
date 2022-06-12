@@ -1,7 +1,8 @@
 package net.thumbtack.school.buscompany.daoImpl;
 
 import net.thumbtack.school.buscompany.mappers.mybatis.account.AccountMapper;
-import net.thumbtack.school.buscompany.mappers.mybatis.account.UserTypeMapper;
+import net.thumbtack.school.buscompany.mappers.mybatis.account.AdminMapper;
+import net.thumbtack.school.buscompany.mappers.mybatis.account.ClientMapper;
 import net.thumbtack.school.buscompany.mappers.mybatis.order.OrderMapper;
 import net.thumbtack.school.buscompany.mappers.mybatis.order.OrderPassengerMapper;
 import net.thumbtack.school.buscompany.mappers.mybatis.order.PassengerMapper;
@@ -24,8 +25,12 @@ public class DaoImplBase {
         return sqlSession.getMapper(AccountMapper.class);
     }
 
-    protected UserTypeMapper getUserTypeMapper(SqlSession sqlSession) {
-        return sqlSession.getMapper(UserTypeMapper.class);
+    protected ClientMapper getClientMapper(SqlSession sqlSession) {
+        return sqlSession.getMapper(ClientMapper.class);
+    }
+
+    protected AdminMapper getAdminMapper(SqlSession sqlSession) {
+        return sqlSession.getMapper(AdminMapper.class);
     }
 
     protected BusMapper getBusMapper(SqlSession sqlSession) {

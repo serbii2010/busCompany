@@ -1,6 +1,5 @@
 package net.thumbtack.school.buscompany.daoImpl;
 
-import net.thumbtack.school.buscompany.daoImpl.trip.TripDaoImpl;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

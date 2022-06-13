@@ -1,50 +1,24 @@
 package net.thumbtack.school.buscompany.controller.account;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import net.thumbtack.school.buscompany.dto.request.account.EditClientDtoRequest;
 import net.thumbtack.school.buscompany.dto.request.account.RegistrationClientDtoRequest;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
-import net.thumbtack.school.buscompany.model.account.Client;
-import net.thumbtack.school.buscompany.service.account.AccountService;
-import net.thumbtack.school.buscompany.utils.UserTypeEnum;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
 
 import javax.servlet.http.Cookie;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = ClientController.class)
-class TestClientController {
-    @Autowired
-    private MockMvc mvc;
-    @Autowired
-    private ObjectMapper mapper;
-    @MockBean
-    private AccountService accountService;
-
-    private Client authClient = new Client(
-            "login",
-            "password",
-            "first",
-            "last",
-            "patronymic",
-            UserTypeEnum.CLIENT,
-            "тестировщик",
-            "88005553535",
-            1);
-
+class TestClientController extends TestBaseAccount {
 
     @Test
     void testInsertClient() throws Exception {
@@ -267,7 +241,6 @@ class TestClientController {
                 "password2"
         );
         Mockito.when(accountService.findClient(null)).thenReturn(authClient);
-        Cookie cookie = new Cookie("JAVASESSIONID", "sessionId");
         mvc.perform(put("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -288,7 +261,6 @@ class TestClientController {
                 "password2"
         );
         Mockito.when(accountService.findClient(null)).thenReturn(authClient);
-        Cookie cookie = new Cookie("JAVASESSIONID", "sessionId");
         mvc.perform(put("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -309,7 +281,6 @@ class TestClientController {
                 "password2"
         );
         Mockito.when(accountService.findClient(null)).thenReturn(authClient);
-        Cookie cookie = new Cookie("JAVASESSIONID", "sessionId");
         mvc.perform(put("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -330,7 +301,6 @@ class TestClientController {
                 "password2"
         );
         Mockito.when(accountService.findClient(null)).thenReturn(authClient);
-        Cookie cookie = new Cookie("JAVASESSIONID", "sessionId");
         mvc.perform(put("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -351,7 +321,6 @@ class TestClientController {
                 "password2"
         );
         Mockito.when(accountService.findClient(null)).thenReturn(authClient);
-        Cookie cookie = new Cookie("JAVASESSIONID", "sessionId");
         mvc.perform(put("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -372,7 +341,6 @@ class TestClientController {
                 "password2"
         );
         Mockito.when(accountService.findClient(null)).thenReturn(authClient);
-        Cookie cookie = new Cookie("JAVASESSIONID", "sessionId");
         mvc.perform(put("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -412,7 +380,6 @@ class TestClientController {
                 "passwor"
         );
         Mockito.when(accountService.findClient(null)).thenReturn(authClient);
-        Cookie cookie = new Cookie("JAVASESSIONID", "sessionId");
         mvc.perform(put("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -423,7 +390,6 @@ class TestClientController {
 
     @Test
     void testGetClients() throws Exception {
-        Cookie cookie = new Cookie("JAVASESSIONID", "sessionId");
         mvc.perform(get("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -434,7 +400,6 @@ class TestClientController {
     @Test
     void testGetClients_badAuth() throws Exception {
         Mockito.doThrow(new ServerException(ServerErrorCode.ACTION_FORBIDDEN)).when(accountService).checkAdmin("sessionId");
-        Cookie cookie = new Cookie("JAVASESSIONID", "sessionId");
         mvc.perform(get("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)

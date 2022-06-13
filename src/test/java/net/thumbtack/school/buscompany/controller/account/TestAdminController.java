@@ -1,22 +1,15 @@
 package net.thumbtack.school.buscompany.controller.account;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import net.thumbtack.school.buscompany.dto.request.account.EditAdministratorDtoRequest;
 import net.thumbtack.school.buscompany.dto.request.account.RegistrationAdminDtoRequest;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
-import net.thumbtack.school.buscompany.model.account.Admin;
-import net.thumbtack.school.buscompany.service.account.AccountService;
-import net.thumbtack.school.buscompany.utils.UserTypeEnum;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
 
 import javax.servlet.http.Cookie;
 
@@ -26,24 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = AdminController.class)
-class TestAdminController {
-    @Autowired
-    private MockMvc mvc;
-    @Autowired
-    private ObjectMapper mapper;
-    @MockBean
-    private AccountService accountService;
-
-    private Admin authAdmin = new Admin(
-            "login",
-            "password",
-            "first",
-            "last",
-            "patronymic",
-            UserTypeEnum.ADMIN,
-            "тестировщик",
-            1);
-
+class TestAdminController extends TestBaseAccount {
     @Test
     void testInsertAdmin() throws Exception {
         Mockito.when(accountService.getAccountByLogin("admin")).thenThrow(new ServerException(ServerErrorCode.USER_NOT_FOUND));
@@ -185,7 +161,6 @@ class TestAdminController {
                 "password2"
         );
         Mockito.when(accountService.findAdmin(null)).thenReturn(authAdmin);
-        Cookie cookie = new Cookie("JAVASESSIONID", "sessionId");
         mvc.perform(put("/api/admins")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -205,7 +180,6 @@ class TestAdminController {
                 "password2"
         );
         Mockito.when(accountService.findAdmin(null)).thenReturn(authAdmin);
-        Cookie cookie = new Cookie("JAVASESSIONID", "sessionId");
         mvc.perform(put("/api/admins")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -225,7 +199,6 @@ class TestAdminController {
                 "password2"
         );
         Mockito.when(accountService.findAdmin(null)).thenReturn(authAdmin);
-        Cookie cookie = new Cookie("JAVASESSIONID", "sessionId");
         mvc.perform(put("/api/admins")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -245,7 +218,6 @@ class TestAdminController {
                 "password2"
         );
         Mockito.when(accountService.findAdmin(null)).thenReturn(authAdmin);
-        Cookie cookie = new Cookie("JAVASESSIONID", "sessionId");
         mvc.perform(put("/api/admins")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -285,7 +257,6 @@ class TestAdminController {
         );
         Mockito.when(accountService.findAdmin(null)).thenReturn(authAdmin);
         Mockito.doThrow(new ServerException(ServerErrorCode.BAD_PASSWORD)).when(accountService).checkPassword(authAdmin, "password");
-        Cookie cookie = new Cookie("JAVASESSIONID", "sessionId");
         mvc.perform(put("/api/admins")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -307,7 +278,6 @@ class TestAdminController {
                 "passwor"
         );
         Mockito.when(accountService.findAdmin(null)).thenReturn(authAdmin);
-        Cookie cookie = new Cookie("JAVASESSIONID", "sessionId");
         mvc.perform(put("/api/admins")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)

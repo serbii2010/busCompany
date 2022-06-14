@@ -31,7 +31,7 @@ class SessionControllerTest extends TestBaseAccount {
     protected AccountService accountService;
 
     @Test
-    void testLogin() throws Exception {
+    public void testLogin() throws Exception {
         Mockito.when(accountService.getAccountByLogin("admin")).thenReturn(admin);
         LoginDtoRequest request = new LoginDtoRequest(
                 "admin",
@@ -46,7 +46,7 @@ class SessionControllerTest extends TestBaseAccount {
     }
 
     @Test
-    void testLogin_badLogin() throws Exception {
+    public void testLogin_badLogin() throws Exception {
         Mockito.when(accountService.getAccountByLogin("admin")).thenThrow(new ServerException(ServerErrorCode.USER_NOT_FOUND));
         LoginDtoRequest request = new LoginDtoRequest(
                 "admin",
@@ -61,7 +61,7 @@ class SessionControllerTest extends TestBaseAccount {
     }
 
     @Test
-    void testLogin_badPassword() throws Exception {
+    public void testLogin_badPassword() throws Exception {
         Mockito.when(accountService.getAccountByLogin("admin")).thenReturn(admin);
         Mockito.doThrow(new ServerException(ServerErrorCode.BAD_PASSWORD)).when(accountService).checkPassword(admin, "password");
         LoginDtoRequest request = new LoginDtoRequest(
@@ -77,7 +77,7 @@ class SessionControllerTest extends TestBaseAccount {
     }
 
     @Test
-    void testLogout() throws Exception {
+    public void testLogout() throws Exception {
         mvc.perform(delete("/api/session")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -86,7 +86,7 @@ class SessionControllerTest extends TestBaseAccount {
     }
 
     @Test
-    void testLogout_withoutCookie() throws Exception {
+    public void testLogout_withoutCookie() throws Exception {
         mvc.perform(delete("/api/session")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))

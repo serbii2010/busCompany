@@ -28,7 +28,7 @@ class TestAccountController extends TestBaseAccount {
     protected AccountService accountService;
 
     @Test
-    void testGetInfo_notAuth() throws Exception {
+    public void testGetInfo_notAuth() throws Exception {
         mvc.perform(get("/api/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -36,7 +36,7 @@ class TestAccountController extends TestBaseAccount {
     }
 
     @Test
-    void testGetInfo_authAdmin() throws Exception {
+    public void testGetInfo_authAdmin() throws Exception {
         Mockito.when(accountService.getAuthAccount("sessionId")).thenReturn(admin);
         mvc.perform(get("/api/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -46,7 +46,7 @@ class TestAccountController extends TestBaseAccount {
     }
 
     @Test
-    void testGetInfo_authClient() throws Exception {
+    public void testGetInfo_authClient() throws Exception {
         Mockito.when(accountService.getAuthAccount("sessionId")).thenReturn(client);
         mvc.perform(get("/api/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -55,9 +55,8 @@ class TestAccountController extends TestBaseAccount {
                 .andExpect(status().isOk());
     }
 
-
     @Test
-    void testDeleteAccount() throws Exception {
+    public void testDeleteAccount() throws Exception {
         Mockito.when(accountService.getAuthAccount("sessionId")).thenReturn(client);
         mvc.perform(delete("/api/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -67,13 +66,11 @@ class TestAccountController extends TestBaseAccount {
     }
 
     @Test
-    void testDeleteAccount_noAuth() throws Exception {
+    public void testDeleteAccount_noAuth() throws Exception {
         Mockito.when(accountService.getAuthAccount("sessionId")).thenReturn(client);
         mvc.perform(delete("/api/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
-
-
 }

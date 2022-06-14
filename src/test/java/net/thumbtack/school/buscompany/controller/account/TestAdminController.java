@@ -32,7 +32,7 @@ class TestAdminController extends TestBaseAccount {
     protected AccountService accountService;
 
     @Test
-    void testInsertAdmin() throws Exception {
+    public void testInsertAdmin() throws Exception {
         Mockito.when(accountService.getAccountByLogin("admin")).thenThrow(new ServerException(ServerErrorCode.USER_NOT_FOUND));
         RegistrationAdminDtoRequest request = new RegistrationAdminDtoRequest(
                 "имя",
@@ -50,7 +50,7 @@ class TestAdminController extends TestBaseAccount {
     }
 
     @Test
-    void testInsertAdmin_badFirstName() throws Exception {
+    public void testInsertAdmin_badFirstName() throws Exception {
         Mockito.when(accountService.getAccountByLogin("admin")).thenThrow(new ServerException(ServerErrorCode.USER_NOT_FOUND));
         RegistrationAdminDtoRequest request = new RegistrationAdminDtoRequest(
                 "name",
@@ -68,7 +68,7 @@ class TestAdminController extends TestBaseAccount {
     }
 
     @Test
-    void testInsertAdmin_badLastNAme() throws Exception {
+    public void testInsertAdmin_badLastNAme() throws Exception {
         Mockito.when(accountService.getAccountByLogin("admin")).thenThrow(new ServerException(ServerErrorCode.USER_NOT_FOUND));
         RegistrationAdminDtoRequest request = new RegistrationAdminDtoRequest(
                 "имя",
@@ -86,7 +86,7 @@ class TestAdminController extends TestBaseAccount {
     }
 
     @Test
-    void testInsertAdmin_badLengthFirstName() throws Exception {
+    public void testInsertAdmin_badLengthFirstName() throws Exception {
         Mockito.when(accountService.getAccountByLogin("admin")).thenThrow(new ServerException(ServerErrorCode.USER_NOT_FOUND));
         RegistrationAdminDtoRequest request = new RegistrationAdminDtoRequest(
                 // 51 символ
@@ -105,7 +105,7 @@ class TestAdminController extends TestBaseAccount {
     }
 
     @Test
-    void testInsertAdmin_badLengthLastName() throws Exception {
+    public void testInsertAdmin_badLengthLastName() throws Exception {
         Mockito.when(accountService.getAccountByLogin("admin")).thenThrow(new ServerException(ServerErrorCode.USER_NOT_FOUND));
         RegistrationAdminDtoRequest request = new RegistrationAdminDtoRequest(
                 "имя-имяимяяяяяяяяяяяяяяяяяяяя",
@@ -124,7 +124,7 @@ class TestAdminController extends TestBaseAccount {
     }
 
     @Test
-    void testInsertAdmin_badLengthPatronymic() throws Exception {
+    public void testInsertAdmin_badLengthPatronymic() throws Exception {
         Mockito.when(accountService.getAccountByLogin("admin")).thenThrow(new ServerException(ServerErrorCode.USER_NOT_FOUND));
         RegistrationAdminDtoRequest request = new RegistrationAdminDtoRequest(
                 // 51 символ
@@ -143,7 +143,7 @@ class TestAdminController extends TestBaseAccount {
     }
 
     @Test
-    void testInsertAdmin_badLengthPassword() throws Exception {
+    public void testInsertAdmin_badLengthPassword() throws Exception {
         Mockito.when(accountService.getAccountByLogin("admin")).thenThrow(new ServerException(ServerErrorCode.USER_NOT_FOUND));
         RegistrationAdminDtoRequest request = new RegistrationAdminDtoRequest(
                 "имя",
@@ -162,7 +162,7 @@ class TestAdminController extends TestBaseAccount {
     }
 
     @Test
-    void testUpdateAdmin() throws Exception {
+    public void testUpdateAdmin() throws Exception {
         EditAdministratorDtoRequest request = new EditAdministratorDtoRequest(
                 "имя",
                 "фамилия",
@@ -181,7 +181,7 @@ class TestAdminController extends TestBaseAccount {
     }
 
     @Test
-    void testUpdateAdmin_badFirstName() throws Exception {
+    public void testUpdateAdmin_badFirstName() throws Exception {
         EditAdministratorDtoRequest request = new EditAdministratorDtoRequest(
                 "имяABC",
                 "фамилия",
@@ -200,7 +200,7 @@ class TestAdminController extends TestBaseAccount {
     }
 
     @Test
-    void testUpdateAdmin_badLastName() throws Exception {
+    public void testUpdateAdmin_badLastName() throws Exception {
         EditAdministratorDtoRequest request = new EditAdministratorDtoRequest(
                 "имя",
                 "фамилияABC",
@@ -219,7 +219,7 @@ class TestAdminController extends TestBaseAccount {
     }
 
     @Test
-    void testUpdateAdmin_badPatronymic() throws Exception {
+    public void testUpdateAdmin_badPatronymic() throws Exception {
         EditAdministratorDtoRequest request = new EditAdministratorDtoRequest(
                 "имя",
                 "фамилия",
@@ -237,9 +237,8 @@ class TestAdminController extends TestBaseAccount {
                 .andExpect(status().isBadRequest());
     }
 
-
     @Test
-    void testUpdateAdmin_badCookie() throws Exception {
+    public void testUpdateAdmin_badCookie() throws Exception {
         EditAdministratorDtoRequest request = new EditAdministratorDtoRequest(
                 "имя",
                 "фамилия",
@@ -257,7 +256,7 @@ class TestAdminController extends TestBaseAccount {
     }
 
     @Test
-    void testUpdateAdmin_badPassword() throws Exception {
+    public void testUpdateAdmin_badPassword() throws Exception {
         EditAdministratorDtoRequest request = new EditAdministratorDtoRequest(
                 "имя",
                 "фамилия",
@@ -276,9 +275,8 @@ class TestAdminController extends TestBaseAccount {
                 .andExpect(status().isBadRequest());
     }
 
-
     @Test
-    void testUpdateAdmin_badLengthNewPassword() throws Exception {
+    public void testUpdateAdmin_badLengthNewPassword() throws Exception {
         EditAdministratorDtoRequest request = new EditAdministratorDtoRequest(
                 "имя",
                 "фамилия",

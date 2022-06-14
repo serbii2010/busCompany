@@ -31,7 +31,7 @@ class TestClientController extends TestBaseAccount {
     protected AccountService accountService;
 
     @Test
-    void testInsertClient() throws Exception {
+    public void testInsertClient() throws Exception {
         Mockito.when(accountService.getAccountByLogin("client")).thenThrow(new ServerException(ServerErrorCode.USER_NOT_FOUND));
         RegistrationClientDtoRequest request = new RegistrationClientDtoRequest(
                 "имя",
@@ -50,7 +50,7 @@ class TestClientController extends TestBaseAccount {
     }
 
     @Test
-    void testInsertClient_badFirstName() throws Exception {
+    public void testInsertClient_badFirstName() throws Exception {
         Mockito.when(accountService.getAccountByLogin("client")).thenThrow(new ServerException(ServerErrorCode.USER_NOT_FOUND));
         RegistrationClientDtoRequest request = new RegistrationClientDtoRequest(
                 "имяW",
@@ -69,7 +69,7 @@ class TestClientController extends TestBaseAccount {
     }
 
     @Test
-    void testInsertClient_badLastName() throws Exception {
+    public void testInsertClient_badLastName() throws Exception {
         Mockito.when(accountService.getAccountByLogin("client")).thenThrow(new ServerException(ServerErrorCode.USER_NOT_FOUND));
         RegistrationClientDtoRequest request = new RegistrationClientDtoRequest(
                 "имя",
@@ -88,7 +88,7 @@ class TestClientController extends TestBaseAccount {
     }
 
     @Test
-    void testInsertClient_badPatronymic() throws Exception {
+    public void testInsertClient_badPatronymic() throws Exception {
         Mockito.when(accountService.getAccountByLogin("client")).thenThrow(new ServerException(ServerErrorCode.USER_NOT_FOUND));
         RegistrationClientDtoRequest request = new RegistrationClientDtoRequest(
                 "имя",
@@ -107,7 +107,7 @@ class TestClientController extends TestBaseAccount {
     }
 
     @Test
-    void testInsertClientBadEmail() throws Exception {
+    public void testInsertClientBadEmail() throws Exception {
         Mockito.when(accountService.getAccountByLogin("client")).thenThrow(new ServerException(ServerErrorCode.USER_NOT_FOUND));
         RegistrationClientDtoRequest request = new RegistrationClientDtoRequest(
                 "имя",
@@ -126,7 +126,7 @@ class TestClientController extends TestBaseAccount {
     }
 
     @Test
-    void testInsertClient_badPhone() throws Exception {
+    public void testInsertClient_badPhone() throws Exception {
         Mockito.when(accountService.getAccountByLogin("client")).thenThrow(new ServerException(ServerErrorCode.USER_NOT_FOUND));
         RegistrationClientDtoRequest request = new RegistrationClientDtoRequest(
                 "имя",
@@ -145,7 +145,7 @@ class TestClientController extends TestBaseAccount {
     }
 
     @Test
-    void testInsertClient_badPasswordLength() throws Exception {
+    public void testInsertClient_badPasswordLength() throws Exception {
         Mockito.when(accountService.getAccountByLogin("client")).thenThrow(new ServerException(ServerErrorCode.USER_NOT_FOUND));
         RegistrationClientDtoRequest request = new RegistrationClientDtoRequest(
                 "имя",
@@ -164,7 +164,7 @@ class TestClientController extends TestBaseAccount {
     }
 
     @Test
-    void testInsertClient_badLengthFirstName() throws Exception {
+    public void testInsertClient_badLengthFirstName() throws Exception {
         Mockito.when(accountService.getAccountByLogin("client")).thenThrow(new ServerException(ServerErrorCode.USER_NOT_FOUND));
         RegistrationClientDtoRequest request = new RegistrationClientDtoRequest(
                 "имяимяяяяяяяяяяяяяяяяяяяя-имяимяяяяяяяяяяяяяяяяяяяя",
@@ -183,7 +183,7 @@ class TestClientController extends TestBaseAccount {
     }
 
     @Test
-    void testInsertClient_badLengthLastName() throws Exception {
+    public void testInsertClient_badLengthLastName() throws Exception {
         Mockito.when(accountService.getAccountByLogin("client")).thenThrow(new ServerException(ServerErrorCode.USER_NOT_FOUND));
         RegistrationClientDtoRequest request = new RegistrationClientDtoRequest(
                 "имя",
@@ -202,7 +202,7 @@ class TestClientController extends TestBaseAccount {
     }
 
     @Test
-    void testInsertClient_badLengthPatronymic() throws Exception {
+    public void testInsertClient_badLengthPatronymic() throws Exception {
         Mockito.when(accountService.getAccountByLogin("client")).thenThrow(new ServerException(ServerErrorCode.USER_NOT_FOUND));
         RegistrationClientDtoRequest request = new RegistrationClientDtoRequest(
                 "имя",
@@ -221,7 +221,7 @@ class TestClientController extends TestBaseAccount {
     }
 
     @Test
-    void testInsertClient_badMinLengthPassword() throws Exception {
+    public void testInsertClient_badMinLengthPassword() throws Exception {
         Mockito.when(accountService.getAccountByLogin("client")).thenThrow(new ServerException(ServerErrorCode.USER_NOT_FOUND));
         RegistrationClientDtoRequest request = new RegistrationClientDtoRequest(
                 "имя",
@@ -240,7 +240,7 @@ class TestClientController extends TestBaseAccount {
     }
 
     @Test
-    void testUpdateClient() throws Exception {
+    public void testUpdateClient() throws Exception {
         EditClientDtoRequest request = new EditClientDtoRequest(
                 "имя",
                 "фамилия",
@@ -260,7 +260,7 @@ class TestClientController extends TestBaseAccount {
     }
 
     @Test
-    void testUpdateClient_badFirstName() throws Exception {
+    public void testUpdateClient_badFirstName() throws Exception {
         EditClientDtoRequest request = new EditClientDtoRequest(
                 "имя@",
                 "фамилия",
@@ -280,7 +280,7 @@ class TestClientController extends TestBaseAccount {
     }
 
     @Test
-    void testUpdateClient_badLastName() throws Exception {
+    public void testUpdateClient_badLastName() throws Exception {
         EditClientDtoRequest request = new EditClientDtoRequest(
                 "имя",
                 "фамилия@",
@@ -300,7 +300,7 @@ class TestClientController extends TestBaseAccount {
     }
 
     @Test
-    void testUpdateClient_badPatronymic() throws Exception {
+    public void testUpdateClient_badPatronymic() throws Exception {
         EditClientDtoRequest request = new EditClientDtoRequest(
                 "имя",
                 "фамилия",
@@ -320,7 +320,7 @@ class TestClientController extends TestBaseAccount {
     }
 
     @Test
-    void testUpdateClient_badEmail() throws Exception {
+    public void testUpdateClient_badEmail() throws Exception {
         EditClientDtoRequest request = new EditClientDtoRequest(
                 "имя",
                 "фамилия",
@@ -340,7 +340,7 @@ class TestClientController extends TestBaseAccount {
     }
 
     @Test
-    void testUpdateClient_badPhone() throws Exception {
+    public void testUpdateClient_badPhone() throws Exception {
         EditClientDtoRequest request = new EditClientDtoRequest(
                 "имя",
                 "фамилия",
@@ -360,7 +360,7 @@ class TestClientController extends TestBaseAccount {
     }
 
     @Test
-    void testUpdateClient_badCookie() throws Exception {
+    public void testUpdateClient_badCookie() throws Exception {
         EditClientDtoRequest request = new EditClientDtoRequest(
                 "имя",
                 "фамилия",
@@ -379,7 +379,7 @@ class TestClientController extends TestBaseAccount {
     }
 
     @Test
-    void testUpdateClient_badMinLengthPassword() throws Exception {
+    public void testUpdateClient_badMinLengthPassword() throws Exception {
         EditClientDtoRequest request = new EditClientDtoRequest(
                 "имя",
                 "фамилия",
@@ -399,7 +399,7 @@ class TestClientController extends TestBaseAccount {
     }
 
     @Test
-    void testGetClients() throws Exception {
+    public void testGetClients() throws Exception {
         mvc.perform(get("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -408,7 +408,7 @@ class TestClientController extends TestBaseAccount {
     }
 
     @Test
-    void testGetClients_badAuth() throws Exception {
+    public void testGetClients_badAuth() throws Exception {
         Mockito.doThrow(new ServerException(ServerErrorCode.ACTION_FORBIDDEN)).when(accountService).checkAdmin("sessionId");
         mvc.perform(get("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)

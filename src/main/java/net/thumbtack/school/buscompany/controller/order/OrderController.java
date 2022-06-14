@@ -7,6 +7,7 @@ import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.mappers.dto.order.OrderMapper;
 import net.thumbtack.school.buscompany.model.account.Account;
 import net.thumbtack.school.buscompany.model.Order;
+import net.thumbtack.school.buscompany.model.account.Client;
 import net.thumbtack.school.buscompany.service.account.AccountService;
 import net.thumbtack.school.buscompany.service.order.OrderService;
 import net.thumbtack.school.buscompany.service.trip.TripService;
@@ -34,7 +35,7 @@ public class OrderController {
         Account account = accountService.getAuthAccount(javaSessionId);
         accountService.checkClient(javaSessionId);
 
-        Order order = OrderMapper.INSTANCE.dtoToOrder(request, tripService, account);
+        Order order = OrderMapper.INSTANCE.dtoToOrder(request, tripService, (Client) account);
         orderService.insert(order);
 
         return OrderMapper.INSTANCE.orderToDto(order);

@@ -5,6 +5,7 @@ import net.thumbtack.school.buscompany.dto.response.order.OrderDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.account.Account;
 import net.thumbtack.school.buscompany.model.Order;
+import net.thumbtack.school.buscompany.model.account.Client;
 import net.thumbtack.school.buscompany.service.trip.TripService;
 import org.mapstruct.Context;
 import org.mapstruct.Mapper;
@@ -17,20 +18,21 @@ import java.util.List;
 public interface OrderMapper {
     OrderMapper INSTANCE = Mappers.getMapper(OrderMapper.class);
 
-    @Mapping(target = "trip", expression = "java(tripService.findById(String.valueOf(request.getTripId())))")
+    @Mapping(target = "dateTrip",
+            expression = "java(tripService.findDateTrip(String.valueOf(request.getTripId()), request.getDate()))")
     @Mapping(target = "account", expression = "java(account)")
     Order dtoToOrder(OrderDtoRequest request,
                      @Context TripService tripService,
-                     @Context Account account) throws ServerException;
+                     @Context Client account) throws ServerException;
 
     @Mapping(target = "orderId", source = "id")
-    @Mapping(target = "tripId", source = "trip.id")
-    @Mapping(target = "fromStation", source = "trip.fromStation.name")
-    @Mapping(target = "toStation", source = "trip.toStation.name")
-    @Mapping(target = "busName", source = "trip.bus.name")
-    @Mapping(target = "start", source = "trip.start")
-    @Mapping(target = "price", source = "trip.price")
-    @Mapping(target = "totalPrice", expression = "java(object.getPassengers().size()*object.getTrip().getPrice())")
+    @Mapping(target = "tripId", source = "dateTrip.trip.id")
+    @Mapping(target = "fromStation", source = "dateTrip.trip.fromStation.name")
+    @Mapping(target = "toStation", source = "dateTrip.trip.toStation.name")
+    @Mapping(target = "busName", source = "dateTrip.trip.bus.name")
+    @Mapping(target = "start", source = "dateTrip.trip.start")
+    @Mapping(target = "price", source = "dateTrip.trip.price")
+    @Mapping(target = "totalPrice", expression = "java(object.getPassengers().size()*object.getDateTrip().getTrip().getPrice())")
     OrderDtoResponse orderToDto(Order object);
 
     List<OrderDtoResponse> orderListToDtoResponse(List<Order> trips);

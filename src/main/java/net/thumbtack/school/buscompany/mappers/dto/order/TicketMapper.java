@@ -15,6 +15,6 @@ public interface TicketMapper {
     @Mapping(target = "passport", source = "orderPassenger.passenger.passport")
     @Mapping(target = "place", source = "place")
     @Mapping(target = "orderId", source = "orderPassenger.order.id")
-    @Mapping(target = "ticket", expression = "java(String.format(\"%s_%s\", ticket.getOrderPassenger().getOrder().getTrip().getId(), ticket.getPlace()))")
+    @Mapping(target = "ticket", expression = "java(String.format(\"%s_%s\", ticket.getOrderPassenger().getOrder().getDateTrip().getTrip().getId(), ticket.getPlace()))")
     TicketDtoResponse tickerToDto(Ticket ticket);
 }

@@ -35,7 +35,7 @@ public class OrderService {
 
     public List<Integer> getFreePlaces(Order order) {
         List<Integer> place = orderDao.getPlaces(order);
-        int countPlace = order.getTrip().getBus().getPlaceCount();
+        int countPlace = order.getDateTrip().getTrip().getBus().getPlaceCount();
         return IntStream.range(1, countPlace+1).filter(p -> !place.contains(p)).boxed().collect(Collectors.toList());
     }
 

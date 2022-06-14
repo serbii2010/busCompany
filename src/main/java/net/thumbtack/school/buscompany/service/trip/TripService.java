@@ -36,6 +36,14 @@ public class TripService {
         return trip;
     }
 
+    public DateTrip findDateTrip(String tripId, String date) throws ServerException {
+        DateTrip dateTrip = dateTripDao.find(tripId, date);
+        if (dateTrip == null) {
+            throw new ServerException(ServerErrorCode.DATE_TRIP_NOT_FOUND);
+        }
+        return  dateTrip;
+    }
+
     public List<Trip> getListTrip(String fromStation, String toStation, String busName, String fromDate, String toDate) {
         return tripDao.filter(fromStation, toStation, busName, fromDate, toDate);
     }
@@ -59,6 +67,7 @@ public class TripService {
         for (DateTrip date: trip.getDates()) {
             DateTrip dateTrip = new DateTrip(trip, date.getDate());
             dateTripDao.insert(dateTrip);
+            //@todo заполнить места для каждого рейса
         }
 
         return trip;

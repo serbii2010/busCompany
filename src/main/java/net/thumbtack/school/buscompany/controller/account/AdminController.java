@@ -4,8 +4,10 @@ import net.thumbtack.school.buscompany.dto.request.account.EditAdministratorDtoR
 import net.thumbtack.school.buscompany.dto.request.account.RegistrationAdminDtoRequest;
 import net.thumbtack.school.buscompany.dto.response.account.EditAdministratorDtoResponse;
 import net.thumbtack.school.buscompany.dto.response.account.RegistrationAdminDtoResponse;
+import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.mappers.dto.account.AdminMapper;
+import net.thumbtack.school.buscompany.model.account.Account;
 import net.thumbtack.school.buscompany.model.account.Admin;
 import net.thumbtack.school.buscompany.service.account.AccountService;
 import net.thumbtack.school.buscompany.utils.UserTypeEnum;
@@ -42,14 +44,16 @@ public class AdminController {
     public EditAdministratorDtoResponse updateAdmin(@Valid @RequestBody EditAdministratorDtoRequest request,
                                                      @CookieValue("JAVASESSIONID") String javaSessionId)
             throws ServerException {
-        Admin account = accountService.findAdmin(accountService.getAuthAccount(javaSessionId));
+        Account account = accountService.getAuthAccount(javaSessionId);
         if (account.getUserType() != UserTypeEnum.ADMIN) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ServerException(ServerErrorCode.ACTION_FORBIDDEN);
         }
-        AdminMapper.INSTANCE.update(account, request, accountService);
+        Admin admin = accountService.findAdmin(account);
+
+        AdminMapper.INSTANCE.update(admin, request, accountService);
         accountService.updateAccount(account);
         LOGGER.debug("client updated");
-        return AdminMapper.INSTANCE.accountEditToDto(account);
+        return AdminMapper.INSTANCE.accountEditToDto(admin);
     }
 
 }

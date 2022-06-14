@@ -110,19 +110,7 @@ CREATE TABLE date_trip
     trip_id INT(11) NULL DEFAULT NULL,
     date    DATE    NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (trip_id) REFERENCES trip (id) ON DELETE SET NULL
-) ENGINE = INNODB
-  DEFAULT CHARSET = utf8;
-
-CREATE TABLE orders
-(
-    id         INT(11) NOT NULL AUTO_INCREMENT,
-    trip_id    INT(11) NULL DEFAULT NULL,
-    account_id INT(11) NULL DEFAULT NULL,
-    date       DATE    NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (trip_id) REFERENCES trip (id) ON DELETE SET NULL,
-    FOREIGN KEY (account_id) REFERENCES account (id) ON DELETE SET NULL
+    FOREIGN KEY (trip_id) REFERENCES trip (id) ON DELETE CASCADE
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;
 
@@ -134,6 +122,19 @@ CREATE TABLE passenger
     passport   VARCHAR(20) NOT NULL,
     UNIQUE KEY uniq_passenger (first_name, last_name, passport),
     PRIMARY KEY (id)
+) ENGINE = INNODB
+  DEFAULT CHARSET = utf8;
+
+CREATE TABLE orders
+(
+    id         INT(11) NOT NULL AUTO_INCREMENT,
+    date_trip_id    INT(11) NULL DEFAULT NULL,
+    client_id INT(11) NULL DEFAULT NULL,
+    date       DATE    NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (date_trip_id) REFERENCES date_trip (id) ON DELETE CASCADE
+,
+    FOREIGN KEY (client_id) REFERENCES client (id) ON DELETE CASCADE
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;
 
@@ -149,13 +150,14 @@ CREATE TABLE order_passenger
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;
 
-CREATE TABLE ticket
+CREATE TABLE place
 (
-    id                 INT(11) NOT NULL AUTO_INCREMENT,
-    order_passenger_id INT(11) NULL DEFAULT NULL,
-    place              INT(3),
+    id      INT(11) NOT NULL AUTO_INCREMENT,
+    number INT(3) NOT NULL,
+    date_trip_id INT(11) NOT NULL,
+    passenger_id INT(11) NULL DEFAULT NULL,
     PRIMARY KEY (id),
-    UNIQUE KEY ticket (order_passenger_id),
-    FOREIGN KEY (order_passenger_id) REFERENCES order_passenger (id) ON DELETE SET NULL
+    FOREIGN KEY (date_trip_id) REFERENCES date_trip (id) ON DELETE CASCADE,
+    FOREIGN KEY (passenger_id) REFERENCES passenger (id) ON DELETE CASCADE
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;

@@ -3,7 +3,7 @@ package net.thumbtack.school.buscompany.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.thumbtack.school.buscompany.model.account.Account;
+import net.thumbtack.school.buscompany.model.account.Client;
 
 import java.util.List;
 
@@ -12,8 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 public class Order {
     private int id;
-    private Trip trip;
-    private Account account;
+    private DateTrip dateTrip;
+    private Client account;
     private String date;
 
     private List<Passenger> passengers;

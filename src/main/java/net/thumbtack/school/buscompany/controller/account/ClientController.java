@@ -5,17 +5,20 @@ import net.thumbtack.school.buscompany.dto.request.account.RegistrationClientDto
 import net.thumbtack.school.buscompany.dto.response.account.EditClientDtoResponse;
 import net.thumbtack.school.buscompany.dto.response.account.InfoClientDtoResponse;
 import net.thumbtack.school.buscompany.dto.response.account.RegistrationClientDtoResponse;
+import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.mappers.dto.account.ClientMapper;
 import net.thumbtack.school.buscompany.model.account.Account;
 import net.thumbtack.school.buscompany.model.account.Client;
 import net.thumbtack.school.buscompany.service.account.AccountService;
+import net.thumbtack.school.buscompany.utils.UserTypeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -45,11 +48,15 @@ public class ClientController {
     public EditClientDtoResponse updateClient(@Valid @RequestBody EditClientDtoRequest request,
                                               @CookieValue("JAVASESSIONID") String javaSessionId)
             throws ServerException {
-        Client account = accountService.findClient(accountService.getAuthAccount(javaSessionId));
-        ClientMapper.INSTANCE.update(account, request, accountService);
+        Account account = accountService.getAuthAccount(javaSessionId);
+        if (account.getUserType() != UserTypeEnum.CLIENT) {
+            throw new ServerException(ServerErrorCode.ACTION_FORBIDDEN);
+        }
+        Client client = accountService.findClient(accountService.getAuthAccount(javaSessionId));
+        ClientMapper.INSTANCE.update(client, request, accountService);
         accountService.updateAccount(account);
         LOGGER.debug("client updated");
-        return ClientMapper.INSTANCE.accountEditToDto(account);
+        return ClientMapper.INSTANCE.accountEditToDto(client);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

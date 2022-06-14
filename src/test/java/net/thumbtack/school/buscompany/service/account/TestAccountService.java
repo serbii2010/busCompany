@@ -12,6 +12,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockHttpServletResponse;
+
+import javax.servlet.http.Cookie;
+
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,12 +24,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class TestAccountService extends TestBaseAccount {
 
     @Mock
-    private AccountDaoImpl accountDao = new AccountDaoImpl();
+    private AccountDaoImpl accountDao;
     @InjectMocks
     private AccountService accountService;
 
     @Test
-    void testRegistrationAdmin() throws Exception {
+    void testRegistrationAdmin() {
         Mockito.when(accountDao.insert(admin)).thenReturn(admin);
         Admin newAdmin = accountService.registrationAdmin(admin);
         assertAll(
@@ -58,55 +63,155 @@ class TestAccountService extends TestBaseAccount {
     }
 
     @Test
-    void testGetAccountByLogin() {
+    void testGetAccountByLogin() throws Exception {
+        Mockito.when(accountDao.findByLogin("admin")).thenReturn(admin);
+        assertEquals(admin, accountService.getAccountByLogin("admin"));
     }
 
     @Test
-    void testGetAuthAccount() {
+    void testGetAccountByLogin_badLogin() throws Exception {
+        Mockito.when(accountDao.findByLogin("admin")).thenThrow(new ServerException(ServerErrorCode.USER_NOT_FOUND));
+        assertThrows(ServerException.class, () -> accountService.getAccountByLogin("admin"));
     }
 
     @Test
-    void testFindAdmin() {
+    void testGetAuthAccount() throws Exception {
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        accountService.login(admin, response);
+        String sessionId = response.getCookie("JAVASESSIONID").getValue();
+        assertEquals(admin, accountService.getAuthAccount(sessionId));
     }
 
     @Test
-    void testFindClient() {
-    }
-
-    @Test
-    void testGetClients() {
+    void testGetAuthAccount_notFound() {
+        assertThrows(ServerException.class, () -> accountService.getAuthAccount(UUID.randomUUID().toString()));
     }
 
     @Test
     void testLogin() {
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        accountService.login(admin, response);
+        Cookie cookieSessionId = response.getCookie("JAVASESSIONID");
+        assertNotNull(cookieSessionId);
     }
 
     @Test
     void testLogout() {
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        accountService.login(admin, response);
+        Cookie cookieSessionId = response.getCookie("JAVASESSIONID");
+        accountService.logout(cookieSessionId.getValue());
+        assertThrows(ServerException.class, () -> accountService.getAuthAccount(cookieSessionId.getValue()));
     }
 
     @Test
-    void testCheckPassword() {
+    void testCheckPassword_admin() {
+        Mockito.when(accountDao.insert(admin)).thenReturn(admin);
+        accountService.registrationAdmin(admin);
+        assertDoesNotThrow(() -> accountService.checkPassword(admin, "password"));
+    }
+
+    @Test
+    void testCheckPassword_badPasswordAdmin() {
+        Mockito.when(accountDao.insert(admin)).thenReturn(admin);
+        accountService.registrationAdmin(admin);
+        assertThrows(ServerException.class, () -> accountService.checkPassword(admin, "password2"));
+    }
+
+    @Test
+    void testCheckPassword_client() {
+        Mockito.when(accountDao.insert(client)).thenReturn(client);
+        accountService.registrationClient(client);
+        assertDoesNotThrow(() -> accountService.checkPassword(client, "password"));
+    }
+
+    @Test
+    void testCheckPassword_badPasswordClient() {
+        Mockito.when(accountDao.insert(client)).thenReturn(client);
+        accountService.registrationClient(client);
+        assertThrows(ServerException.class, () -> accountService.checkPassword(client, "password2"));
     }
 
     @Test
     void testCheckAdmin() {
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        accountService.login(admin, response);
+        Cookie cookieSessionId = response.getCookie("JAVASESSIONID");
+        assertDoesNotThrow(() -> accountService.checkAdmin(cookieSessionId.getValue()));
+    }
+
+
+
+    @Test
+    void testCheckAdmin_bad() {
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        accountService.login(client, response);
+        Cookie cookieSessionId = response.getCookie("JAVASESSIONID");
+        assertThrows(ServerException.class, () -> accountService.checkAdmin(cookieSessionId.getValue()));
     }
 
     @Test
     void testCheckClient() {
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        accountService.login(client, response);
+        Cookie cookieSessionId = response.getCookie("JAVASESSIONID");
+        assertDoesNotThrow(() -> accountService.checkClient(cookieSessionId.getValue()));
     }
 
     @Test
-    void testIsAdmin() {
+    void testCheckClientBad() {
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        accountService.login(admin, response);
+        Cookie cookieSessionId = response.getCookie("JAVASESSIONID");
+        assertThrows(ServerException.class, () -> accountService.checkClient(cookieSessionId.getValue()));
     }
 
     @Test
-    void testIsClient() {
+    void testIsAdmin() throws Exception {
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        accountService.login(admin, response);
+        Cookie cookieSessionId = response.getCookie("JAVASESSIONID");
+        assertTrue(accountService.isAdmin(cookieSessionId.getValue()));
+    }
+
+
+    @Test
+    void testIsAdmin_bad() throws Exception {
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        accountService.login(client, response);
+        Cookie cookieSessionId = response.getCookie("JAVASESSIONID");
+        assertFalse(accountService.isAdmin(cookieSessionId.getValue()));
+    }
+
+    @Test
+    void testIsClient() throws Exception {
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        accountService.login(client, response);
+        Cookie cookieSessionId = response.getCookie("JAVASESSIONID");
+        assertTrue(accountService.isClient(cookieSessionId.getValue()));
+    }
+
+    @Test
+    void testIsClient_bad() throws Exception {
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        accountService.login(admin, response);
+        Cookie cookieSessionId = response.getCookie("JAVASESSIONID");
+        assertFalse(accountService.isClient(cookieSessionId.getValue()));
     }
 
     @Test
     void testIsAuth() {
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        accountService.login(admin, response);
+        Cookie cookieSessionId = response.getCookie("JAVASESSIONID");
+        assertTrue(accountService.isAuth(cookieSessionId.getValue()));
+    }
+
+    @Test
+    void testIsAuth_bad() {
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        accountService.login(admin, response);
+        assertFalse(accountService.isAuth(UUID.randomUUID().toString()));
     }
 
 }

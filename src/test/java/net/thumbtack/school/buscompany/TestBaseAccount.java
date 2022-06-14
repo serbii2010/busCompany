@@ -1,4 +1,4 @@
-package net.thumbtack.school.buscompany.controller.account;
+package net.thumbtack.school.buscompany;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.thumbtack.school.buscompany.model.account.Admin;
@@ -12,14 +12,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import javax.servlet.http.Cookie;
 
 public class TestBaseAccount {
-    @Autowired
-    protected MockMvc mvc;
-    @Autowired
-    protected ObjectMapper mapper;
-    @MockBean
-    protected AccountService accountService;
 
-    protected Admin authAdmin = new Admin(
+    protected Admin admin = new Admin(
             "login",
             "password",
             "first",
@@ -29,7 +23,7 @@ public class TestBaseAccount {
             "тестировщик",
             1);
 
-    protected Client authClient = new Client(
+    protected Client client = new Client(
             "login",
             "password",
             "first",

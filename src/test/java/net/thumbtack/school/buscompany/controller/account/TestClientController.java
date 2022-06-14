@@ -1,17 +1,21 @@
 package net.thumbtack.school.buscompany.controller.account;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import net.thumbtack.school.buscompany.TestBaseAccount;
 import net.thumbtack.school.buscompany.dto.request.account.EditClientDtoRequest;
 import net.thumbtack.school.buscompany.dto.request.account.RegistrationClientDtoRequest;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
+import net.thumbtack.school.buscompany.service.account.AccountService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import javax.servlet.http.Cookie;
+import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -19,6 +23,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = ClientController.class)
 class TestClientController extends TestBaseAccount {
+    @Autowired
+    protected MockMvc mvc;
+    @Autowired
+    protected ObjectMapper mapper;
+    @MockBean
+    protected AccountService accountService;
 
     @Test
     void testInsertClient() throws Exception {
@@ -240,7 +250,7 @@ class TestClientController extends TestBaseAccount {
                 "password",
                 "password2"
         );
-        Mockito.when(accountService.findClient(null)).thenReturn(authClient);
+        Mockito.when(accountService.findClient(null)).thenReturn(client);
         mvc.perform(put("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -260,7 +270,7 @@ class TestClientController extends TestBaseAccount {
                 "password",
                 "password2"
         );
-        Mockito.when(accountService.findClient(null)).thenReturn(authClient);
+        Mockito.when(accountService.findClient(null)).thenReturn(client);
         mvc.perform(put("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -280,7 +290,7 @@ class TestClientController extends TestBaseAccount {
                 "password",
                 "password2"
         );
-        Mockito.when(accountService.findClient(null)).thenReturn(authClient);
+        Mockito.when(accountService.findClient(null)).thenReturn(client);
         mvc.perform(put("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -300,7 +310,7 @@ class TestClientController extends TestBaseAccount {
                 "password",
                 "password2"
         );
-        Mockito.when(accountService.findClient(null)).thenReturn(authClient);
+        Mockito.when(accountService.findClient(null)).thenReturn(client);
         mvc.perform(put("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -320,7 +330,7 @@ class TestClientController extends TestBaseAccount {
                 "password",
                 "password2"
         );
-        Mockito.when(accountService.findClient(null)).thenReturn(authClient);
+        Mockito.when(accountService.findClient(null)).thenReturn(client);
         mvc.perform(put("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -340,7 +350,7 @@ class TestClientController extends TestBaseAccount {
                 "password",
                 "password2"
         );
-        Mockito.when(accountService.findClient(null)).thenReturn(authClient);
+        Mockito.when(accountService.findClient(null)).thenReturn(client);
         mvc.perform(put("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -360,7 +370,7 @@ class TestClientController extends TestBaseAccount {
                 "password",
                 "password2"
         );
-        Mockito.when(accountService.findClient(null)).thenReturn(authClient);
+        Mockito.when(accountService.findClient(null)).thenReturn(client);
         mvc.perform(put("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -379,7 +389,7 @@ class TestClientController extends TestBaseAccount {
                 "password",
                 "passwor"
         );
-        Mockito.when(accountService.findClient(null)).thenReturn(authClient);
+        Mockito.when(accountService.findClient(null)).thenReturn(client);
         mvc.perform(put("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)

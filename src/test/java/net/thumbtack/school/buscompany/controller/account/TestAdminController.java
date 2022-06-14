@@ -1,17 +1,21 @@
 package net.thumbtack.school.buscompany.controller.account;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import net.thumbtack.school.buscompany.TestBaseAccount;
 import net.thumbtack.school.buscompany.dto.request.account.EditAdministratorDtoRequest;
 import net.thumbtack.school.buscompany.dto.request.account.RegistrationAdminDtoRequest;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
+import net.thumbtack.school.buscompany.service.account.AccountService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import javax.servlet.http.Cookie;
+import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -20,6 +24,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = AdminController.class)
 class TestAdminController extends TestBaseAccount {
+    @Autowired
+    protected MockMvc mvc;
+    @Autowired
+    protected ObjectMapper mapper;
+    @MockBean
+    protected AccountService accountService;
+
     @Test
     void testInsertAdmin() throws Exception {
         Mockito.when(accountService.getAccountByLogin("admin")).thenThrow(new ServerException(ServerErrorCode.USER_NOT_FOUND));
@@ -160,7 +171,7 @@ class TestAdminController extends TestBaseAccount {
                 "password",
                 "password2"
         );
-        Mockito.when(accountService.findAdmin(null)).thenReturn(authAdmin);
+        Mockito.when(accountService.findAdmin(null)).thenReturn(admin);
         mvc.perform(put("/api/admins")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -179,7 +190,7 @@ class TestAdminController extends TestBaseAccount {
                 "password",
                 "password2"
         );
-        Mockito.when(accountService.findAdmin(null)).thenReturn(authAdmin);
+        Mockito.when(accountService.findAdmin(null)).thenReturn(admin);
         mvc.perform(put("/api/admins")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -198,7 +209,7 @@ class TestAdminController extends TestBaseAccount {
                 "password",
                 "password2"
         );
-        Mockito.when(accountService.findAdmin(null)).thenReturn(authAdmin);
+        Mockito.when(accountService.findAdmin(null)).thenReturn(admin);
         mvc.perform(put("/api/admins")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -217,7 +228,7 @@ class TestAdminController extends TestBaseAccount {
                 "password",
                 "password2"
         );
-        Mockito.when(accountService.findAdmin(null)).thenReturn(authAdmin);
+        Mockito.when(accountService.findAdmin(null)).thenReturn(admin);
         mvc.perform(put("/api/admins")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -237,7 +248,7 @@ class TestAdminController extends TestBaseAccount {
                 "password",
                 "password2"
         );
-        Mockito.when(accountService.findAdmin(null)).thenReturn(authAdmin);
+        Mockito.when(accountService.findAdmin(null)).thenReturn(admin);
         mvc.perform(put("/api/admins")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -255,8 +266,8 @@ class TestAdminController extends TestBaseAccount {
                 "password",
                 "password2"
         );
-        Mockito.when(accountService.findAdmin(null)).thenReturn(authAdmin);
-        Mockito.doThrow(new ServerException(ServerErrorCode.BAD_PASSWORD)).when(accountService).checkPassword(authAdmin, "password");
+        Mockito.when(accountService.findAdmin(null)).thenReturn(admin);
+        Mockito.doThrow(new ServerException(ServerErrorCode.BAD_PASSWORD)).when(accountService).checkPassword(admin, "password");
         mvc.perform(put("/api/admins")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -277,7 +288,7 @@ class TestAdminController extends TestBaseAccount {
                 // 7 символов
                 "passwor"
         );
-        Mockito.when(accountService.findAdmin(null)).thenReturn(authAdmin);
+        Mockito.when(accountService.findAdmin(null)).thenReturn(admin);
         mvc.perform(put("/api/admins")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)

@@ -250,7 +250,8 @@ class TestClientController extends TestBaseAccount {
                 "password",
                 "password2"
         );
-        Mockito.when(accountService.findClient(null)).thenReturn(client);
+        Mockito.when(accountService.getAuthAccount(cookie.getValue())).thenReturn(client);
+        Mockito.when(accountService.findClient(client)).thenReturn(client);
         mvc.perform(put("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -270,7 +271,8 @@ class TestClientController extends TestBaseAccount {
                 "password",
                 "password2"
         );
-        Mockito.when(accountService.findClient(null)).thenReturn(client);
+        Mockito.when(accountService.getAuthAccount(cookie.getValue())).thenReturn(client);
+        Mockito.when(accountService.findClient(client)).thenReturn(client);
         mvc.perform(put("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -290,7 +292,8 @@ class TestClientController extends TestBaseAccount {
                 "password",
                 "password2"
         );
-        Mockito.when(accountService.findClient(null)).thenReturn(client);
+        Mockito.when(accountService.getAuthAccount(cookie.getValue())).thenReturn(client);
+        Mockito.when(accountService.findClient(client)).thenReturn(client);
         mvc.perform(put("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -310,7 +313,8 @@ class TestClientController extends TestBaseAccount {
                 "password",
                 "password2"
         );
-        Mockito.when(accountService.findClient(null)).thenReturn(client);
+        Mockito.when(accountService.getAuthAccount(cookie.getValue())).thenReturn(client);
+        Mockito.when(accountService.findClient(client)).thenReturn(client);
         mvc.perform(put("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -330,7 +334,8 @@ class TestClientController extends TestBaseAccount {
                 "password",
                 "password2"
         );
-        Mockito.when(accountService.findClient(null)).thenReturn(client);
+        Mockito.when(accountService.getAuthAccount(cookie.getValue())).thenReturn(client);
+        Mockito.when(accountService.findClient(client)).thenReturn(client);
         mvc.perform(put("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -350,7 +355,8 @@ class TestClientController extends TestBaseAccount {
                 "password",
                 "password2"
         );
-        Mockito.when(accountService.findClient(null)).thenReturn(client);
+        Mockito.when(accountService.getAuthAccount(cookie.getValue())).thenReturn(client);
+        Mockito.when(accountService.findClient(client)).thenReturn(client);
         mvc.perform(put("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -370,7 +376,8 @@ class TestClientController extends TestBaseAccount {
                 "password",
                 "password2"
         );
-        Mockito.when(accountService.findClient(null)).thenReturn(client);
+        Mockito.when(accountService.getAuthAccount(cookie.getValue())).thenReturn(client);
+        Mockito.when(accountService.findClient(client)).thenReturn(client);
         mvc.perform(put("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -389,7 +396,8 @@ class TestClientController extends TestBaseAccount {
                 "password",
                 "passwor"
         );
-        Mockito.when(accountService.findClient(null)).thenReturn(client);
+        Mockito.when(accountService.getAuthAccount(cookie.getValue())).thenReturn(client);
+        Mockito.when(accountService.findClient(client)).thenReturn(client);
         mvc.perform(put("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)

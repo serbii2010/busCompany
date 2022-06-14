@@ -171,7 +171,8 @@ class TestAdminController extends TestBaseAccount {
                 "password",
                 "password2"
         );
-        Mockito.when(accountService.findAdmin(null)).thenReturn(admin);
+        Mockito.when(accountService.getAuthAccount(cookie.getValue())).thenReturn(admin);
+        Mockito.when(accountService.findAdmin(admin)).thenReturn(admin);
         mvc.perform(put("/api/admins")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -190,7 +191,8 @@ class TestAdminController extends TestBaseAccount {
                 "password",
                 "password2"
         );
-        Mockito.when(accountService.findAdmin(null)).thenReturn(admin);
+        Mockito.when(accountService.getAuthAccount(cookie.getValue())).thenReturn(admin);
+        Mockito.when(accountService.findAdmin(admin)).thenReturn(admin);
         mvc.perform(put("/api/admins")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -209,7 +211,8 @@ class TestAdminController extends TestBaseAccount {
                 "password",
                 "password2"
         );
-        Mockito.when(accountService.findAdmin(null)).thenReturn(admin);
+        Mockito.when(accountService.getAuthAccount(cookie.getValue())).thenReturn(admin);
+        Mockito.when(accountService.findAdmin(admin)).thenReturn(admin);
         mvc.perform(put("/api/admins")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -228,7 +231,8 @@ class TestAdminController extends TestBaseAccount {
                 "password",
                 "password2"
         );
-        Mockito.when(accountService.findAdmin(null)).thenReturn(admin);
+        Mockito.when(accountService.getAuthAccount(cookie.getValue())).thenReturn(admin);
+        Mockito.when(accountService.findAdmin(admin)).thenReturn(admin);
         mvc.perform(put("/api/admins")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -247,7 +251,8 @@ class TestAdminController extends TestBaseAccount {
                 "password",
                 "password2"
         );
-        Mockito.when(accountService.findAdmin(null)).thenReturn(admin);
+        Mockito.when(accountService.getAuthAccount(cookie.getValue())).thenReturn(admin);
+        Mockito.when(accountService.findAdmin(admin)).thenReturn(admin);
         mvc.perform(put("/api/admins")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -265,7 +270,8 @@ class TestAdminController extends TestBaseAccount {
                 "password",
                 "password2"
         );
-        Mockito.when(accountService.findAdmin(null)).thenReturn(admin);
+        Mockito.when(accountService.getAuthAccount(cookie.getValue())).thenReturn(admin);
+        Mockito.when(accountService.findAdmin(admin)).thenReturn(admin);
         Mockito.doThrow(new ServerException(ServerErrorCode.BAD_PASSWORD)).when(accountService).checkPassword(admin, "password");
         mvc.perform(put("/api/admins")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -286,7 +292,8 @@ class TestAdminController extends TestBaseAccount {
                 // 7 символов
                 "passwor"
         );
-        Mockito.when(accountService.findAdmin(null)).thenReturn(admin);
+        Mockito.when(accountService.getAuthAccount(cookie.getValue())).thenReturn(admin);
+        Mockito.when(accountService.findAdmin(admin)).thenReturn(admin);
         mvc.perform(put("/api/admins")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)

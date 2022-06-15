@@ -3,6 +3,8 @@ package net.thumbtack.school.buscompany.daoImpl.trip;
 import net.thumbtack.school.buscompany.dao.Dao;
 import net.thumbtack.school.buscompany.daoImpl.DaoImplBase;
 import net.thumbtack.school.buscompany.exception.ServerException;
+import net.thumbtack.school.buscompany.model.DateTrip;
+import net.thumbtack.school.buscompany.model.Place;
 import net.thumbtack.school.buscompany.model.Trip;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
@@ -10,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Component
 public class TripDaoImpl extends DaoImplBase implements Dao<Trip> {
@@ -47,6 +51,13 @@ public class TripDaoImpl extends DaoImplBase implements Dao<Trip> {
         try (SqlSession sqlSession = getSession()) {
             try {
                 getTripMapper(sqlSession).insert(trip);
+                for (DateTrip date: trip.getDates()) {
+                    DateTrip dateTrip = new DateTrip(trip, date.getDate());
+                    getDateTripMapper(sqlSession).insert(dateTrip);
+                    for (int numberPlace: IntStream.range(1, trip.getBus().getPlaceCount()+1).boxed().collect(Collectors.toList())) {
+                        getPlaceMapper(sqlSession).insertFree(new Place(numberPlace, dateTrip));
+                    }
+                }
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't insert Trip {} {}", trip, ex);
                 sqlSession.rollback();

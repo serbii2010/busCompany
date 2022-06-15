@@ -34,8 +34,9 @@ public class OrderController {
                                         @CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
         Account account = accountService.getAuthAccount(javaSessionId);
         accountService.checkClient(javaSessionId);
+        Client client = accountService.findClient(account);
 
-        Order order = OrderMapper.INSTANCE.dtoToOrder(request, tripService, (Client) account);
+        Order order = OrderMapper.INSTANCE.dtoToOrder(request, tripService, client);
         orderService.insert(order);
 
         return OrderMapper.INSTANCE.orderToDto(order);

@@ -4,9 +4,7 @@ import net.thumbtack.school.buscompany.dao.Dao;
 import net.thumbtack.school.buscompany.daoImpl.DaoImplBase;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.Order;
-import net.thumbtack.school.buscompany.model.OrderPassenger;
 import net.thumbtack.school.buscompany.model.Passenger;
-import net.thumbtack.school.buscompany.model.Ticket;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,10 +27,10 @@ public class OrderDaoImpl extends DaoImplBase implements Dao<Order> {
         }
     }
 
-    public List<Integer> getPlaces(Order order) {
+    public List<Integer> getFreePlaces(Order order) {
         LOGGER.debug("DAO get Order by Id {}", order);
         try (SqlSession sqlSession = getSession()) {
-            return getOrderMapper(sqlSession).findPlaces(order);
+            return getOrderMapper(sqlSession).findFreePlaces(order);
         } catch (RuntimeException ex) {
             LOGGER.info("Can't get Order by Id {} {}", order, ex);
             throw ex;
@@ -56,7 +54,7 @@ public class OrderDaoImpl extends DaoImplBase implements Dao<Order> {
                         getPassengerMapper(sqlSession).insert(passenger);
                         newPassenger = passenger;
                     }
-                    getOrderPassengerMapper(sqlSession).insert(new OrderPassenger(order, newPassenger));
+                    getPassengerMapper(sqlSession).insertOrderPassenger(order, newPassenger);
                 }
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't insert Order {} {}", order, ex);
@@ -73,14 +71,8 @@ public class OrderDaoImpl extends DaoImplBase implements Dao<Order> {
         LOGGER.debug("DAO delete Order {}", order);
         try (SqlSession sqlSession = getSession()) {
             try {
-                List<OrderPassenger> listOrderPassenger = getOrderPassengerMapper(sqlSession).findByOrderId(String.valueOf(order.getId()));
-                for (OrderPassenger orderPassenger: listOrderPassenger) {
-                    Ticket ticket = getTicketMapper(sqlSession).findByOrderPassengerId(String.valueOf(orderPassenger.getId()));
-                    getTicketMapper(sqlSession).delete(ticket);
-                    getOrderPassengerMapper(sqlSession).delete(orderPassenger);
-                }
                 getOrderMapper(sqlSession).delete(order);
-
+                getPlaceMapper(sqlSession).setFreePlaceByOrder(order);
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't delete Order {}", ex);
                 sqlSession.rollback();

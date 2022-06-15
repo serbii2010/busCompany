@@ -2,6 +2,8 @@ package net.thumbtack.school.buscompany.mappers.mybatis.order;
 
 import net.thumbtack.school.buscompany.model.*;
 import net.thumbtack.school.buscompany.model.account.Account;
+import net.thumbtack.school.buscompany.model.account.Client;
+import net.thumbtack.school.buscompany.utils.UserTypeEnum;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -12,21 +14,27 @@ public interface OrderMapper {
             @Result(property = "id", column = "id"),
             @Result(property = "passengers", javaType = List.class, column = "id",
                     many = @Many(select = "getPassenger")),
-            @Result(property = "trip", javaType = Trip.class, column = "trip_id",
-                    one = @One(select = "selectTrip")),
-            @Result(property = "account", javaType = Account.class, column = "account_id",
-                    one = @One(select = "selectAccount"))
+            @Result(property = "dateTrip", javaType = DateTrip.class, column = "date_trip_id",
+                    one = @One(select = "selectDateTrip")),
+            @Result(property = "client", javaType = Client.class, column = "client_id",
+                    one = @One(select = "selectClient"))
     })
     Order findById(String id);
 
-    @Select("SELECT place FROM order_passenger " +
-            "RIGHT JOIN ticket ON ticket.order_passenger_id=order_passenger.id " +
-            "LEFT JOIN orders ON order_passenger.order_id=orders.id " +
-            "WHERE orders.trip_id=#{trip.id} AND orders.date=#{date}")
-    List<Integer> findPlaces(Order order);
+    @Select("SELECT number FROM place " +
+            "WHERE date_trip_id=#{dateTrip.id} AND passenger_id IS NULL")
+    List<Integer> findFreePlaces(Order order);
 
     @Select("SELECT * FROM order_passenger LEFT JOIN passenger ON passenger.id = order_passenger.passenger_id WHERE order_id=#{orderId}")
     List<Passenger> getPassenger(String orderId);
+
+    @Select("SELECT * FROM date_trip WHERE id=#{id}")
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "trip", javaType = Trip.class, column = "trip_id",
+                    one = @One(select = "selectTrip"))
+    })
+    DateTrip selectDateTrip(String id);
 
     @Select("SELECT * from trip WHERE id=#{tripId}")
     @Results(value = {
@@ -36,14 +44,24 @@ public interface OrderMapper {
     })
     Trip selectTrip(String tripId);
 
+    @Select("SELECT * FROM client LEFT JOIN account ON account.id=account_id WHERE client.id=#{id}")
+    @Results(value = {
+            @Result(property = "firstName", column = "first_name"),
+            @Result(property = "lastName", column = "last_name"),
+            @Result(property = "patronymic", column = "patronymic"),
+            @Result(property = "accountId", column = "account_id"),
+            @Result(property = "userType", javaType = UserTypeEnum.class, column = "user_type")
+    })
+    Client selectClient(String id);
+
     @Select("SELECT * FROM bus where id = #{busId} ")
     @Results(value = {
             @Result(property = "placeCount", column = "place_count")
     })
     Bus getBus(String busId);
 
-    @Insert("INSERT INTO orders (trip_id, account_id, date) " +
-            "VALUES (#{trip.id}, #{account.id}, #{date})")
+    @Insert("INSERT INTO orders (date_trip_id, client_id) " +
+            "VALUES (#{dateTrip.trip.id}, #{client.id})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     Integer insert(Order order);
 

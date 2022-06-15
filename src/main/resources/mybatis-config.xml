@@ -35,12 +35,11 @@
         <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.trip.StationMapper"/>
         <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.trip.ScheduleMapper"/>
         <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.trip.DateTripMapper"/>
+        <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.trip.PlaceMapper"/>
 
         <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.order.OrderMapper"/>
         <mapper resource="net/thumbtack/school/buscompany/mappers/mybatis/order/OrderMapper.xml"/>
         <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.order.PassengerMapper"/>
-        <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.order.OrderPassengerMapper"/>
-        <mapper class="net.thumbtack.school.buscompany.mappers.mybatis.order.TicketMapper"/>
     </mappers>
 
 </configuration>

@@ -1,37 +1,51 @@
 package net.thumbtack.school.buscompany.service.order;
 
-import net.thumbtack.school.buscompany.daoImpl.order.TicketDaoImpl;
+import net.thumbtack.school.buscompany.daoImpl.order.PassengerDaoImpl;
+import net.thumbtack.school.buscompany.daoImpl.trip.PlaceDaoImpl;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
-import net.thumbtack.school.buscompany.model.OrderPassenger;
+import net.thumbtack.school.buscompany.model.DateTrip;
 import net.thumbtack.school.buscompany.model.Passenger;
-import net.thumbtack.school.buscompany.model.Ticket;
+import net.thumbtack.school.buscompany.model.Place;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TicketService {
     @Autowired
-    private TicketDaoImpl ticketDao;
+    private PlaceDaoImpl placeDao;
+    @Autowired
+    private PassengerDaoImpl passengerDao;
 
-    public Ticket insert(Ticket ticket) {
-        ticketDao.insert(ticket);
+    public Place choose(Place ticket) {
+        placeDao.update(ticket);
         return ticket;
     }
 
     public Passenger getPassenger(String firstName, String lastName, String passport) throws ServerException {
-        Passenger passenger = ticketDao.getPassenger(firstName, lastName, passport);
+        Passenger passenger = passengerDao.getPassenger(firstName, lastName, passport);
         if (passenger == null) {
             throw new ServerException(ServerErrorCode.PASSENGER_NOT_FOUND);
         }
         return passenger;
     }
 
-    public OrderPassenger getOrderPassenger(String orderId, Passenger passenger) throws ServerException {
-        OrderPassenger orderPassenger = ticketDao.getOrderPassenger(orderId, passenger);
-        if (orderPassenger == null) {
-            throw new ServerException(ServerErrorCode.PASSENGER_IN_ORDER_NOT_FOUND);
+    public Place findPlace(int number, DateTrip dateTrip) throws ServerException {
+        Place place = placeDao.find(number, dateTrip);
+        if (place == null) {
+            throw new ServerException(ServerErrorCode.PLACE_NOT_FOUND);
         }
-        return orderPassenger;
+        if (place.getPassenger() != null) {
+            throw new ServerException(ServerErrorCode.PLACE_TAKEN);
+        }
+        return place;
     }
+
+//    public OrderPassenger getOrderPassenger(String orderId, Passenger passenger) throws ServerException {
+//        OrderPassenger orderPassenger = placeDao.getOrderPassenger(orderId, passenger);
+//        if (orderPassenger == null) {
+//            throw new ServerException(ServerErrorCode.PASSENGER_IN_ORDER_NOT_FOUND);
+//        }
+//        return orderPassenger;
+//    }
 }

@@ -13,8 +13,7 @@ import java.util.List;
 public class Order {
     private int id;
     private DateTrip dateTrip;
-    private Client account;
-    private String date;
+    private Client client;
 
     private List<Passenger> passengers;
 }

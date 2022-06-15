@@ -6,6 +6,7 @@ import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.mappers.dto.order.TicketMapper;
 import net.thumbtack.school.buscompany.model.*;
 import net.thumbtack.school.buscompany.model.account.Account;
+import net.thumbtack.school.buscompany.model.account.Client;
 import net.thumbtack.school.buscompany.service.account.AccountService;
 import net.thumbtack.school.buscompany.service.order.OrderService;
 import net.thumbtack.school.buscompany.service.order.TicketService;
@@ -29,10 +30,11 @@ public class TicketController {
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public List<Integer> getFreePlaces(@PathVariable String id,
                                        @CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
-        accountService.isClient(javaSessionId);
+        accountService.checkClient(javaSessionId);
         Account account = accountService.getAuthAccount(javaSessionId);
+        Client client = accountService.findClient(account);
         Order order = orderService.findById(id);
-        orderService.checkAccount(order, account);
+        orderService.checkAccount(order, client);
         return orderService.getFreePlaces(order);
     }
 
@@ -41,11 +43,12 @@ public class TicketController {
                                           @CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
         accountService.checkClient(javaSessionId);
         Passenger passenger = ticketService.getPassenger(request.getFirstName(), request.getLastName(), request.getPassport());
-        OrderPassenger orderPassenger = ticketService.getOrderPassenger(request.getOrderId(), passenger);
-        Ticket ticket = new Ticket(orderPassenger, Integer.parseInt(request.getPlace()));
+        Order order = orderService.findById(request.getOrderId());
+        Place ticket = ticketService.findPlace(Integer.parseInt(request.getPlace()), order.getDateTrip());
+        ticket.setPassenger(passenger);
 
-        ticketService.insert(ticket);
-        return TicketMapper.INSTANCE.tickerToDto(ticket);
+        ticketService.choose(ticket);
+        return TicketMapper.INSTANCE.tickerToDto(ticket, order, passenger);
     }
 
 }

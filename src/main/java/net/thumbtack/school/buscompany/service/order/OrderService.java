@@ -5,6 +5,7 @@ import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.account.Account;
 import net.thumbtack.school.buscompany.model.Order;
+import net.thumbtack.school.buscompany.model.account.Client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,17 +35,11 @@ public class OrderService {
     }
 
     public List<Integer> getFreePlaces(Order order) {
-        List<Integer> place = orderDao.getPlaces(order);
-        int countPlace = order.getDateTrip().getTrip().getBus().getPlaceCount();
-        return IntStream.range(1, countPlace+1).filter(p -> !place.contains(p)).boxed().collect(Collectors.toList());
+        return orderDao.getFreePlaces(order);
     }
 
-    public List<Integer> getPlaces(Order order) {
-        return orderDao.getPlaces(order);
-    }
-
-    public void checkAccount(Order order, Account account) throws ServerException {
-        if (order.getAccount().getId() != account.getId()) {
+    public void checkAccount(Order order, Client client) throws ServerException {
+        if (order.getClient().getId() != client.getId()) {
             throw new ServerException(ServerErrorCode.ACTION_FORBIDDEN);
         }
     }

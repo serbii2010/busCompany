@@ -1,11 +1,13 @@
 package net.thumbtack.school.buscompany.service.trip;
 
 import net.thumbtack.school.buscompany.daoImpl.trip.DateTripDaoImpl;
+import net.thumbtack.school.buscompany.daoImpl.trip.PlaceDaoImpl;
 import net.thumbtack.school.buscompany.daoImpl.trip.ScheduleDaoImpl;
 import net.thumbtack.school.buscompany.daoImpl.trip.TripDaoImpl;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.DateTrip;
+import net.thumbtack.school.buscompany.model.Place;
 import net.thumbtack.school.buscompany.model.Trip;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 public class TripService {
@@ -27,6 +31,8 @@ public class TripService {
     private ScheduleDaoImpl scheduleDao;
     @Autowired
     private DateTripDaoImpl dateTripDao;
+    @Autowired
+    private PlaceDaoImpl placeDao;
 
     public Trip findById(String id) throws ServerException {
         Trip trip = tripDao.findById(id);
@@ -63,12 +69,6 @@ public class TripService {
         }
 
         tripDao.insert(trip);
-
-        for (DateTrip date: trip.getDates()) {
-            DateTrip dateTrip = new DateTrip(trip, date.getDate());
-            dateTripDao.insert(dateTrip);
-            //@todo заполнить места для каждого рейса
-        }
 
         return trip;
     }

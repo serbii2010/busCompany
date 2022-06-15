@@ -130,10 +130,8 @@ CREATE TABLE orders
     id         INT(11) NOT NULL AUTO_INCREMENT,
     date_trip_id    INT(11) NULL DEFAULT NULL,
     client_id INT(11) NULL DEFAULT NULL,
-    date       DATE    NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (date_trip_id) REFERENCES date_trip (id) ON DELETE CASCADE
-,
+    FOREIGN KEY (date_trip_id) REFERENCES date_trip (id) ON DELETE CASCADE,
     FOREIGN KEY (client_id) REFERENCES client (id) ON DELETE CASCADE
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;
@@ -158,6 +156,6 @@ CREATE TABLE place
     passenger_id INT(11) NULL DEFAULT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (date_trip_id) REFERENCES date_trip (id) ON DELETE CASCADE,
-    FOREIGN KEY (passenger_id) REFERENCES passenger (id) ON DELETE CASCADE
+    FOREIGN KEY (passenger_id) REFERENCES passenger (id) ON DELETE SET NULL
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;

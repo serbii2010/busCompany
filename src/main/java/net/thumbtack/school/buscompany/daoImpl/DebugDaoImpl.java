@@ -13,8 +13,7 @@ public class DebugDaoImpl extends DaoImplBase {
         LOGGER.debug("DAO clear database");
         try (SqlSession sqlSession = getSession()) {
             try {
-                getTicketMapper(sqlSession).deleteAll();
-                getOrderPassengerMapper(sqlSession).deleteAll();
+                getPlaceMapper(sqlSession).deleteAll();
                 getOrderMapper(sqlSession).deleteAll();
                 getPassengerMapper(sqlSession).deleteAll();
                 getDateTripMapper(sqlSession).deleteAll();

@@ -12,18 +12,19 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
-@Mapper(componentModel = "spring", imports = {TripService.class, Account.class})
+@Mapper(componentModel = "spring", imports = {TripService.class, Account.class, SimpleDateFormat.class})
 public interface OrderMapper {
     OrderMapper INSTANCE = Mappers.getMapper(OrderMapper.class);
 
     @Mapping(target = "dateTrip",
             expression = "java(tripService.findDateTrip(String.valueOf(request.getTripId()), request.getDate()))")
-    @Mapping(target = "account", expression = "java(account)")
+    @Mapping(target = "client", expression = "java(client)")
     Order dtoToOrder(OrderDtoRequest request,
                      @Context TripService tripService,
-                     @Context Client account) throws ServerException;
+                     @Context Client client) throws ServerException;
 
     @Mapping(target = "orderId", source = "id")
     @Mapping(target = "tripId", source = "dateTrip.trip.id")
@@ -32,7 +33,10 @@ public interface OrderMapper {
     @Mapping(target = "busName", source = "dateTrip.trip.bus.name")
     @Mapping(target = "start", source = "dateTrip.trip.start")
     @Mapping(target = "price", source = "dateTrip.trip.price")
-    @Mapping(target = "totalPrice", expression = "java(object.getPassengers().size()*object.getDateTrip().getTrip().getPrice())")
+    @Mapping(target = "date", expression = "java(new SimpleDateFormat(\"yyyy-MM-dd\").format( object.getDateTrip().getDate()))")
+    @Mapping(target = "totalPrice",
+            expression = "java(object.getPassengers().size()*object.getDateTrip().getTrip().getPrice())")
+
     OrderDtoResponse orderToDto(Order object);
 
     List<OrderDtoResponse> orderListToDtoResponse(List<Order> trips);

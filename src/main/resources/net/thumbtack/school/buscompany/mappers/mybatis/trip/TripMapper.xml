@@ -58,6 +58,9 @@
             <if test="toDate != null">
                 AND `date` &lt;= DATE(#{toDate})
             </if>
+            <if test="approved != null">
+                AND approved=#{approved}
+            </if>
         </where>
     </select>
 

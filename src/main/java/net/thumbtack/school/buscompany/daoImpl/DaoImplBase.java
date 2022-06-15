@@ -4,7 +4,6 @@ import net.thumbtack.school.buscompany.mappers.mybatis.account.AccountMapper;
 import net.thumbtack.school.buscompany.mappers.mybatis.account.AdminMapper;
 import net.thumbtack.school.buscompany.mappers.mybatis.account.ClientMapper;
 import net.thumbtack.school.buscompany.mappers.mybatis.order.OrderMapper;
-import net.thumbtack.school.buscompany.mappers.mybatis.order.OrderPassengerMapper;
 import net.thumbtack.school.buscompany.mappers.mybatis.order.PassengerMapper;
 import net.thumbtack.school.buscompany.mappers.mybatis.trip.*;
 import net.thumbtack.school.buscompany.utils.MyBatisUtils;

@@ -110,6 +110,9 @@ CREATE TABLE date_trip
     trip_id INT(11) NULL DEFAULT NULL,
     date    DATE    NOT NULL,
     PRIMARY KEY (id),
+    INDEX (trip_id),
+    INDEX (date),
+    UNIQUE KEY uniq_date_trip (trip_id, date),
     FOREIGN KEY (trip_id) REFERENCES trip (id) ON DELETE CASCADE
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;

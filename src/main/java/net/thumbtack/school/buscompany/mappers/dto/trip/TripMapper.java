@@ -1,7 +1,8 @@
 package net.thumbtack.school.buscompany.mappers.dto.trip;
 
 import net.thumbtack.school.buscompany.dto.request.trip.TripDtoRequest;
-import net.thumbtack.school.buscompany.dto.response.trip.TripDtoResponse;
+import net.thumbtack.school.buscompany.dto.response.trip.TripAdminDtoResponse;
+import net.thumbtack.school.buscompany.dto.response.trip.TripClientDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.DateTrip;
 import net.thumbtack.school.buscompany.model.Trip;
@@ -39,9 +40,20 @@ public interface TripMapper {
     @Mapping(target = "bus.places", source = "bus.placeCount")
     @Mapping(target = "schedule.fromDate", dateFormat = "yyyy-MM-dd")
     @Mapping(target = "schedule.toDate", dateFormat = "yyyy-MM-dd")
-    TripDtoResponse tripToDtoResponse(Trip trip);
+    TripAdminDtoResponse tripAdminToDtoResponse(Trip trip);
 
-    List<TripDtoResponse> tripListToDtoResponse(List<Trip> trips);
+    List<TripAdminDtoResponse> tripListAdminToDtoResponse(List<Trip> trips);
+
+    @Mapping(target = "fromStation", source = "fromStation.name")
+    @Mapping(target = "toStation", source = "toStation.name")
+    @Mapping(target = "tripId", source = "id")
+    @Mapping(target = "bus.busName", source = "bus.name")
+    @Mapping(target = "bus.places", source = "bus.placeCount")
+    @Mapping(target = "schedule.fromDate", dateFormat = "yyyy-MM-dd")
+    @Mapping(target = "schedule.toDate", dateFormat = "yyyy-MM-dd")
+    TripClientDtoResponse tripClientToDtoResponse(Trip trip);
+
+    List<TripClientDtoResponse> tripListClientToDtoResponse(List<Trip> trips);
 
 
     @Mapping(target = "bus", expression = "java(busService.findByName(request.getBusName()))")

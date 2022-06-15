@@ -42,6 +42,18 @@ public class TripService {
         return trip;
     }
 
+    public void checkApproved(Trip trip) throws ServerException {
+        if (!trip.isApproved()) {
+            throw new ServerException(ServerErrorCode.ACTION_FORBIDDEN);
+        }
+    }
+
+    public void checkNotApproved(Trip trip) throws ServerException {
+        if (trip.isApproved()) {
+            throw new ServerException(ServerErrorCode.ACTION_FORBIDDEN);
+        }
+    }
+
     public DateTrip findDateTrip(String tripId, String date) throws ServerException {
         DateTrip dateTrip = dateTripDao.find(tripId, date);
         if (dateTrip == null) {
@@ -50,8 +62,12 @@ public class TripService {
         return  dateTrip;
     }
 
-    public List<Trip> getListTrip(String fromStation, String toStation, String busName, String fromDate, String toDate) {
-        return tripDao.filter(fromStation, toStation, busName, fromDate, toDate);
+    public List<Trip> getListTripByAdmin(String fromStation, String toStation, String busName, String fromDate, String toDate) {
+        return tripDao.filter(fromStation, toStation, busName, fromDate, toDate, null);
+    }
+
+    public List<Trip> getListTripByClient(String fromStation, String toStation, String busName, String fromDate, String toDate) {
+        return tripDao.filter(fromStation, toStation, busName, fromDate, toDate, true);
     }
 
 
@@ -75,10 +91,7 @@ public class TripService {
 
     public void update(Trip trip) {
         tripDao.update(trip);
-        for (DateTrip date: trip.getDates()) {
-            DateTrip dateTrip = new DateTrip(trip, date.getDate());
-            dateTripDao.insert(dateTrip);
-        }
+
     }
 
     public List<DateTrip> updateDates(Trip trip) {

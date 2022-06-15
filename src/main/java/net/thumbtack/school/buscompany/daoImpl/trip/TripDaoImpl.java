@@ -30,10 +30,10 @@ public class TripDaoImpl extends DaoImplBase implements Dao<Trip> {
         }
     }
 
-    public List<Trip> filter(String fromStation, String toStation, String busName, String fromDate, String toDate) {
+    public List<Trip> filter(String fromStation, String toStation, String busName, String fromDate, String toDate, Boolean approved) {
         LOGGER.debug("DAO get Trip list from filter");
         try (SqlSession sqlSession = getSession()) {
-            return getTripMapper(sqlSession).filterTrip(fromStation, toStation, busName, fromDate, toDate);
+            return getTripMapper(sqlSession).filterTrip(fromStation, toStation, busName, fromDate, toDate, approved);
         } catch (RuntimeException ex) {
             LOGGER.info("Can't get Trip list from filter");
             throw ex;
@@ -92,6 +92,11 @@ public class TripDaoImpl extends DaoImplBase implements Dao<Trip> {
         try (SqlSession sqlSession = getSession()) {
             try {
                 getTripMapper(sqlSession).update(trip);
+                getDateTripMapper(sqlSession).deleteByTripId(String.valueOf(trip.getId()));
+                for (DateTrip date: trip.getDates()) {
+                    DateTrip dateTrip = new DateTrip(trip, date.getDate());
+                    getDateTripMapper(sqlSession).insert(dateTrip);
+                }
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't update account {} {}", trip, ex);
                 sqlSession.rollback();

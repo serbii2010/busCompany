@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TripDtoResponse {
+public class TripClientDtoResponse implements BaseTripDtoResponse {
     private int tripId;
     private String fromStation;
     private String toStation;
@@ -17,7 +17,6 @@ public class TripDtoResponse {
     private String duration;
     private int price;
     private BusDtoResponse bus;
-    private Boolean approved;
     private ScheduleDtoResponse schedule;
     private List<String> dates;
 }

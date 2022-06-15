@@ -66,5 +66,5 @@ public interface TripMapper {
     @Delete("DELETE FROM trip")
     Integer deleteAll();
 
-    List<Trip> filterTrip(String fromStation, String toStation, String busName, String fromDate, String toDate);
+    List<Trip> filterTrip(String fromStation, String toStation, String busName, String fromDate, String toDate, Boolean approved);
 }

@@ -61,7 +61,7 @@ public interface OrderMapper {
     Bus getBus(String busId);
 
     @Insert("INSERT INTO orders (date_trip_id, client_id) " +
-            "VALUES (#{dateTrip.trip.id}, #{client.id})")
+            "VALUES (#{dateTrip.id}, #{client.id})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     Integer insert(Order order);
 

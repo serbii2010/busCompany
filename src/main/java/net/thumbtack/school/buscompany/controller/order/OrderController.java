@@ -54,10 +54,12 @@ public class OrderController {
     ) throws ServerException {
         Account account = accountService.getAuthAccount(javaSessionId);
         List<Order> orderList = new ArrayList<>();
+        //@todo станции не отображаются
         if (accountService.isAdmin(javaSessionId)) {
             orderList.addAll(orderService.getListOrder(fromStation, toStation, busName, fromDate, toDate, clientId));
         } else {
-            orderList.addAll(orderService.getListOrder(fromStation, toStation, busName, fromDate, toDate, String.valueOf(account.getId())));
+            Client client = accountService.findClient(account);
+            orderList.addAll(orderService.getListOrder(fromStation, toStation, busName, fromDate, toDate, String.valueOf(client.getId())));
         }
         return OrderMapper.INSTANCE.orderListToDtoResponse(orderList);
     }

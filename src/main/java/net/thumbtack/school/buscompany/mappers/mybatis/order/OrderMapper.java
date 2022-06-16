@@ -36,11 +36,15 @@ public interface OrderMapper {
     })
     DateTrip selectDateTrip(String id);
 
-    @Select("SELECT * from trip WHERE id=#{tripId}")
+    @Select("SELECT * FROM trip WHERE id=#{tripId}")
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "bus", javaType = Bus.class, column = "bus_id",
-                    one = @One(select = "getBus")),
+                    one = @One(select = "selectBus")),
+            @Result(property = "fromStation", javaType = Station.class, column = "from_station_id",
+                    one = @One(select = "selectStation")),
+            @Result(property = "toStation", javaType = Station.class, column = "to_station_id",
+                    one = @One(select = "selectStation"))
     })
     Trip selectTrip(String tripId);
 
@@ -58,7 +62,10 @@ public interface OrderMapper {
     @Results(value = {
             @Result(property = "placeCount", column = "place_count")
     })
-    Bus getBus(String busId);
+    Bus selectBus(String busId);
+
+    @Select("SELECT * FROM station WHERE id=#{id}")
+    Station selectStation(String id);
 
     @Insert("INSERT INTO orders (date_trip_id, client_id) " +
             "VALUES (#{dateTrip.id}, #{client.id})")

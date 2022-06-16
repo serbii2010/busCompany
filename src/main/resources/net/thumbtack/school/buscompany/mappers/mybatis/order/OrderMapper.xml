@@ -96,18 +96,6 @@
         </where>
     </select>
 
-    <select id="selectBus" resultType="net.thumbtack.school.buscompany.model.Bus">
-        SELECT name as name, place_count as placeCount
-        FROM bus
-        WHERE id = #{id}
-    </select>
-
-    <select id="selectStation" resultType="net.thumbtack.school.buscompany.model.Station">
-        SELECT *
-        FROM station
-        WHERE id = #{id}
-    </select>
-
     <select id="selectSchedule" resultMap="resultSchedule">
         SELECT *
         FROM schedule

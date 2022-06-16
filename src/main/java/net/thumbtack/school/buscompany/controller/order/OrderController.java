@@ -54,7 +54,6 @@ public class OrderController {
     ) throws ServerException {
         Account account = accountService.getAuthAccount(javaSessionId);
         List<Order> orderList = new ArrayList<>();
-        //@todo станции не отображаются
         if (accountService.isAdmin(javaSessionId)) {
             orderList.addAll(orderService.getListOrder(fromStation, toStation, busName, fromDate, toDate, clientId));
         } else {

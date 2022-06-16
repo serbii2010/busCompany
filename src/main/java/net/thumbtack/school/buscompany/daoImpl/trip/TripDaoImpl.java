@@ -51,13 +51,7 @@ public class TripDaoImpl extends DaoImplBase implements Dao<Trip> {
         try (SqlSession sqlSession = getSession()) {
             try {
                 getTripMapper(sqlSession).insert(trip);
-                for (DateTrip date: trip.getDates()) {
-                    DateTrip dateTrip = new DateTrip(trip, date.getDate());
-                    getDateTripMapper(sqlSession).insert(dateTrip);
-                    for (int numberPlace: IntStream.range(1, trip.getBus().getPlaceCount()+1).boxed().collect(Collectors.toList())) {
-                        getPlaceMapper(sqlSession).insertFree(new Place(numberPlace, dateTrip));
-                    }
-                }
+                insertDateTrip(sqlSession, trip);
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't insert Trip {} {}", trip, ex);
                 sqlSession.rollback();
@@ -76,7 +70,6 @@ public class TripDaoImpl extends DaoImplBase implements Dao<Trip> {
                 String id = String.valueOf(trip.getId());
                 getDateTripMapper(sqlSession).deleteByTripId(id);
                 getTripMapper(sqlSession).delete(trip);
-
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't delete Trip {}", ex);
                 sqlSession.rollback();
@@ -93,16 +86,23 @@ public class TripDaoImpl extends DaoImplBase implements Dao<Trip> {
             try {
                 getTripMapper(sqlSession).update(trip);
                 getDateTripMapper(sqlSession).deleteByTripId(String.valueOf(trip.getId()));
-                for (DateTrip date: trip.getDates()) {
-                    DateTrip dateTrip = new DateTrip(trip, date.getDate());
-                    getDateTripMapper(sqlSession).insert(dateTrip);
-                }
+                insertDateTrip(sqlSession, trip);
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't update account {} {}", trip, ex);
                 sqlSession.rollback();
                 throw ex;
             }
             sqlSession.commit();
+        }
+    }
+
+    private void insertDateTrip(SqlSession sqlSession, Trip trip) {
+        for (DateTrip date: trip.getDates()) {
+            DateTrip dateTrip = new DateTrip(trip, date.getDate());
+            getDateTripMapper(sqlSession).insert(dateTrip);
+            for (int numberPlace: IntStream.range(1, trip.getBus().getPlaceCount()+1).boxed().collect(Collectors.toList())) {
+                getPlaceMapper(sqlSession).insertFree(new Place(numberPlace, dateTrip));
+            }
         }
     }
 }

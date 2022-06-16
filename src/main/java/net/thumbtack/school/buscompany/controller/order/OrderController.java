@@ -37,6 +37,7 @@ public class OrderController {
         Client client = accountService.findClient(account);
 
         Order order = OrderMapper.INSTANCE.dtoToOrder(request, tripService, client);
+        orderService.checkApproved(order);
         orderService.insert(order);
 
         return OrderMapper.INSTANCE.orderToDto(order);
@@ -62,7 +63,6 @@ public class OrderController {
         }
         return OrderMapper.INSTANCE.orderListToDtoResponse(orderList);
     }
-
 
     @DeleteMapping(path = "/{orderId}",produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public EmptyDtoResponse deleteTicket(@PathVariable String orderId,

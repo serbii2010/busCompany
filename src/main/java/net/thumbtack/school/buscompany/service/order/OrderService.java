@@ -3,15 +3,12 @@ package net.thumbtack.school.buscompany.service.order;
 import net.thumbtack.school.buscompany.daoImpl.order.OrderDaoImpl;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
-import net.thumbtack.school.buscompany.model.account.Account;
 import net.thumbtack.school.buscompany.model.Order;
 import net.thumbtack.school.buscompany.model.account.Client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Service
 public class OrderService {
@@ -28,6 +25,12 @@ public class OrderService {
 
     public void insert(Order order) {
         orderDao.insert(order);
+    }
+
+    public void checkApproved(Order order) throws ServerException{
+        if (!order.getDateTrip().getTrip().isApproved()) {
+            throw new ServerException(ServerErrorCode.TRIP_NOT_FOUND);
+        }
     }
 
     public List<Order> getListOrder(String fromStation, String toStation, String busName, String fromDate, String toDate, String clientId) {

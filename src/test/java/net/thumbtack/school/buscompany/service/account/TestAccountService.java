@@ -1,12 +1,13 @@
 package net.thumbtack.school.buscompany.service.account;
 
-import net.thumbtack.school.buscompany.TestBaseAccount;
+import net.thumbtack.school.buscompany.helper.AccountHelper;
 import net.thumbtack.school.buscompany.daoImpl.account.AccountDaoImpl;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.account.Admin;
 import net.thumbtack.school.buscompany.model.account.Client;
 import net.thumbtack.school.buscompany.utils.UserTypeEnum;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -21,12 +22,22 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class TestAccountService extends TestBaseAccount {
+class TestAccountService {
 
     @Mock
     private AccountDaoImpl accountDao;
     @InjectMocks
     private AccountService accountService;
+
+    private Admin admin;
+    private Client client;
+
+    @BeforeEach
+    public void init() {
+        AccountHelper.getInstance().init();
+        admin = AccountHelper.getInstance().getAdmin();
+        client = AccountHelper.getInstance().getClient();
+    }
 
     @Test
     public void testRegistrationAdmin() {

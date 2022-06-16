@@ -1,0 +1,101 @@
+package net.thumbtack.school.buscompany.controller.order;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import net.thumbtack.school.buscompany.dto.request.order.OrderDtoRequest;
+import net.thumbtack.school.buscompany.dto.request.order.PassengerDtoRequest;
+import net.thumbtack.school.buscompany.helper.AccountHelper;
+import net.thumbtack.school.buscompany.helper.DateTripHelper;
+import net.thumbtack.school.buscompany.helper.OrderHelper;
+import net.thumbtack.school.buscompany.helper.TripHelper;
+import net.thumbtack.school.buscompany.model.Order;
+import net.thumbtack.school.buscompany.model.Trip;
+import net.thumbtack.school.buscompany.model.account.Admin;
+import net.thumbtack.school.buscompany.model.account.Client;
+import net.thumbtack.school.buscompany.service.account.AccountService;
+import net.thumbtack.school.buscompany.service.order.OrderService;
+import net.thumbtack.school.buscompany.service.trip.TripService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+
+import javax.servlet.http.Cookie;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@ExtendWith(SpringExtension.class)
+@WebMvcTest(controllers = OrderController.class)
+class TestOrderController {
+
+    @Autowired
+    private MockMvc mvc;
+    @Autowired
+    private ObjectMapper mapper;
+    @MockBean
+    private OrderService orderService;
+    @MockBean
+    private AccountService accountService;
+    @MockBean
+    private TripService tripService;
+
+    private Admin admin;
+    private Client client;
+    private Cookie cookie;
+    private Trip trip;
+    private Order order;
+
+    @BeforeEach
+    public void init() throws Exception {
+        AccountHelper.getInstance().init();
+        TripHelper.getInstance().init();
+        trip = TripHelper.getInstance().getTrip();
+        order = OrderHelper.getInstance().getOrder();
+        admin = AccountHelper.getInstance().getAdmin();
+        client = AccountHelper.getInstance().getClient();
+        cookie = AccountHelper.getInstance().getCookie();
+
+    }
+
+    @Test
+    void testCreateOrder() throws Exception {
+        List<PassengerDtoRequest> passengers = new ArrayList<>();
+        passengers.add(new PassengerDtoRequest("имя", "фамилия", "номер паспорта"));
+        passengers.add(new PassengerDtoRequest("имя2", "фамилия2", "номер паспорта2"));
+        OrderDtoRequest request = new OrderDtoRequest(
+                1,
+                "2021-12-12",
+                passengers
+        );
+        Mockito.when(tripService.findById("1")).thenReturn(trip);
+        Mockito.when(tripService.findDateTrip("1", "2021-12-12")).thenReturn(DateTripHelper.getInstance().getDateTrip());
+        MvcResult result = mvc.perform(post("/api/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(request))
+                .cookie(cookie))
+                .andExpect(status().isOk())
+                .andReturn();
+        assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+    }
+
+    @Test
+    void testFilter() {
+    }
+
+    @Test
+    void testDeleteTicket() {
+    }
+}

@@ -1,8 +1,10 @@
 package net.thumbtack.school.buscompany.controller.account;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import net.thumbtack.school.buscompany.TestBaseAccount;
+import net.thumbtack.school.buscompany.helper.AccountHelper;
+import net.thumbtack.school.buscompany.model.account.Admin;
+import net.thumbtack.school.buscompany.model.account.Client;
 import net.thumbtack.school.buscompany.service.account.AccountService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -13,19 +15,31 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.servlet.http.Cookie;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = AccountController.class)
-class TestAccountController extends TestBaseAccount {
+class TestAccountController {
     @Autowired
-    protected MockMvc mvc;
-    @Autowired
-    protected ObjectMapper mapper;
+    private MockMvc mvc;
     @MockBean
-    protected AccountService accountService;
+    private AccountService accountService;
+
+    private Admin admin;
+    private Client client;
+    private Cookie cookie;
+
+    @BeforeEach
+    public void init() {
+        AccountHelper.getInstance().init();
+        admin = AccountHelper.getInstance().getAdmin();
+        client = AccountHelper.getInstance().getClient();
+        cookie = AccountHelper.getInstance().getCookie();
+    }
 
     @Test
     public void testGetInfo_notAuth() throws Exception {

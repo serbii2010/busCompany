@@ -1,12 +1,13 @@
 package net.thumbtack.school.buscompany.controller.order;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.thumbtack.school.buscompany.controller.GlobalErrorHandler;
 import net.thumbtack.school.buscompany.dto.request.order.OrderDtoRequest;
 import net.thumbtack.school.buscompany.dto.request.order.PassengerDtoRequest;
-import net.thumbtack.school.buscompany.helper.AccountHelper;
-import net.thumbtack.school.buscompany.helper.DateTripHelper;
-import net.thumbtack.school.buscompany.helper.OrderHelper;
-import net.thumbtack.school.buscompany.helper.TripHelper;
+import net.thumbtack.school.buscompany.dto.response.account.ErrorDtoResponse;
+import net.thumbtack.school.buscompany.exception.ServerErrorCode;
+import net.thumbtack.school.buscompany.exception.ServerException;
+import net.thumbtack.school.buscompany.helper.*;
 import net.thumbtack.school.buscompany.model.Order;
 import net.thumbtack.school.buscompany.model.Trip;
 import net.thumbtack.school.buscompany.model.account.Admin;
@@ -32,9 +33,9 @@ import javax.servlet.http.Cookie;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = OrderController.class)
@@ -79,17 +80,78 @@ class TestOrderController {
                 "2021-12-12",
                 passengers
         );
+        Mockito.when(accountService.getAuthAccount(cookie.getValue())).thenReturn(client);
         Mockito.when(tripService.findById("1")).thenReturn(trip);
-        Mockito.when(tripService.findDateTrip("1", "2021-12-12")).thenReturn(DateTripHelper.getInstance().getDateTrip());
+        Mockito.when(tripService.findDateTrip("1", "2021-12-12")).thenReturn(DateTripHelper.getInstance().getDateTrip(trip));
         MvcResult result = mvc.perform(post("/api/orders")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(request))
                 .cookie(cookie))
-                .andExpect(status().isOk())
                 .andReturn();
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
     }
+
+
+    @Test
+    void testCreateOrder_badByAdmin() throws Exception {
+        List<PassengerDtoRequest> passengers = new ArrayList<>();
+        passengers.add(new PassengerDtoRequest("имя", "фамилия", "номер паспорта"));
+        passengers.add(new PassengerDtoRequest("имя2", "фамилия2", "номер паспорта2"));
+        OrderDtoRequest request = new OrderDtoRequest(
+                1,
+                "2021-12-12",
+                passengers
+        );
+        Mockito.doThrow(new ServerException(ServerErrorCode.ACTION_FORBIDDEN)).when(accountService).checkClient(cookie.getValue());
+        Mockito.when(tripService.findById("1")).thenReturn(trip);
+        Mockito.when(tripService.findDateTrip("1", "2021-12-12")).thenReturn(DateTripHelper.getInstance().getDateTrip(trip));
+        MvcResult result = mvc.perform(post("/api/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(request))
+                .cookie(cookie))
+                .andReturn();
+        String responseContent = result.getResponse().getContentAsString();
+        GlobalErrorHandler.MyError errorResponse = mapper.readValue(responseContent, GlobalErrorHandler.MyError.class);
+        ServerErrorCode errorCode = ServerErrorCode.valueOf(errorResponse.getErrors().get(0).getErrorCode());
+        assertAll(
+                "head",
+                () -> assertEquals(result.getResponse().getStatus(), HttpStatus.BAD_REQUEST.value()),
+                () -> assertEquals(ServerErrorCode.ACTION_FORBIDDEN, errorCode)
+        );
+    }
+
+    @Test
+    void testCreateOrder_badDateTrip() throws Exception {
+        List<PassengerDtoRequest> passengers = new ArrayList<>();
+        passengers.add(new PassengerDtoRequest("имя", "фамилия", "номер паспорта"));
+        passengers.add(new PassengerDtoRequest("имя2", "фамилия2", "номер паспорта2"));
+        OrderDtoRequest request = new OrderDtoRequest(
+                1,
+                "2022-12-12",
+                passengers
+        );
+
+        Mockito.when(tripService.findById("1")).thenReturn(trip);
+        Mockito.when(tripService.findDateTrip("1", "2021-12-12")).thenReturn(DateTripHelper.getInstance().getDateTrip(trip));
+        MvcResult result = mvc.perform(post("/api/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(request))
+                .cookie(cookie))
+                .andReturn();
+        String responseContent = result.getResponse().getContentAsString();
+        GlobalErrorHandler.MyError errorResponse = mapper.readValue(responseContent, GlobalErrorHandler.MyError.class);
+        String errorCode = errorResponse.getErrors().get(0).getErrorCode();
+        assertAll(
+                "head",
+                () -> assertEquals(result.getResponse().getStatus(), HttpStatus.BAD_REQUEST.value()),
+                () -> assertEquals("DateOrderInDatesTrip", errorCode)
+        );
+    }
+
+
 
     @Test
     void testFilter() {

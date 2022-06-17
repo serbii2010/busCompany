@@ -23,7 +23,6 @@ public class OrderHelper {
     }
 
     public void init() throws ParseException {
-        //@todo сформировать модель order
-        order = new Order();
+        order = new Order(1, DateTripHelper.getInstance().getDateTrip(TripHelper.getInstance().getTrip()), AccountHelper.getInstance().getClient(), null);
     }
 }

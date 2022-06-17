@@ -34,7 +34,7 @@ public class TripHelper {
         List<DateTrip> dates = new ArrayList<>();
         trip = new Trip(1, bus, fromStation, toStation, "12:30", "23:51", 30, false, schedule, dates);
 
-        dates.add(DateTripHelper.getInstance().getDateTrip());
+        dates.add(DateTripHelper.getInstance().getDateTrip(trip));
         trip.setDates(dates);
     }
 }

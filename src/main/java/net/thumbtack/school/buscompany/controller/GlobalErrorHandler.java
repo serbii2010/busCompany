@@ -30,12 +30,7 @@ public class GlobalErrorHandler {
         ErrorDtoResponse dtoResponse = new ErrorDtoResponse();
         dtoResponse.setErrorCode(exception.getErrorCode().getErrorString());
         dtoResponse.setMessage(exception.getErrorCode().getErrorString());
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            error.getErrors().add(mapper.writeValueAsString(dtoResponse));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        error.getErrors().add(dtoResponse);
         return error;
     }
 
@@ -48,12 +43,7 @@ public class GlobalErrorHandler {
         dtoResponse.setErrorCode(ServerErrorCode.BAD_FIELD_COOKIE.getErrorString());
         dtoResponse.setMessage(exception.getMessage());
         dtoResponse.setField(exception.getCookieName());
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            error.getErrors().add(mapper.writeValueAsString(dtoResponse));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        error.getErrors().add(dtoResponse);
         return error;
     }
 
@@ -63,43 +53,31 @@ public class GlobalErrorHandler {
     @ResponseBody
     public MyError handleValidation(MethodArgumentNotValidException exc) {
         final MyError error = new MyError();
-        exc.getBindingResult().getFieldErrors().forEach(fieldError-> {
+        exc.getBindingResult().getFieldErrors().forEach(fieldError -> {
             ErrorDtoResponse errorDtoResponse = new ErrorDtoResponse();
             errorDtoResponse.setErrorCode(fieldError.getCode());
             errorDtoResponse.setField(fieldError.getField());
             errorDtoResponse.setMessage(fieldError.getDefaultMessage());
-            ObjectMapper mapper = new ObjectMapper();
-            try {
-                String jsonError = mapper.writeValueAsString(errorDtoResponse);
-                error.getErrors().add(jsonError);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
+            error.getErrors().add(errorDtoResponse);
         });
-        exc.getBindingResult().getGlobalErrors().forEach(err-> {
+        exc.getBindingResult().getGlobalErrors().forEach(err -> {
             ErrorDtoResponse errorDtoResponse = new ErrorDtoResponse();
             errorDtoResponse.setErrorCode(err.getCode());
             errorDtoResponse.setField("Global");
             errorDtoResponse.setMessage(err.getDefaultMessage());
-            ObjectMapper mapper = new ObjectMapper();
-            try {
-                String jsonError = mapper.writeValueAsString(errorDtoResponse);
-                error.getErrors().add(jsonError);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
+            error.getErrors().add(errorDtoResponse);
         });
         return error;
     }
 
     public static class MyError {
-        private List<String> errors = new ArrayList<>();
+        private List<ErrorDtoResponse> errors = new ArrayList<>();
 
-        public List<String> getErrors() {
+        public List<ErrorDtoResponse> getErrors() {
             return errors;
         }
 
-        public void setAllErrors(List<String> Errors) {
+        public void setAllErrors(List<ErrorDtoResponse> Errors) {
             this.errors = Errors;
         }
     }

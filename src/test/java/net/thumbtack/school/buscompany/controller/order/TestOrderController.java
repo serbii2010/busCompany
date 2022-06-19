@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import net.thumbtack.school.buscompany.controller.GlobalErrorHandler;
 import net.thumbtack.school.buscompany.dto.request.order.OrderDtoRequest;
 import net.thumbtack.school.buscompany.dto.request.order.PassengerDtoRequest;
-import net.thumbtack.school.buscompany.dto.response.account.ErrorDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.helper.*;
@@ -151,13 +150,13 @@ class TestOrderController {
         );
     }
 
-
-
     @Test
     void testFilter() {
+        //@todo
     }
 
     @Test
     void testDeleteTicket() {
+        //@todo
     }
 }

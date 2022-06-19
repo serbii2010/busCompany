@@ -28,7 +28,7 @@ public class BusController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public List<BusDtoResponse> getClients(@CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
+    public List<BusDtoResponse> getBuses(@CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
         accountService.checkAdmin(javaSessionId);
 
         List<BusDtoResponse> responseList = new ArrayList<>();

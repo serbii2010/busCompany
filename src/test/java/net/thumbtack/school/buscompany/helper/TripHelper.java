@@ -31,6 +31,7 @@ public class TripHelper {
         bus = new Bus(1, "Пазик", 21);
         Station fromStation = new Station(1, "omsk");
         Station toStation = new Station(2, "novosibirsk");
+        //@todo заполнить поля расписания
         Schedule schedule = new Schedule();
         List<DateTrip> dates = new ArrayList<>();
         trip = new Trip(1, bus, fromStation, toStation, "12:30", "23:51", 30, false, schedule, dates);

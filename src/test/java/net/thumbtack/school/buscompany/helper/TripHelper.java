@@ -18,6 +18,7 @@ public class TripHelper {
     }
 
     private Trip trip;
+    private Bus bus;
 
     public static TripHelper getInstance() throws ParseException {
         if (instance == null) {
@@ -27,7 +28,7 @@ public class TripHelper {
     }
 
     public void init() throws ParseException {
-        Bus bus = new Bus(1, "Пазик", 21);
+        bus = new Bus(1, "Пазик", 21);
         Station fromStation = new Station(1, "omsk");
         Station toStation = new Station(2, "novosibirsk");
         Schedule schedule = new Schedule();
@@ -36,5 +37,7 @@ public class TripHelper {
 
         dates.add(DateTripHelper.getInstance().getDateTrip(trip));
         trip.setDates(dates);
+
+
     }
 }

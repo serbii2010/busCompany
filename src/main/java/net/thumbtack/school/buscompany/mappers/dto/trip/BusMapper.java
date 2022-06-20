@@ -11,5 +11,6 @@ public interface BusMapper {
     BusMapper INSTANCE = Mappers.getMapper(BusMapper.class);
 
     @Mapping(target = "busName", source = "name")
+    @Mapping(target = "places", source = "placeCount")
     BusDtoResponse busToDto(Bus bus);
 }

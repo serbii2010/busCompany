@@ -281,37 +281,36 @@ class TestTripController {
         assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
     }
 
-    //@todo раскомментить и исправить
-//    @Test
-//    void testAddTrip_schedule() throws Exception {
-//
-//        TripDtoRequest request = new TripDtoRequest(
-//                "Пазик",
-//                "Omsk",
-//                "Новосибирск",
-//                "12:30",
-//                "23:51",
-//                20,
-//                new ScheduleDtoRequest(
-//                        "2022-12-01",
-//                        "2022-12-25",
-//                        "odd"
-//                ),
-//                null
-//        );
-//
-//        Mockito.when(scheduleService.checkPeriod("odd")).thenReturn(true);
-//        Mockito.when(tripService.insert(trip)).thenReturn(trip);
-//        Mockito.when(scheduleService.findOrInsert()).thenReturn()
-//
-//        MvcResult result = mvc.perform(post("/api/trips")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .accept(MediaType.APPLICATION_JSON)
-//                .content(mapper.writeValueAsString(request))
-//                .cookie(cookie))
-//                .andReturn();
-//        assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
-//    }
+    @Test
+    void testAddTrip_schedule() throws Exception {
+
+        TripDtoRequest request = new TripDtoRequest(
+                "Пазик",
+                "Omsk",
+                "Новосибирск",
+                "12:30",
+                "23:51",
+                20,
+                new ScheduleDtoRequest(
+                        "2022-12-01",
+                        "2022-12-25",
+                        "odd"
+                ),
+                null
+        );
+
+        Mockito.when(scheduleService.checkPeriod("odd")).thenReturn(true);
+        Mockito.when(tripService.insert(trip)).thenReturn(trip);
+        Mockito.when(scheduleService.findOrInsert(schedule)).thenReturn(schedule);
+
+        MvcResult result = mvc.perform(post("/api/trips")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(request))
+                .cookie(cookie))
+                .andReturn();
+        assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
+    }
 
     @Test
     void testAddTrip_badBusName() throws Exception {

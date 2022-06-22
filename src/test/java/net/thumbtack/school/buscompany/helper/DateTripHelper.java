@@ -1,8 +1,12 @@
 package net.thumbtack.school.buscompany.helper;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import net.thumbtack.school.buscompany.model.DateTrip;
 import net.thumbtack.school.buscompany.model.Trip;
+import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,22 +14,23 @@ import java.util.Date;
 import java.util.Locale;
 
 @Getter
+@Setter
+@Component
+@NoArgsConstructor
+@AllArgsConstructor
 public class DateTripHelper {
-    private static DateTripHelper instance = null;
+    private Date date;
 
-    private final Date date = (new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)).parse("2021-12-12");
-
-    public static DateTripHelper getInstance() throws ParseException {
-        if (instance == null) {
-            instance = new DateTripHelper();
+    public void init() {
+        try {
+            date = (new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)).parse("2021-12-12");
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-        return instance;
-    }
-
-    private DateTripHelper() throws ParseException {
     }
 
     public DateTrip getDateTrip(Trip trip) {
+        init();
         return new DateTrip(1, trip, getDate(), null);
     }
 }

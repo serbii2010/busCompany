@@ -37,13 +37,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(controllers = OrderController.class)
+@WebMvcTest(controllers = {OrderController.class, AccountHelper.class, DateTripHelper.class, OrderHelper.class, TripHelper.class})
 class TestOrderController {
 
     @Autowired
     private MockMvc mvc;
     @Autowired
     private ObjectMapper mapper;
+    @Autowired
+    private TripHelper tripHelper;
+    @Autowired
+    private AccountHelper accountHelper;
+    @Autowired
+    private DateTripHelper dateTripHelper;
+    @Autowired
+    private OrderHelper orderHelper;
+
     @MockBean
     private OrderService orderService;
     @MockBean
@@ -59,13 +68,15 @@ class TestOrderController {
 
     @BeforeEach
     public void init() throws Exception {
-        AccountHelper.getInstance().init();
-        TripHelper.getInstance().init();
-        trip = TripHelper.getInstance().getTrip();
-        order = OrderHelper.getInstance().getOrder();
-        admin = AccountHelper.getInstance().getAdmin();
-        client = AccountHelper.getInstance().getClient();
-        cookie = AccountHelper.getInstance().getCookie();
+        accountHelper.init();
+        tripHelper.init();
+        orderHelper.init();
+        dateTripHelper.init();
+        trip = tripHelper.getTrip();
+        order = orderHelper.getOrder();
+        admin = accountHelper.getAdmin();
+        client = accountHelper.getClient();
+        cookie = accountHelper.getCookie();
 
     }
 
@@ -81,7 +92,7 @@ class TestOrderController {
         );
         Mockito.when(accountService.getAuthAccount(cookie.getValue())).thenReturn(client);
         Mockito.when(tripService.findById("1")).thenReturn(trip);
-        Mockito.when(tripService.findDateTrip("1", "2021-12-12")).thenReturn(DateTripHelper.getInstance().getDateTrip(trip));
+        Mockito.when(tripService.findDateTrip("1", "2021-12-12")).thenReturn(dateTripHelper.getDateTrip(trip));
         MvcResult result = mvc.perform(post("/api/orders")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -104,7 +115,7 @@ class TestOrderController {
         );
         Mockito.doThrow(new ServerException(ServerErrorCode.ACTION_FORBIDDEN)).when(accountService).checkClient(cookie.getValue());
         Mockito.when(tripService.findById("1")).thenReturn(trip);
-        Mockito.when(tripService.findDateTrip("1", "2021-12-12")).thenReturn(DateTripHelper.getInstance().getDateTrip(trip));
+        Mockito.when(tripService.findDateTrip("1", "2021-12-12")).thenReturn(dateTripHelper.getDateTrip(trip));
         MvcResult result = mvc.perform(post("/api/orders")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -133,7 +144,7 @@ class TestOrderController {
         );
 
         Mockito.when(tripService.findById("1")).thenReturn(trip);
-        Mockito.when(tripService.findDateTrip("1", "2021-12-12")).thenReturn(DateTripHelper.getInstance().getDateTrip(trip));
+        Mockito.when(tripService.findDateTrip("1", "2021-12-12")).thenReturn(dateTripHelper.getDateTrip(trip));
         MvcResult result = mvc.perform(post("/api/orders")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)

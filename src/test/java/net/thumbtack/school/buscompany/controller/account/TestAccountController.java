@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -22,10 +23,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(controllers = AccountController.class)
+@WebMvcTest(controllers = {AccountController.class, AccountHelper.class})
 class TestAccountController {
     @Autowired
     private MockMvc mvc;
+    @Autowired
+    private AccountHelper accountHelper;
+
     @MockBean
     private AccountService accountService;
 
@@ -35,10 +39,10 @@ class TestAccountController {
 
     @BeforeEach
     public void init() {
-        AccountHelper.getInstance().init();
-        admin = AccountHelper.getInstance().getAdmin();
-        client = AccountHelper.getInstance().getClient();
-        cookie = AccountHelper.getInstance().getCookie();
+        accountHelper.init();
+        admin = accountHelper.getAdmin();
+        client = accountHelper.getClient();
+        cookie = accountHelper.getCookie();
     }
 
     @Test

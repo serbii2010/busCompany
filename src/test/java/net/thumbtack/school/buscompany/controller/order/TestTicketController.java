@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import net.thumbtack.school.buscompany.dto.request.order.TicketDtoRequest;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
-import net.thumbtack.school.buscompany.helper.AccountHelper;
-import net.thumbtack.school.buscompany.helper.OrderHelper;
-import net.thumbtack.school.buscompany.helper.TicketHelper;
+import net.thumbtack.school.buscompany.helper.*;
 import net.thumbtack.school.buscompany.model.Order;
 import net.thumbtack.school.buscompany.model.Passenger;
 import net.thumbtack.school.buscompany.model.Place;
@@ -36,13 +34,19 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(controllers = TicketController.class)
+@WebMvcTest(controllers = {TicketController.class, AccountHelper.class, TripHelper.class, OrderHelper.class, TicketHelper.class, DateTripHelper.class})
 class TestTicketController {
 
     @Autowired
     private MockMvc mvc;
     @Autowired
     private ObjectMapper mapper;
+    @Autowired
+    private AccountHelper accountHelper;
+    @Autowired
+    private OrderHelper orderHelper;
+    @Autowired
+    private TicketHelper ticketHelper;
 
     @MockBean
     private AccountService accountService;
@@ -59,11 +63,14 @@ class TestTicketController {
 
     @BeforeEach
     public void init() throws Exception {
-        client = AccountHelper.getInstance().getClient();
-        cookie = AccountHelper.getInstance().getCookie();
-        order = OrderHelper.getInstance().getOrder();
-        passenger = TicketHelper.getInstance().getPassenger();
-        place = TicketHelper.getInstance().getPlace();
+        accountHelper.init();
+        orderHelper.init();
+        ticketHelper.init();
+        client = accountHelper.getClient();
+        cookie = accountHelper.getCookie();
+        order = orderHelper.getOrder();
+        passenger = ticketHelper.getPassenger();
+        place = ticketHelper.getPlace();
     }
 
     @Test

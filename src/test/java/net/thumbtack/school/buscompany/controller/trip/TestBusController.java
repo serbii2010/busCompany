@@ -3,6 +3,7 @@ package net.thumbtack.school.buscompany.controller.trip;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.helper.AccountHelper;
+import net.thumbtack.school.buscompany.helper.DateTripHelper;
 import net.thumbtack.school.buscompany.helper.TripHelper;
 import net.thumbtack.school.buscompany.model.Bus;
 import net.thumbtack.school.buscompany.service.account.AccountService;
@@ -29,11 +30,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(controllers = BusController.class)
+@WebMvcTest(controllers = {BusController.class, AccountHelper.class, TripHelper.class, DateTripHelper.class})
 class TestBusController {
 
     @Autowired
     private MockMvc mvc;
+    @Autowired
+    private AccountHelper accountHelper;
+    @Autowired
+    private TripHelper tripHelper;
 
     @MockBean
     private BusService busService;
@@ -45,8 +50,10 @@ class TestBusController {
 
     @BeforeEach
     public void init() throws ParseException {
-        cookie = AccountHelper.getInstance().getCookie();
-        bus = TripHelper.getInstance().getBus();
+        accountHelper.init();
+        tripHelper.init();
+        cookie = accountHelper.getCookie();
+        bus = tripHelper.getBus();
     }
 
     @Test

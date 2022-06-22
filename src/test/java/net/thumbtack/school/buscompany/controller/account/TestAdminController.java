@@ -27,12 +27,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(controllers = AdminController.class)
+@WebMvcTest(controllers = {AdminController.class, AccountHelper.class})
 class TestAdminController {
     @Autowired
     private MockMvc mvc;
     @Autowired
     private ObjectMapper mapper;
+    @Autowired
+    private AccountHelper accountHelper;
     @MockBean
     private AccountService accountService;
 
@@ -42,10 +44,10 @@ class TestAdminController {
 
     @BeforeEach
     public void init() {
-        AccountHelper.getInstance().init();
-        admin = AccountHelper.getInstance().getAdmin();
-        client = AccountHelper.getInstance().getClient();
-        cookie = AccountHelper.getInstance().getCookie();
+        accountHelper.init();
+        admin = accountHelper.getAdmin();
+        client = accountHelper.getClient();
+        cookie = accountHelper.getCookie();
     }
 
     @Test

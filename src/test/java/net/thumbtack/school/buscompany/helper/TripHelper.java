@@ -1,33 +1,24 @@
 package net.thumbtack.school.buscompany.helper;
 
 import lombok.Getter;
+import lombok.Setter;
 import net.thumbtack.school.buscompany.model.*;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 @Getter
+@Setter
+@Component
 public class TripHelper {
-    private static TripHelper instance = null;
-
-    private TripHelper() throws ParseException {
-        init();
-    }
+    @Autowired
+    private DateTripHelper dateTripHelper;
 
     private Trip trip;
     private Bus bus;
 
-    public static TripHelper getInstance() throws ParseException {
-        if (instance == null) {
-            instance = new TripHelper();
-        }
-        return instance;
-    }
-
-    public void init() throws ParseException {
+    public void init() {
         bus = new Bus(1, "Пазик", 21);
         Station fromStation = new Station(1, "omsk");
         Station toStation = new Station(2, "novosibirsk");
@@ -36,9 +27,7 @@ public class TripHelper {
         List<DateTrip> dates = new ArrayList<>();
         trip = new Trip(1, bus, fromStation, toStation, "12:30", "23:51", 30, false, schedule, dates);
 
-        dates.add(DateTripHelper.getInstance().getDateTrip(trip));
+        dates.add(dateTripHelper.getDateTrip(trip));
         trip.setDates(dates);
-
-
     }
 }

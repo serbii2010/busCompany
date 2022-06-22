@@ -1,26 +1,22 @@
 package net.thumbtack.school.buscompany.helper;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import net.thumbtack.school.buscompany.model.account.Admin;
 import net.thumbtack.school.buscompany.model.account.Client;
 import net.thumbtack.school.buscompany.utils.UserTypeEnum;
-import org.junit.jupiter.api.BeforeEach;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.Cookie;
 
+@Component
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class AccountHelper {
-    private static AccountHelper instance = null;
-
-    private AccountHelper() {
-        init();
-    };
-
-    public static AccountHelper getInstance() {
-        if (instance == null) {
-            instance = new AccountHelper();
-        }
-        return instance;
-    }
-
     private Admin admin;
     private Client client;
     private Cookie cookie;
@@ -48,18 +44,6 @@ public class AccountHelper {
                 1);
 
         this.cookie = new Cookie("JAVASESSIONID", "sessionId");
-    }
-
-    public Admin getAdmin() {
-        return admin;
-    }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public Cookie getCookie() {
-        return cookie;
     }
 
 }

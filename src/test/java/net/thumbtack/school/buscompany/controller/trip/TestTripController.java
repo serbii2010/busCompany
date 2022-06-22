@@ -6,6 +6,7 @@ import net.thumbtack.school.buscompany.dto.request.trip.TripDtoRequest;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.helper.AccountHelper;
+import net.thumbtack.school.buscompany.helper.DateTripHelper;
 import net.thumbtack.school.buscompany.helper.TripHelper;
 import net.thumbtack.school.buscompany.model.Schedule;
 import net.thumbtack.school.buscompany.model.Trip;
@@ -39,13 +40,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(controllers = TripController.class)
+@WebMvcTest(controllers = {TripController.class, TripHelper.class, DateTripHelper.class, AccountHelper.class})
 class TestTripController {
 
     @Autowired
     private MockMvc mvc;
     @Autowired
     private ObjectMapper mapper;
+    @Autowired
+    private TripHelper tripHelper;
+    @Autowired
+    private AccountHelper accountHelper;
 
     @MockBean
     private AccountService accountService;
@@ -65,9 +70,12 @@ class TestTripController {
 
     @BeforeEach
     public void init() throws ParseException {
-        cookie = AccountHelper.getInstance().getCookie();
-        client = AccountHelper.getInstance().getClient();
-        trip = TripHelper.getInstance().getTrip();
+        accountHelper.init();
+        cookie = accountHelper.getCookie();
+        client = accountHelper.getClient();
+
+        tripHelper.init();
+        trip = tripHelper.getTrip();
     }
 
     @Test

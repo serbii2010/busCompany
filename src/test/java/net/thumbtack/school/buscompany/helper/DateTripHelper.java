@@ -22,8 +22,12 @@ public class DateTripHelper {
     private Date date;
 
     public void init() {
+        init("2021-12-12");
+    }
+
+    public void init(String dateString) {
         try {
-            date = (new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)).parse("2021-12-12");
+            date = (new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)).parse(dateString);
         } catch (ParseException e) {
             e.printStackTrace();
         }

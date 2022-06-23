@@ -36,8 +36,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = {TripController.class, TripHelper.class, DateTripHelper.class, AccountHelper.class})
@@ -338,9 +337,29 @@ class TestTripController {
 
 
     @Test
-    void testUpdate() {
+    void testUpdate() throws Exception {
+        TripDtoRequest request = new TripDtoRequest(
+                "Пазик",
+                "Omsk",
+                "Новосибирск",
+                "12:30",
+                "23:51",
+                20,
+                null,
+                Collections.singletonList("2022-12-12")
+        );
 
+        Mockito.when(tripService.findById("1")).thenReturn(tripHelper.getTrip());
+
+        MvcResult result = mvc.perform(put("/api/trips/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(request))
+                .cookie(cookie))
+                .andReturn();
+        assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
     }
+    //@todo проверить все варианты неработоспособности
 
     @Test
     void testApproveTrip() {

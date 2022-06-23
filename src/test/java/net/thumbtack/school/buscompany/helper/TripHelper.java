@@ -6,6 +6,7 @@ import net.thumbtack.school.buscompany.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -17,13 +18,18 @@ public class TripHelper {
 
     private Trip trip;
     private Bus bus;
+    private Schedule schedule;
 
     public void init() {
         bus = new Bus(1, "Пазик", 21);
         Station fromStation = new Station(1, "omsk");
         Station toStation = new Station(2, "novosibirsk");
         //@todo заполнить поля расписания
-        Schedule schedule = new Schedule();
+        dateTripHelper.init("2021-12-12");
+        Date fromDate = dateTripHelper.getDate();
+        dateTripHelper.init("2022-12-12");
+        Date toDate = dateTripHelper.getDate();
+        schedule = new Schedule(1, fromDate, toDate, "odd", null);
         List<DateTrip> dates = new ArrayList<>();
         trip = new Trip(1, bus, fromStation, toStation, "12:30", "23:51", 30, false, schedule, dates);
 

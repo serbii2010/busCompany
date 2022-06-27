@@ -553,8 +553,7 @@ class TestTripController {
 
     @Test
     void testApproveTrip_tripNotFound() throws Exception {
-
-        Mockito.when(tripService.findById("1")).thenReturn(tripHelper.getTrip());
+        Mockito.when(tripService.findById("1")).thenThrow(new ServerException(ServerErrorCode.TRIP_NOT_FOUND));
 
         MvcResult result = mvc.perform(put("/api/trips/1/approve")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -566,7 +565,7 @@ class TestTripController {
 
     @Test
     void testApproveTrip_notAdmin() throws Exception {
-        Mockito.when(tripService.findById("1")).thenThrow(new ServerException(ServerErrorCode.TRIP_NOT_FOUND));
+        Mockito.when(tripService.findById("1")).thenReturn(tripHelper.getTrip());
         Mockito.doThrow(new ServerException(ServerErrorCode.ACTION_FORBIDDEN)).when(accountService).checkAdmin(cookie.getValue());
 
         MvcResult result = mvc.perform(put("/api/trips/1/approve")

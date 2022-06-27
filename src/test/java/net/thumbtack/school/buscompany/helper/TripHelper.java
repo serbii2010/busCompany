@@ -24,7 +24,7 @@ public class TripHelper {
         bus = new Bus(1, "Пазик", 21);
         Station fromStation = new Station(1, "omsk");
         Station toStation = new Station(2, "novosibirsk");
-        //@todo заполнить поля расписания
+
         dateTripHelper.init("2021-12-12");
         Date fromDate = dateTripHelper.getDate();
         dateTripHelper.init("2022-12-12");

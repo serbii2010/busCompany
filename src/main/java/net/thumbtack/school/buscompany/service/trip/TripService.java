@@ -85,7 +85,6 @@ public class TripService {
 
     public void update(Trip trip) {
         tripDao.update(trip);
-
     }
 
     public List<DateTrip> updateDates(Trip trip) {

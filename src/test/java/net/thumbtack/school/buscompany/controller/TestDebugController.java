@@ -1,5 +1,6 @@
 package net.thumbtack.school.buscompany.controller;
 
+import net.thumbtack.school.buscompany.helper.AccountHelper;
 import net.thumbtack.school.buscompany.service.DebugService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,6 +23,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 class TestDebugController {
     @Autowired
     private MockMvc mvc;
+    @Autowired
+    private AccountHelper accountHelper;
     @MockBean
     private DebugService debugService;
 

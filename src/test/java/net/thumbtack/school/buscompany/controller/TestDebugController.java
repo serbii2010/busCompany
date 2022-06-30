@@ -23,8 +23,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 class TestDebugController {
     @Autowired
     private MockMvc mvc;
-    @Autowired
-    private AccountHelper accountHelper;
     @MockBean
     private DebugService debugService;
 

@@ -40,12 +40,4 @@ public class TicketService {
         }
         return place;
     }
-
-//    public OrderPassenger getOrderPassenger(String orderId, Passenger passenger) throws ServerException {
-//        OrderPassenger orderPassenger = placeDao.getOrderPassenger(orderId, passenger);
-//        if (orderPassenger == null) {
-//            throw new ServerException(ServerErrorCode.PASSENGER_IN_ORDER_NOT_FOUND);
-//        }
-//        return orderPassenger;
-//    }
 }

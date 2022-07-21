@@ -19,25 +19,13 @@ public class TicketHelper {
     @Autowired
     private DateTripHelper dateTripHelper;
 
-//    private static TicketHelper instance = null;
-
     private Passenger passenger;
     private Place place;
+    private Place freePlace;
 
-//    private TicketHelper() throws ParseException {
-////        init();
-//    }
-
-//    public static TicketHelper getInstance() throws ParseException {
-//        if (instance == null) {
-//            instance = new TicketHelper();
-//        }
-//        return instance;
-//    }
-
-    @PostMapping
     public void init() throws ParseException {
         passenger = new Passenger(1, "имя", "фамилия", "passport");
         place = new Place(1, 2, passenger, dateTripHelper.getDateTrip(tripHelper.getTrip()));
+        freePlace = new Place(1, 2, null, dateTripHelper.getDateTrip(tripHelper.getTrip()));
     }
 }

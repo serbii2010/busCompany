@@ -2,7 +2,6 @@ package net.thumbtack.school.buscompany.service.order;
 
 import net.thumbtack.school.buscompany.daoImpl.order.PassengerDaoImpl;
 import net.thumbtack.school.buscompany.daoImpl.trip.PlaceDaoImpl;
-import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.helper.DateTripHelper;
 import net.thumbtack.school.buscompany.helper.TicketHelper;

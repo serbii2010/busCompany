@@ -4,7 +4,6 @@ import net.thumbtack.school.buscompany.daoImpl.trip.StationDaoImpl;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.helper.TripHelper;
 import net.thumbtack.school.buscompany.model.Station;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

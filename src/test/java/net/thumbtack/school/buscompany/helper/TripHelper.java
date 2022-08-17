@@ -19,11 +19,13 @@ public class TripHelper {
     private Trip trip;
     private Bus bus;
     private Schedule schedule;
+    private Station fromStation;
+    private Station toStation;
 
     public void init() {
         bus = new Bus(1, "Пазик", 21);
-        Station fromStation = new Station(1, "omsk");
-        Station toStation = new Station(2, "novosibirsk");
+        fromStation = new Station(1, "omsk");
+        toStation = new Station(2, "novosibirsk");
 
         dateTripHelper.init("2021-12-12");
         Date fromDate = dateTripHelper.getDate();

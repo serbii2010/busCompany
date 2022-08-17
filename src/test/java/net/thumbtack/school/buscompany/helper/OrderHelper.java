@@ -5,8 +5,6 @@ import net.thumbtack.school.buscompany.model.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.text.ParseException;
-
 @Getter
 @Component
 public class OrderHelper {

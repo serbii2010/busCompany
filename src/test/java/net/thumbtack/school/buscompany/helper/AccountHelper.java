@@ -5,8 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.thumbtack.school.buscompany.dto.request.account.LoginDtoRequest;
 import net.thumbtack.school.buscompany.dto.request.account.RegistrationAdminDtoRequest;
 import net.thumbtack.school.buscompany.dto.request.account.RegistrationClientDtoRequest;
+import net.thumbtack.school.buscompany.helper.dto.request.account.LoginAdminDtoRequestHelper;
+import net.thumbtack.school.buscompany.helper.dto.request.account.LoginClientDtoRequestHelper;
 import net.thumbtack.school.buscompany.helper.dto.request.account.RegistrationAdminDtoRequestHelper;
 import net.thumbtack.school.buscompany.helper.dto.request.account.RegistrationClientDtoRequestHelper;
 import net.thumbtack.school.buscompany.model.account.Admin;
@@ -18,11 +21,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import javax.servlet.http.Cookie;
-
 import java.util.Objects;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @Component
 @Getter
@@ -79,6 +80,32 @@ public class AccountHelper {
                 .content(mapper.writeValueAsString(request)))
                 .andReturn();
         return Objects.requireNonNull(result.getResponse().getCookie("JAVASESSIONID")).getValue();
+    }
+
+    public static String loginAdmin(MockMvc mvc, ObjectMapper mapper) throws Exception {
+        LoginDtoRequest request = LoginAdminDtoRequestHelper.get();
+
+        return Objects.requireNonNull(mvc.perform(post("/api/session")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(request)))
+                .andReturn()
+                .getResponse()
+                .getCookie("JAVASESSIONID"))
+                .getValue();
+    }
+
+    public static String loginClient(MockMvc mvc, ObjectMapper mapper) throws Exception {
+        LoginDtoRequest request = LoginClientDtoRequestHelper.get();
+
+        return Objects.requireNonNull(mvc.perform(post("/api/session")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(request)))
+                .andReturn()
+                .getResponse()
+                .getCookie("JAVASESSIONID"))
+                .getValue();
     }
 
 }

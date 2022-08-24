@@ -1,15 +1,15 @@
 package net.thumbtack.school.buscompany.controller.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.thumbtack.school.buscompany.dto.request.account.EditAdministratorDtoRequest;
-import net.thumbtack.school.buscompany.dto.request.account.RegistrationAdminDtoRequest;
-import net.thumbtack.school.buscompany.dto.response.account.EditAdministratorDtoResponse;
-import net.thumbtack.school.buscompany.dto.response.account.RegistrationAdminDtoResponse;
+import net.thumbtack.school.buscompany.dto.request.account.EditClientDtoRequest;
+import net.thumbtack.school.buscompany.dto.request.account.RegistrationClientDtoRequest;
+import net.thumbtack.school.buscompany.dto.response.account.EditClientDtoResponse;
+import net.thumbtack.school.buscompany.dto.response.account.RegistrationClientDtoResponse;
 import net.thumbtack.school.buscompany.helper.AccountHelper;
-import net.thumbtack.school.buscompany.helper.dto.request.account.RegistrationAdminDtoRequestHelper;
-import net.thumbtack.school.buscompany.helper.dto.request.account.UpdateAdminDtoRequestHelper;
-import net.thumbtack.school.buscompany.helper.dto.response.account.RegistrationAdminDtoResponseHelper;
-import net.thumbtack.school.buscompany.helper.dto.response.account.UpdateAdminDtoResponseHelper;
+import net.thumbtack.school.buscompany.helper.dto.request.account.RegistrationClientDtoRequestHelper;
+import net.thumbtack.school.buscompany.helper.dto.request.account.UpdateClientDtoRequestHelper;
+import net.thumbtack.school.buscompany.helper.dto.response.account.RegistrationClientDtoResponseHelper;
+import net.thumbtack.school.buscompany.helper.dto.response.account.UpdateClientDtoResponseHelper;
 import net.thumbtack.school.buscompany.service.DebugService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,12 +23,11 @@ import javax.servlet.http.Cookie;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class TestIntegrationAdminController {
+public class TestIntegrationClientController {
     @Autowired
     private MockMvc mvc;
     @Autowired
@@ -42,28 +41,27 @@ class TestIntegrationAdminController {
     }
 
     @Test
-    public void insertAdmin() throws Exception {
-        RegistrationAdminDtoRequest request = RegistrationAdminDtoRequestHelper.get();
-        RegistrationAdminDtoResponse response = RegistrationAdminDtoResponseHelper.get();
+    public void insertClient() throws Exception {
+        RegistrationClientDtoRequest request = RegistrationClientDtoRequestHelper.get();
+        RegistrationClientDtoResponse response = RegistrationClientDtoResponseHelper.get();
 
-        mvc.perform(post("/api/admins")
+        mvc.perform(post("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(request)))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(response)))
                 .andExpect(cookie().exists("JAVASESSIONID"));
-
     }
 
     @Test
-    public void updateAdmin() throws Exception {
-        String javaSessionId = AccountHelper.registrationAdmin(mvc, mapper);
+    public void updateClient() throws Exception {
+        String javaSessionId = AccountHelper.registrationClient(mvc, mapper);
 
-        EditAdministratorDtoRequest request = UpdateAdminDtoRequestHelper.get();
-        EditAdministratorDtoResponse response = UpdateAdminDtoResponseHelper.get();
-        mvc.perform(put("/api/admins")
+        EditClientDtoRequest request = UpdateClientDtoRequestHelper.get();
+        EditClientDtoResponse response = UpdateClientDtoResponseHelper.get();
+
+        mvc.perform(put("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(request))
@@ -71,5 +69,4 @@ class TestIntegrationAdminController {
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(response)));
     }
-
 }

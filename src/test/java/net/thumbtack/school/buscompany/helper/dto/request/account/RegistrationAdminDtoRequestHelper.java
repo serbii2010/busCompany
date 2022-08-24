@@ -1,4 +1,4 @@
-package net.thumbtack.school.buscompany.helper.dto.request;
+package net.thumbtack.school.buscompany.helper.dto.request.account;
 
 import net.thumbtack.school.buscompany.dto.request.account.RegistrationAdminDtoRequest;
 

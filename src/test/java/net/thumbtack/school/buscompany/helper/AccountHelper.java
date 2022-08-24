@@ -6,9 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import net.thumbtack.school.buscompany.dto.request.account.RegistrationAdminDtoRequest;
-import net.thumbtack.school.buscompany.dto.response.account.RegistrationAdminDtoResponse;
-import net.thumbtack.school.buscompany.helper.dto.request.RegistrationAdminDtoRequestHelper;
-import net.thumbtack.school.buscompany.helper.dto.response.RegistrationAdminDtoResponseHelper;
+import net.thumbtack.school.buscompany.dto.request.account.RegistrationClientDtoRequest;
+import net.thumbtack.school.buscompany.helper.dto.request.account.RegistrationAdminDtoRequestHelper;
+import net.thumbtack.school.buscompany.helper.dto.request.account.RegistrationClientDtoRequestHelper;
 import net.thumbtack.school.buscompany.model.account.Admin;
 import net.thumbtack.school.buscompany.model.account.Client;
 import net.thumbtack.school.buscompany.utils.UserTypeEnum;
@@ -23,7 +23,6 @@ import java.util.Objects;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Component
 @Getter
@@ -64,6 +63,17 @@ public class AccountHelper {
         RegistrationAdminDtoRequest request = RegistrationAdminDtoRequestHelper.get();
 
         MvcResult result = mvc.perform(post("/api/admins")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(request)))
+                .andReturn();
+        return Objects.requireNonNull(result.getResponse().getCookie("JAVASESSIONID")).getValue();
+    }
+
+    public static String registrationClient(MockMvc mvc, ObjectMapper mapper) throws Exception {
+        RegistrationClientDtoRequest request = RegistrationClientDtoRequestHelper.get();
+
+        MvcResult result = mvc.perform(post("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(request)))

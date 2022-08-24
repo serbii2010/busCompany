@@ -54,7 +54,7 @@ public class ClientController {
         }
         Client client = accountService.findClient(accountService.getAuthAccount(javaSessionId));
         ClientMapper.INSTANCE.update(client, request, accountService);
-        accountService.updateAccount(account);
+        accountService.updateAccount(client);
         LOGGER.debug("client updated");
         return ClientMapper.INSTANCE.accountEditToDto(client);
     }

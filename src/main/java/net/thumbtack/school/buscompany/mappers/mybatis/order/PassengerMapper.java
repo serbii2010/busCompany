@@ -34,4 +34,10 @@ public interface PassengerMapper {
     @Insert("INSERT INTO order_passenger (order_id, passenger_id) " +
             "VALUES (#{order.id}, #{passenger.id})")
     Integer insertOrderPassenger(Order order, Passenger passenger);
+
+    @Update("ALTER TABLE passenger AUTO_INCREMENT = 1")
+    void resetAutoIncrement();
+
+    @Update("ALTER TABLE order_passenger AUTO_INCREMENT = 1")
+    void resetAutoIncrementFromOrderPassenger();
 }

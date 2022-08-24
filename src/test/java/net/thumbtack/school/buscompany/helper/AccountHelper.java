@@ -1,15 +1,29 @@
 package net.thumbtack.school.buscompany.helper;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.thumbtack.school.buscompany.dto.request.account.RegistrationAdminDtoRequest;
+import net.thumbtack.school.buscompany.dto.response.account.RegistrationAdminDtoResponse;
+import net.thumbtack.school.buscompany.helper.dto.request.RegistrationAdminDtoRequestHelper;
+import net.thumbtack.school.buscompany.helper.dto.response.RegistrationAdminDtoResponseHelper;
 import net.thumbtack.school.buscompany.model.account.Admin;
 import net.thumbtack.school.buscompany.model.account.Client;
 import net.thumbtack.school.buscompany.utils.UserTypeEnum;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import javax.servlet.http.Cookie;
+
+import java.util.Objects;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Component
 @Getter
@@ -39,11 +53,22 @@ public class AccountHelper {
                 "last",
                 "patronymic",
                 UserTypeEnum.CLIENT,
-                "тестировщик",
+                "a@a.a",
                 "88005553535",
                 1);
 
         this.cookie = new Cookie("JAVASESSIONID", "sessionId");
+    }
+
+    public static String registrationAdmin(MockMvc mvc, ObjectMapper mapper) throws Exception {
+        RegistrationAdminDtoRequest request = RegistrationAdminDtoRequestHelper.get();
+
+        MvcResult result = mvc.perform(post("/api/admins")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(request)))
+                .andReturn();
+        return Objects.requireNonNull(result.getResponse().getCookie("JAVASESSIONID")).getValue();
     }
 
 }

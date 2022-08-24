@@ -43,7 +43,7 @@ public interface AccountMapper {
             "last_name=#{account.lastName}, " +
             "patronymic=#{account.patronymic}, " +
             "password=#{account.password} " +
-            "WHERE id=#{accountId}")
+            "WHERE id=#{account.id}")
     Integer update(@Param("account") Account account, String accountId);
 
     @Delete("DELETE FROM account WHERE id=#{account.id}")
@@ -51,4 +51,7 @@ public interface AccountMapper {
 
     @Delete("DELETE FROM account")
     Integer deleteAll();
+
+    @Update("ALTER TABLE account AUTO_INCREMENT = 1")
+    void resetAutoIncrement();
 }

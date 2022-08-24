@@ -31,4 +31,7 @@ public interface ClientMapper {
 
     @Delete("DELETE FROM client WHERE account_id=#{id}")
     Integer deleteByAccount(Account account);
+
+    @Update("ALTER TABLE client AUTO_INCREMENT = 1")
+    void resetAutoIncrement();
 }

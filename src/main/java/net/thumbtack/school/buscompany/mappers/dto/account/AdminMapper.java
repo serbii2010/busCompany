@@ -24,10 +24,10 @@ public interface AdminMapper {
     @Mapping(target = "userType", source = "userType.type")
     EditAdministratorDtoResponse accountEditToDto(Admin account);
 
-    void update(@MappingTarget Admin account, EditAdministratorDtoRequest request, @Context AccountService service) throws ServerException;
+    void update(@MappingTarget Admin admin, EditAdministratorDtoRequest request, @Context AccountService service) throws ServerException;
 
     @AfterMapping
-    default void setPassword(@MappingTarget Admin account, EditAdministratorDtoRequest request, @Context AccountService service) throws ServerException {
+    default void setPassword(@MappingTarget Account account, EditAdministratorDtoRequest request, @Context AccountService service) throws ServerException {
         service.checkPassword(account, request.getOldPassword());
         service.setPassword(account, request.getNewPassword());
     }

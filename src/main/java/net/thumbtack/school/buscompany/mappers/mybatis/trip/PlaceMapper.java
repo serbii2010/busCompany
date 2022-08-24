@@ -49,4 +49,7 @@ public interface PlaceMapper {
 
     @Select("SELECT * FROM date_trip WHERE id=#{id}")
     DateTrip selectDateTrip(String id);
+
+    @Update("ALTER TABLE place AUTO_INCREMENT = 1")
+    void resetAutoIncrement();
 }

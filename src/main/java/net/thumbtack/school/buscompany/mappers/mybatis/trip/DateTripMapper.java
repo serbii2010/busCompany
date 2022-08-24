@@ -53,4 +53,7 @@ public interface DateTripMapper {
             @Result(property = "placeCount", column = "place_count")
     })
     Bus getBus(String busId);
+
+    @Update("ALTER TABLE date_trip AUTO_INCREMENT = 1")
+    void resetAutoIncrement();
 }

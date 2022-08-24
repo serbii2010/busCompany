@@ -67,4 +67,7 @@ public interface TripMapper {
     Integer deleteAll();
 
     List<Trip> filterTrip(String fromStation, String toStation, String busName, String fromDate, String toDate, Boolean approved);
+
+    @Update("ALTER TABLE trip AUTO_INCREMENT = 1")
+    void resetAutoIncrement();
 }

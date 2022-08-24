@@ -79,4 +79,7 @@ public interface OrderMapper {
     Integer deleteAll();
 
     List<Order> filter(String fromStation, String toStation, String busName, String fromDate, String toDate, String clientId);
+
+    @Update("ALTER TABLE orders AUTO_INCREMENT = 1")
+    void resetAutoIncrement();
 }

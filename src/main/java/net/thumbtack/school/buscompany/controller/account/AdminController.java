@@ -51,8 +51,8 @@ public class AdminController {
         Admin admin = accountService.findAdmin(account);
 
         AdminMapper.INSTANCE.update(admin, request, accountService);
-        accountService.updateAccount(account);
-        LOGGER.debug("client updated");
+        accountService.updateAccount(admin);
+        LOGGER.debug("admin updated");
         return AdminMapper.INSTANCE.accountEditToDto(admin);
     }
 

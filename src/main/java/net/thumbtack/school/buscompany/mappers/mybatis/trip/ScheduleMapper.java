@@ -19,4 +19,7 @@ public interface ScheduleMapper {
 
     @Delete("DELETE FROM schedule")
     Integer deleteAll();
+
+    @Update("ALTER TABLE schedule AUTO_INCREMENT = 1")
+    void resetAutoIncrement();
 }

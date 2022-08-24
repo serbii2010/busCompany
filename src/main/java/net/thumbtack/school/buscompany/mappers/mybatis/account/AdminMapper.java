@@ -33,4 +33,7 @@ public interface AdminMapper {
 
     @Select("SELECT count(id) FROM admin")
     Integer getCount();
+
+    @Update("ALTER TABLE admin AUTO_INCREMENT = 1")
+    void resetAutoIncrement();
 }

@@ -59,8 +59,8 @@ public class AccountHelper {
         this.cookie = new Cookie("JAVASESSIONID", "sessionId");
     }
 
-    public static String registrationAdmin(MockMvc mvc, ObjectMapper mapper) throws Exception {
-        RegistrationAdminDtoRequest request = RegistrationAdminDtoRequestHelper.get();
+    public static String registrationAdmin(String login, MockMvc mvc, ObjectMapper mapper) throws Exception {
+        RegistrationAdminDtoRequest request = RegistrationAdminDtoRequestHelper.get(login);
 
         MvcResult result = mvc.perform(post("/api/admins")
                 .contentType(MediaType.APPLICATION_JSON)

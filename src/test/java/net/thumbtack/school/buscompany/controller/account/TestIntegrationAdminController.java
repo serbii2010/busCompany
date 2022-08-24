@@ -43,7 +43,7 @@ class TestIntegrationAdminController {
 
     @Test
     public void insertAdmin() throws Exception {
-        RegistrationAdminDtoRequest request = RegistrationAdminDtoRequestHelper.get();
+        RegistrationAdminDtoRequest request = RegistrationAdminDtoRequestHelper.get("admin");
         RegistrationAdminDtoResponse response = RegistrationAdminDtoResponseHelper.get();
 
         mvc.perform(post("/api/admins")
@@ -59,7 +59,7 @@ class TestIntegrationAdminController {
 
     @Test
     public void updateAdmin() throws Exception {
-        String javaSessionId = AccountHelper.registrationAdmin(mvc, mapper);
+        String javaSessionId = AccountHelper.registrationAdmin("admin", mvc, mapper);
 
         EditAdministratorDtoRequest request = UpdateAdminDtoRequestHelper.get();
         EditAdministratorDtoResponse response = UpdateAdminDtoResponseHelper.get();

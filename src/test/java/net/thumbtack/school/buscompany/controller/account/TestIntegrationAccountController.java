@@ -19,9 +19,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import javax.servlet.http.Cookie;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -49,7 +49,7 @@ class TestIntegrationAccountController {
 
     @Test
     public void getInfo_admin() throws Exception {
-        String javaSessionId = AccountHelper.registrationAdmin(mvc, mapper);
+        String javaSessionId = AccountHelper.registrationAdmin("admin", mvc, mapper);
         InfoAdministratorDtoResponse response = InfoAdminDtoResponseHelper.get();
 
         mvc.perform(get("/api/accounts")
@@ -74,6 +74,38 @@ class TestIntegrationAccountController {
     }
 
     @Test
-    void deleteAccount() {
+    public void deleteAccount_admin() throws Exception {
+        AccountHelper.registrationAdmin("firstAdmin", mvc, mapper);
+        String javaSessionId = AccountHelper.registrationAdmin("admin", mvc, mapper);
+
+        mvc.perform(delete("/api/accounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("JAVASESSIONID", javaSessionId)))
+                .andExpect(status().isOk())
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
+    }
+
+    @Test
+    public void deleteAccount_lastAdmin() throws Exception {
+        String javaSessionId = AccountHelper.registrationAdmin("admin", mvc, mapper);
+
+        mvc.perform(delete("/api/accounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("JAVASESSIONID", javaSessionId)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void deleteAccount_client() throws Exception {
+        String javaSessionId = AccountHelper.registrationClient(mvc, mapper);
+
+        mvc.perform(delete("/api/accounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .cookie(new Cookie("JAVASESSIONID", javaSessionId)))
+                .andExpect(status().isOk())
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 }

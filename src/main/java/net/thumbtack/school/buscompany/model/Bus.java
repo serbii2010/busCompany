@@ -11,4 +11,8 @@ public class Bus {
     private int id;
     private String name;
     private int placeCount;
+
+    public Bus(String name, int placeCount) {
+        this(0, name, placeCount);
+    }
 }

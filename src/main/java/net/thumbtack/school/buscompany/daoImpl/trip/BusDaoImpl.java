@@ -43,8 +43,19 @@ public class BusDaoImpl extends DaoImplBase implements Dao<Bus> {
     }
 
     @Override
-    public Bus insert(Bus object) {
-        return null;
+    public Bus insert(Bus bus) {
+        LOGGER.debug("DAO insert Bus {}", bus);
+        try (SqlSession sqlSession = getSession()) {
+            try {
+                getBusMapper(sqlSession).insert(bus);
+            } catch (RuntimeException ex) {
+                LOGGER.info("Can't insert Bus {} {}", bus, ex);
+                sqlSession.rollback();
+                throw ex;
+            }
+            sqlSession.commit();
+        }
+        return bus;
     }
 
     @Override

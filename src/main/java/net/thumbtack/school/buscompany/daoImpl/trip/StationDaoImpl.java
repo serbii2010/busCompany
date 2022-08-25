@@ -37,8 +37,19 @@ public class StationDaoImpl extends DaoImplBase implements Dao<Station> {
     }
 
     @Override
-    public Station insert(Station object) {
-        return null;
+    public Station insert(Station station) {
+        LOGGER.debug("DAO insert Station {}", station);
+        try (SqlSession sqlSession = getSession()) {
+            try {
+                getStationMapper(sqlSession).insert(station);
+            } catch (RuntimeException ex) {
+                LOGGER.info("Can't insert Station {} {}", station, ex);
+                sqlSession.rollback();
+                throw ex;
+            }
+            sqlSession.commit();
+        }
+        return station;
     }
 
     @Override

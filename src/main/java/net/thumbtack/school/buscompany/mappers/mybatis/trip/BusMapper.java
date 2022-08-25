@@ -1,10 +1,7 @@
 package net.thumbtack.school.buscompany.mappers.mybatis.trip;
 
 import net.thumbtack.school.buscompany.model.Bus;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -19,6 +16,11 @@ public interface BusMapper {
 
     @Delete("DELETE FROM bus")
     Integer deleteAll();
+
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+    @Insert("INSERT INTO bus (name, place_count) " +
+            "VALUES (#{name}, #{placeCount})")
+    Integer insert(Bus bus);
 
     @Update("ALTER TABLE bus AUTO_INCREMENT = 1")
     void resetAutoIncrement();

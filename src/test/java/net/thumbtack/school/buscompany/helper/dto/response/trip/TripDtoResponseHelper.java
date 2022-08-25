@@ -163,4 +163,21 @@ public class TripDtoResponseHelper {
 
         return response;
     }
+
+    public static TripAdminDtoResponse getDtoUpdateWithEven() {
+        TripAdminDtoResponse response = getDtoInsertWithScheduleEven();
+        response.setBus(new BusDtoResponse("Ikarus", 40));
+        response.setToStation("Новосибирск");
+        response.setFromStation("Omsk");
+        response.setStart("23:51");
+        response.setDuration("12:30");
+        response.setPrice(30);
+        return response;
+    }
+
+    public static TripAdminDtoResponse getDtoUpdateApproveWithWeek() {
+        TripAdminDtoResponse response = getDtoInsertWithScheduleWeek();
+        response.setApproved(true);
+        return response;
+    }
 }

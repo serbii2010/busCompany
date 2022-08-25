@@ -1,13 +1,25 @@
 package net.thumbtack.school.buscompany.helper;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.Setter;
+import net.thumbtack.school.buscompany.dto.request.trip.TripDtoRequest;
+import net.thumbtack.school.buscompany.dto.response.trip.TripAdminDtoResponse;
+import net.thumbtack.school.buscompany.helper.dto.request.trip.TripDtoRequestHelper;
+import net.thumbtack.school.buscompany.helper.dto.response.trip.TripDtoResponseHelper;
 import net.thumbtack.school.buscompany.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.test.web.servlet.MockMvc;
+
+import javax.servlet.http.Cookie;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Getter
 @Setter
@@ -37,5 +49,20 @@ public class TripHelper {
 
         dates.add(dateTripHelper.getDateTrip(trip));
         trip.setDates(dates);
+    }
+
+    public static int insertTripWithWeek(Cookie cookie, MockMvc mvc, ObjectMapper mapper) throws Exception {
+        TripDtoRequest request = TripDtoRequestHelper.getWithScheduleWeek();
+
+        String result = mvc.perform(post("/api/trips")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(request))
+                .cookie(cookie))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        return mapper.readValue(result, TripAdminDtoResponse.class).getTripId();
     }
 }

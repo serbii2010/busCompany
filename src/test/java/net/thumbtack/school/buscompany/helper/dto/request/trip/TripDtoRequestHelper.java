@@ -58,5 +58,15 @@ public class TripDtoRequestHelper {
         return request;
     }
 
+    public static TripDtoRequest getUpdateToScheduleEven() {
+        TripDtoRequest request = getWithScheduleEven();
+        request.setBusName("Ikarus");
+        request.setToStation("Новосибирск");
+        request.setFromStation("Omsk");
+        request.setStart("23:51");
+        request.setDuration("12:30");
+        request.setPrice(30);
+        return request;
+    }
 
 }

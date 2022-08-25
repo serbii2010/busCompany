@@ -6,6 +6,7 @@ import net.thumbtack.school.buscompany.dto.response.trip.TripAdminDtoResponse;
 import net.thumbtack.school.buscompany.helper.AccountHelper;
 import net.thumbtack.school.buscompany.helper.BusHelper;
 import net.thumbtack.school.buscompany.helper.StationHelper;
+import net.thumbtack.school.buscompany.helper.TripHelper;
 import net.thumbtack.school.buscompany.helper.dto.request.trip.TripDtoRequestHelper;
 import net.thumbtack.school.buscompany.helper.dto.response.trip.TripDtoResponseHelper;
 import net.thumbtack.school.buscompany.service.DebugService;
@@ -20,7 +21,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import javax.servlet.http.Cookie;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -142,11 +145,34 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void update() {
+    void update_scheduleWeekToScheduleEven() throws Exception {
+        int tripId = TripHelper.insertTripWithWeek(cookieAdmin, mvc, mapper);
+
+        TripDtoRequest request = TripDtoRequestHelper.getUpdateToScheduleEven();
+        TripAdminDtoResponse response = TripDtoResponseHelper.getDtoUpdateWithEven();
+
+        mvc.perform(put("/api/trips/" + tripId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(request))
+                .cookie(cookieAdmin))
+                .andExpect(status().isOk())
+                .andExpect(content().json(mapper.writeValueAsString(response)))
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
     @Test
-    void approveTrip() {
+    void approveTrip() throws Exception {
+        int tripId = TripHelper.insertTripWithWeek(cookieAdmin, mvc, mapper);
+        TripAdminDtoResponse response = TripDtoResponseHelper.getDtoUpdateApproveWithWeek();
+
+        mvc.perform(put("/api/trips/" + tripId + "/approve")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .cookie(cookieAdmin))
+                .andExpect(status().isOk())
+                .andExpect(content().json(mapper.writeValueAsString(response)))
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
     @Test

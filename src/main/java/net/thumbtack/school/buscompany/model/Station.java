@@ -10,4 +10,8 @@ import lombok.NoArgsConstructor;
 public class Station {
     private int id;
     private String name;
+
+    public Station(String name) {
+        this(0, name);
+    }
 }

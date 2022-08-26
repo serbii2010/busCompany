@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Getter
@@ -51,18 +52,23 @@ public class TripHelper {
         trip.setDates(dates);
     }
 
-    public static int insertTripWithWeek(Cookie cookie, MockMvc mvc, ObjectMapper mapper) throws Exception {
-        TripDtoRequest request = TripDtoRequestHelper.getWithScheduleWeek();
-
+    public static int insertTrip(TripDtoRequest requestTrip, Cookie cookie, MockMvc mvc, ObjectMapper mapper) throws Exception {
         String result = mvc.perform(post("/api/trips")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(request))
+                .content(mapper.writeValueAsString(requestTrip))
                 .cookie(cookie))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
 
         return mapper.readValue(result, TripAdminDtoResponse.class).getTripId();
+    }
+
+    public static void approveTrip(int tripId, Cookie cookie, MockMvc mvc) throws Exception {
+        mvc.perform(put("/api/trips/" + tripId + "/approve")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .cookie(cookie));
     }
 }

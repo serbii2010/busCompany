@@ -6,7 +6,6 @@ import lombok.Setter;
 import net.thumbtack.school.buscompany.dto.request.trip.TripDtoRequest;
 import net.thumbtack.school.buscompany.dto.response.trip.TripAdminDtoResponse;
 import net.thumbtack.school.buscompany.helper.dto.request.trip.TripDtoRequestHelper;
-import net.thumbtack.school.buscompany.helper.dto.response.trip.TripDtoResponseHelper;
 import net.thumbtack.school.buscompany.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -20,7 +19,6 @@ import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Getter
 @Setter
@@ -70,5 +68,12 @@ public class TripHelper {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .cookie(cookie));
+    }
+
+    public void generateDefaultTrip(Cookie cookie, MockMvc mvc, ObjectMapper mapper) throws Exception {
+        int tripId1 = insertTrip(TripDtoRequestHelper.getWithScheduleWeek(), cookie, mvc, mapper);
+        approveTrip(tripId1, cookie, mvc);
+        int tripId2 = insertTrip(TripDtoRequestHelper.getWithScheduleDaily(), cookie, mvc, mapper);
+        approveTrip(tripId2, cookie, mvc);
     }
 }

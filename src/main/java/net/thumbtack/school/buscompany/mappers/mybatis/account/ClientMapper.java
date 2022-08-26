@@ -13,7 +13,7 @@ public interface ClientMapper {
             "VALUES (#{id}, #{email}, #{phone})")
     Integer insert(Client client);
 
-    @Select("SELECT * FROM client LEFT JOIN account ON account.id=account_id WHERE account_id=#{id}")
+    @Select("SELECT * FROM client LEFT JOIN account ON account.id=client.account_id WHERE account_id=#{id}")
     @Results(value = {
             @Result(property = "firstName", column = "first_name"),
             @Result(property = "lastName", column = "last_name"),

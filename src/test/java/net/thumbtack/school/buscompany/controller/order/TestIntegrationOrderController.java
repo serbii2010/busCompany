@@ -19,7 +19,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.servlet.http.Cookie;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +55,6 @@ class TestIntegrationOrderController {
         cookieAdmin = new Cookie("JAVASESSIONID", AccountHelper.registrationAdmin("admin", mvc, mapper));
         cookieClient = new Cookie("JAVASESSIONID", AccountHelper.registrationClient(mvc, mapper));
         tripHelper.generateDefaultTrip(cookieAdmin, mvc, mapper);
-
     }
 
     @Test

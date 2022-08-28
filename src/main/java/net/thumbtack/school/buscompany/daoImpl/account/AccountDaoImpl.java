@@ -55,11 +55,13 @@ public class AccountDaoImpl extends DaoImplBase implements Dao<Account> {
         try (SqlSession sqlSession = getSession()) {
             try {
                 getAccountMapper(sqlSession).insert(account);
+                int idAccount = account.getId();
                 if (account.getClass() == Client.class) {
                     getClientMapper(sqlSession).insert((Client) account);
                 } else if (account.getClass() == Admin.class) {
                     getAdminMapper(sqlSession).insert((Admin) account);
                 }
+                account.setId(idAccount);
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't insert account {} {}", account, ex);
                 sqlSession.rollback();

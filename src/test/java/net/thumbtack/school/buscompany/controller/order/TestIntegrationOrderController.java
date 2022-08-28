@@ -3,10 +3,7 @@ package net.thumbtack.school.buscompany.controller.order;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.thumbtack.school.buscompany.dto.request.order.OrderDtoRequest;
 import net.thumbtack.school.buscompany.dto.response.order.OrderDtoResponse;
-import net.thumbtack.school.buscompany.helper.AccountHelper;
-import net.thumbtack.school.buscompany.helper.BusHelper;
-import net.thumbtack.school.buscompany.helper.StationHelper;
-import net.thumbtack.school.buscompany.helper.TripHelper;
+import net.thumbtack.school.buscompany.helper.*;
 import net.thumbtack.school.buscompany.helper.dto.request.order.OrderDtoRequestHelper;
 import net.thumbtack.school.buscompany.helper.dto.response.order.OrderDtoResponseHelper;
 import net.thumbtack.school.buscompany.service.DebugService;
@@ -39,6 +36,8 @@ class TestIntegrationOrderController {
     @Autowired
     private TripHelper tripHelper;
     @Autowired
+    private OrderHelper orderHelper;
+    @Autowired
     private ObjectMapper mapper;
 
     private Cookie cookieAdmin;
@@ -68,5 +67,11 @@ class TestIntegrationOrderController {
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(response)))
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
+    }
+
+    @Test
+    public void filter_byClient() throws Exception {
+        orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);
+
     }
 }

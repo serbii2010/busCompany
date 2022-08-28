@@ -2,9 +2,13 @@ package net.thumbtack.school.buscompany.controller.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.thumbtack.school.buscompany.dto.request.account.LoginDtoRequest;
+import net.thumbtack.school.buscompany.dto.response.account.InfoAdministratorDtoResponse;
+import net.thumbtack.school.buscompany.dto.response.account.InfoClientDtoResponse;
 import net.thumbtack.school.buscompany.helper.AccountHelper;
 import net.thumbtack.school.buscompany.helper.dto.request.account.LoginAdminDtoRequestHelper;
 import net.thumbtack.school.buscompany.helper.dto.request.account.LoginClientDtoRequestHelper;
+import net.thumbtack.school.buscompany.helper.dto.response.account.InfoAdminDtoResponseHelper;
+import net.thumbtack.school.buscompany.helper.dto.response.account.InfoClientDtoResponseHelper;
 import net.thumbtack.school.buscompany.service.DebugService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,12 +46,14 @@ class TestIntegrationSessionController {
     void login_admin() throws Exception {
         AccountHelper.registrationAdmin("admin", mvc, mapper);
         LoginDtoRequest request = LoginAdminDtoRequestHelper.get();
+        InfoAdministratorDtoResponse response = InfoAdminDtoResponseHelper.get();
 
         mvc.perform(post("/api/session")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
+                .andExpect(content().json(mapper.writeValueAsString(response)))
                 .andExpect(cookie().exists("JAVASESSIONID"));
     }
 
@@ -67,12 +73,14 @@ class TestIntegrationSessionController {
     void login_client() throws Exception {
         AccountHelper.registrationClient(mvc, mapper);
         LoginDtoRequest request = LoginClientDtoRequestHelper.get();
+        InfoClientDtoResponse response = InfoClientDtoResponseHelper.get();
 
         mvc.perform(post("/api/session")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
+                .andExpect(content().json(mapper.writeValueAsString(response)))
                 .andExpect(cookie().exists("JAVASESSIONID"));
     }
 

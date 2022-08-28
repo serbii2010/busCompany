@@ -102,7 +102,6 @@ class TestOrderController {
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
     }
 
-
     @Test
     void testCreateOrder_badByAdmin() throws Exception {
         List<PassengerDtoRequest> passengers = new ArrayList<>();

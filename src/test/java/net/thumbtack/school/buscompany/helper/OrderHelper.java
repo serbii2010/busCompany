@@ -33,12 +33,18 @@ public class OrderHelper {
     }
 
     public void generateDefaultOrder(Cookie cookieClient, MockMvc mvc, ObjectMapper mapper) throws Exception {
-        OrderDtoRequest request = OrderDtoRequestHelper.getDtoInsert();
-
+        OrderDtoRequest request1 = OrderDtoRequestHelper.getDtoInsert();
         mvc.perform(post("/api/orders")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(request))
+                .content(mapper.writeValueAsString(request1))
+                .cookie(cookieClient));
+
+        OrderDtoRequest request2 = OrderDtoRequestHelper.getDtoInsert2();
+        mvc.perform(post("/api/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(request2))
                 .cookie(cookieClient));
     }
 }

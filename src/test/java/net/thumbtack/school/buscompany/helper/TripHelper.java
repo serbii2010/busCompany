@@ -73,7 +73,7 @@ public class TripHelper {
     public void generateDefaultTrip(Cookie cookie, MockMvc mvc, ObjectMapper mapper) throws Exception {
         int tripId1 = insertTrip(TripDtoRequestHelper.getWithScheduleWeek(), cookie, mvc, mapper);
         approveTrip(tripId1, cookie, mvc);
-        int tripId2 = insertTrip(TripDtoRequestHelper.getWithScheduleDaily(), cookie, mvc, mapper);
+        int tripId2 = insertTrip(TripDtoRequestHelper.getUpdateToScheduleEven(), cookie, mvc, mapper);
         approveTrip(tripId2, cookie, mvc);
     }
 }

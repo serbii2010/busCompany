@@ -18,6 +18,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import javax.servlet.http.Cookie;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -72,6 +76,167 @@ class TestIntegrationOrderController {
     @Test
     public void filter_byClient() throws Exception {
         orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);
+        List<OrderDtoResponse> responses = OrderDtoResponseHelper.getResponseListAll();
 
+        mvc.perform(get("/api/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .cookie(cookieClient))
+                .andExpect(status().isOk())
+                .andExpect(content().json(mapper.writeValueAsString(responses)))
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
+    }
+
+    @Test
+    public void filter_byClientFromStation() throws Exception {
+        orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);
+        List<OrderDtoResponse> responses = OrderDtoResponseHelper.getResponseListAll();
+
+        mvc.perform(get("/api/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .param("fromStation", "Omsk")
+                .cookie(cookieClient))
+                .andExpect(status().isOk())
+                .andExpect(content().json(mapper.writeValueAsString(responses)))
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
+    }
+
+    @Test
+    public void filter_byClientToStation() throws Exception {
+        orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);
+        List<OrderDtoResponse> responses = OrderDtoResponseHelper.getResponseListAll();
+
+        mvc.perform(get("/api/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .param("toStation", "Новосибирск")
+                .cookie(cookieClient))
+                .andExpect(status().isOk())
+                .andExpect(content().json(mapper.writeValueAsString(responses)))
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
+    }
+
+    @Test
+    public void filter_byClientBusName() throws Exception {
+        orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);
+        List<OrderDtoResponse> responses = OrderDtoResponseHelper.getResponseListTwo();
+
+        mvc.perform(get("/api/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .param("busName", "Пазик")
+                .cookie(cookieClient))
+                .andExpect(status().isOk())
+                .andExpect(content().json(mapper.writeValueAsString(responses)))
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
+    }
+
+    @Test
+    public void filter_byClientFromDate() throws Exception {
+        orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);
+        List<OrderDtoResponse> responses = OrderDtoResponseHelper.getResponseListTwo();
+
+        mvc.perform(get("/api/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .param("fromDate", "2023-01-10")
+                .cookie(cookieClient))
+                .andExpect(status().isOk())
+                .andExpect(content().json(mapper.writeValueAsString(responses)))
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
+    }
+
+    @Test
+    public void filter_byClientToDate() throws Exception {
+        orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);
+        List<OrderDtoResponse> responses = OrderDtoResponseHelper.getResponseListFirst();
+
+        mvc.perform(get("/api/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .param("toDate", "2023-01-10")
+                .cookie(cookieClient))
+                .andExpect(status().isOk())
+                .andExpect(content().json(mapper.writeValueAsString(responses)))
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
+    }
+
+    @Test
+    public void filter_byClientAllFilter() throws Exception {
+        orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);
+        List<OrderDtoResponse> responses = OrderDtoResponseHelper.getResponseListTwo();
+
+        mvc.perform(get("/api/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .param("fromStation", "Omsk")
+                .param("toStation", "Новосибирск")
+                .param("busName", "Пазик")
+                .param("fromDate", "2023-01-10")
+                .param("toDate", "2023-01-19")
+                .cookie(cookieClient))
+                .andExpect(status().isOk())
+                .andExpect(content().json(mapper.writeValueAsString(responses)))
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
+    }
+
+    @Test
+    public void filter_byClientAllFilterIgnoreClientId() throws Exception {
+        orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);
+        List<OrderDtoResponse> responses = OrderDtoResponseHelper.getResponseListTwo();
+
+        mvc.perform(get("/api/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .param("fromStation", "Omsk")
+                .param("toStation", "Новосибирск")
+                .param("busName", "Пазик")
+                .param("fromDate", "2023-01-10")
+                .param("toDate", "2023-01-19")
+                .param("clientId", "1234")
+                .cookie(cookieClient))
+                .andExpect(status().isOk())
+                .andExpect(content().json(mapper.writeValueAsString(responses)))
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
+    }
+
+    @Test
+    public void filter_byAdminAllFilter() throws Exception {
+        orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);
+        List<OrderDtoResponse> responses = OrderDtoResponseHelper.getResponseListTwo();
+
+        mvc.perform(get("/api/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .param("fromStation", "Omsk")
+                .param("toStation", "Новосибирск")
+                .param("busName", "Пазик")
+                .param("fromDate", "2023-01-10")
+                .param("toDate", "2023-01-19")
+                .param("clientId", "1")
+                .cookie(cookieAdmin))
+                .andExpect(status().isOk())
+                .andExpect(content().json(mapper.writeValueAsString(responses)))
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
+    }
+
+    @Test
+    public void filter_byAdminAllFilterClientNotFound() throws Exception {
+        orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);
+
+        mvc.perform(get("/api/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .param("fromStation", "Omsk")
+                .param("toStation", "Новосибирск")
+                .param("busName", "Пазик")
+                .param("fromDate", "2023-01-10")
+                .param("toDate", "2023-01-19")
+                .param("clientId", "12")
+                .cookie(cookieAdmin))
+                .andExpect(status().isOk())
+                .andExpect(content().json(mapper.writeValueAsString(new ArrayList<>())))
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 }

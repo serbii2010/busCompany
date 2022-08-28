@@ -51,7 +51,7 @@ public class OrderController {
             @RequestParam(value = "busName", required = false) String busName,
             @RequestParam(value = "fromDate", required = false) String fromDate,
             @RequestParam(value = "toDate", required = false) String toDate,
-            @RequestParam(value = "clintId", required = false) String clientId
+            @RequestParam(value = "clientId", required = false) String clientId
     ) throws ServerException {
         Account account = accountService.getAuthAccount(javaSessionId);
         List<Order> orderList = new ArrayList<>();
@@ -65,7 +65,7 @@ public class OrderController {
     }
 
     @DeleteMapping(path = "/{orderId}",produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public EmptyDtoResponse deleteTicket(@PathVariable String orderId,
+    public EmptyDtoResponse deleteOrder(@PathVariable String orderId,
                                          @CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
         accountService.checkClient(javaSessionId);
 

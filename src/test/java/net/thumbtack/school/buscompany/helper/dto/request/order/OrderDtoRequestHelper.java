@@ -20,12 +20,12 @@ public class OrderDtoRequestHelper {
         );
         return new OrderDtoRequest(
                 2,
-                "2022-12-31",
+                "2023-01-08",
                 new ArrayList<>(Arrays.asList(passenger1, passenger2))
         );
     }
 
-    public static OrderDtoRequest getDtoInsertTwo() {
+    public static OrderDtoRequest getDtoInsert2() {
         PassengerDtoRequest passenger1 = new PassengerDtoRequest(
                 "ivan2",
                 "ivanov2",
@@ -37,8 +37,8 @@ public class OrderDtoRequestHelper {
                 "5128 46732135"
         );
         return new OrderDtoRequest(
-                2,
-                "2022-12-31",
+                1,
+                "2023-01-13",
                 new ArrayList<>(Arrays.asList(passenger1, passenger2))
         );
     }

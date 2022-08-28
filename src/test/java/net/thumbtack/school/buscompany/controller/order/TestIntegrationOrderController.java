@@ -2,9 +2,11 @@ package net.thumbtack.school.buscompany.controller.order;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.thumbtack.school.buscompany.dto.request.order.OrderDtoRequest;
+import net.thumbtack.school.buscompany.dto.response.account.EmptyDtoResponse;
 import net.thumbtack.school.buscompany.dto.response.order.OrderDtoResponse;
 import net.thumbtack.school.buscompany.helper.*;
 import net.thumbtack.school.buscompany.helper.dto.request.order.OrderDtoRequestHelper;
+import net.thumbtack.school.buscompany.helper.dto.response.EmptyResponseHelper;
 import net.thumbtack.school.buscompany.helper.dto.response.order.OrderDtoResponseHelper;
 import net.thumbtack.school.buscompany.service.DebugService;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,8 +23,7 @@ import javax.servlet.http.Cookie;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -237,6 +238,41 @@ class TestIntegrationOrderController {
                 .cookie(cookieAdmin))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(new ArrayList<>())))
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
+    }
+
+    @Test
+    public void deleteOrder() throws Exception {
+        orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);
+        EmptyDtoResponse response = EmptyResponseHelper.get();
+
+        mvc.perform(delete("/api/orders/2")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .cookie(cookieClient))
+                .andExpect(status().isOk())
+                .andExpect(content().json(mapper.writeValueAsString(response)))
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
+
+        List<OrderDtoResponse> responses = OrderDtoResponseHelper.getResponseListFirst();
+        mvc.perform(get("/api/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .cookie(cookieClient))
+                .andExpect(status().isOk())
+                .andExpect(content().json(mapper.writeValueAsString(responses)))
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
+    }
+
+    @Test
+    public void deleteOrder_byAdmin() throws Exception {
+        orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);
+
+        mvc.perform(delete("/api/orders/2")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .cookie(cookieAdmin))
+                .andExpect(status().isBadRequest())
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 }

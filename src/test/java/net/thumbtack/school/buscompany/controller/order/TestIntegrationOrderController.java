@@ -57,7 +57,6 @@ class TestIntegrationOrderController {
 
     @Test
     public void createOrder() throws Exception {
-        //@todo не записывается идентификатор клиента в БД.
         OrderDtoRequest request = OrderDtoRequestHelper.getDtoInsert();
         OrderDtoResponse response = OrderDtoResponseHelper.getResponse();
 

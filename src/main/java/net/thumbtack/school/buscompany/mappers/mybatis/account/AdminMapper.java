@@ -13,7 +13,7 @@ public interface AdminMapper {
             "VALUES (#{id}, #{position})")
     Integer insert(Admin client);
 
-    @Select("SELECT * FROM admin LEFT JOIN account ON account.id=admin.account_id WHERE account_id=#{id}")
+    @Select("SELECT * FROM admin LEFT JOIN account ON account.id=admin.account_id WHERE admin.id=#{id}")
     @Results(value = {
             @Result(property = "firstName", column = "first_name"),
             @Result(property = "lastName", column = "last_name"),

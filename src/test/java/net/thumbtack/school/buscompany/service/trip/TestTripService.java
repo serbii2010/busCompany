@@ -111,11 +111,4 @@ class TestTripService {
         assertNotEquals(null, insertTrip.getDates());
     }
 
-    //@todo
-    //проверить все возможные генерации дат отправкки по расписанию
-
-    @Test
-    void updateDates() {
-
-    }
 }

@@ -660,10 +660,4 @@ class TestTripController {
                 .andReturn();
         assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
     }
-
-
-    @Test
-    void testGetTrips() {
-        //@todo
-    }
 }

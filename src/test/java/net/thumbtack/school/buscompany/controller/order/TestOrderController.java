@@ -161,14 +161,4 @@ class TestOrderController {
                 () -> assertEquals("DateOrderInDatesTrip", errorCode)
         );
     }
-
-    @Test
-    void testFilter() {
-        //@todo
-    }
-
-    @Test
-    void testDeleteTicket() {
-        //@todo
-    }
 }

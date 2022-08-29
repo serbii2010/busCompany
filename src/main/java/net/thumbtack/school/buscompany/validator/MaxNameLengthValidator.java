@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import javax.validation.constraints.NotNull;
 
 @Component
 public class MaxNameLengthValidator implements ConstraintValidator<MaxNameLength, String> {

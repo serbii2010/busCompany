@@ -4,7 +4,6 @@ import net.thumbtack.school.buscompany.dao.Dao;
 import net.thumbtack.school.buscompany.daoImpl.DaoImplBase;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.DateTrip;
-import net.thumbtack.school.buscompany.model.Passenger;
 import net.thumbtack.school.buscompany.model.Place;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;

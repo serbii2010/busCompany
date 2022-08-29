@@ -1,6 +1,9 @@
 package net.thumbtack.school.buscompany.dto.request.order;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import net.thumbtack.school.buscompany.validator.DateFormat;
 import net.thumbtack.school.buscompany.validator.DateOrderInDatesTrip;
 

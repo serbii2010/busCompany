@@ -23,7 +23,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.servlet.http.Cookie;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

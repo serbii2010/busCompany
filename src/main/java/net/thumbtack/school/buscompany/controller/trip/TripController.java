@@ -2,8 +2,8 @@ package net.thumbtack.school.buscompany.controller.trip;
 
 import net.thumbtack.school.buscompany.dto.request.trip.TripDtoRequest;
 import net.thumbtack.school.buscompany.dto.response.account.EmptyDtoResponse;
-import net.thumbtack.school.buscompany.dto.response.trip.TripAdminDtoResponse;
 import net.thumbtack.school.buscompany.dto.response.trip.BaseTripDtoResponse;
+import net.thumbtack.school.buscompany.dto.response.trip.TripAdminDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.mappers.dto.trip.TripMapper;
 import net.thumbtack.school.buscompany.model.Trip;

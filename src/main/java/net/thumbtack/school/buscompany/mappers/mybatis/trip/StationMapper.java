@@ -1,6 +1,5 @@
 package net.thumbtack.school.buscompany.mappers.mybatis.trip;
 
-import net.thumbtack.school.buscompany.model.Bus;
 import net.thumbtack.school.buscompany.model.Station;
 import org.apache.ibatis.annotations.*;
 

@@ -12,7 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @ActiveProfiles("dev")
@@ -53,34 +54,34 @@ class TestScheduleService {
     void checkPeriod_daily() {
         String period = "daily";
         boolean result = scheduleService.checkPeriod(period);
-        assertEquals(true, result);
+        assertTrue(result);
     }
 
     @Test
     void checkPeriod_odd() {
         String period = "odd";
         boolean result = scheduleService.checkPeriod(period);
-        assertEquals(true, result);
+        assertTrue(result);
     }
 
     @Test
     void checkPeriod_even() {
         String period = "even";
         boolean result = scheduleService.checkPeriod(period);
-        assertEquals(true, result);
+        assertTrue(result);
     }
 
     @Test
     void checkPeriod_dayOfWeek() {
         String period = "Fri,Sat";
         boolean result = scheduleService.checkPeriod(period);
-        assertEquals(true, result);
+        assertTrue(result);
     }
 
     @Test
     void checkPeriod_dayOfMonth() {
         String period = "1,13,25,31";
         boolean result = scheduleService.checkPeriod(period);
-        assertEquals(true, result);
+        assertTrue(result);
     }
 }

@@ -1,6 +1,5 @@
 package net.thumbtack.school.buscompany.helper.dto.response.order;
 
-import net.thumbtack.school.buscompany.dto.request.order.PassengerDtoRequest;
 import net.thumbtack.school.buscompany.dto.response.order.OrderDtoResponse;
 import net.thumbtack.school.buscompany.dto.response.order.PassengerDtoResponse;
 

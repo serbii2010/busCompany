@@ -17,7 +17,6 @@ import net.thumbtack.school.buscompany.service.trip.ScheduleService;
 import net.thumbtack.school.buscompany.service.trip.StationService;
 import net.thumbtack.school.buscompany.service.trip.TripService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -36,6 +35,7 @@ import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = {TripController.class, TripHelper.class, DateTripHelper.class, AccountHelper.class})
@@ -76,7 +76,6 @@ class TestTripController {
         trip = tripHelper.getTrip();
     }
 
-    @Disabled
     @Test
     void testAddTrip_byDates() throws Exception {
         TripDtoRequest request = new TripDtoRequest(
@@ -366,7 +365,6 @@ class TestTripController {
         assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
     }
 
-    @Disabled
     @Test
     void testUpdate() throws Exception {
         TripDtoRequest request = new TripDtoRequest(
@@ -380,15 +378,12 @@ class TestTripController {
                 Collections.singletonList("2022-12-12")
         );
 
-        Mockito.when(tripService.findById("1")).thenReturn(tripHelper.getTrip());
-
-        MvcResult result = mvc.perform(put("/api/trips/1")
+        mvc.perform(put("/api/trips/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(request))
                 .cookie(cookie))
-                .andReturn();
-        assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -539,7 +534,6 @@ class TestTripController {
         assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
     }
 
-    @Disabled
     @Test
     void testApproveTrip() throws Exception {
         Mockito.when(tripService.findById("1")).thenReturn(tripHelper.getTrip());
@@ -552,9 +546,9 @@ class TestTripController {
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
     }
 
-    @Disabled
     @Test
     void testApproveTrip_tripNotFound() throws Exception {
+        Mockito.when(tripService.approved("1")).thenCallRealMethod();
         Mockito.when(tripService.findById("1")).thenThrow(new ServerException(ServerErrorCode.TRIP_NOT_FOUND));
 
         MvcResult result = mvc.perform(put("/api/trips/1/approve")
@@ -603,9 +597,9 @@ class TestTripController {
         assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
     }
 
-    @Disabled
     @Test
     void testDeleteTrip_notFoundTrip() throws Exception {
+        Mockito.when(tripService.delete("1")).thenCallRealMethod();
         Mockito.when(tripService.findById("1")).thenThrow(new ServerException(ServerErrorCode.TRIP_NOT_FOUND));
 
         MvcResult result = mvc.perform(delete("/api/trips/1")
@@ -616,9 +610,9 @@ class TestTripController {
         assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
     }
 
-    @Disabled
     @Test
     void testDeleteTrip_approvedTrip() throws Exception {
+        Mockito.when(tripService.delete("1")).thenCallRealMethod();
         Mockito.when(tripService.findById("1")).thenReturn(tripHelper.getTrip());
         Mockito.doThrow(new ServerException(ServerErrorCode.ACTION_FORBIDDEN)).when(tripService).checkNotApproved(tripHelper.getTrip());
 
@@ -655,9 +649,9 @@ class TestTripController {
         assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
     }
 
-    @Disabled
     @Test
     void testGetTrip_notFoundTrip() throws Exception {
+        Mockito.when(tripService.getTrip("1")).thenCallRealMethod();
         Mockito.when(tripService.findById("1")).thenThrow(new ServerException(ServerErrorCode.ACTION_FORBIDDEN));
 
         MvcResult result = mvc.perform(get("/api/trips/1")

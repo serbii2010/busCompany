@@ -14,8 +14,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import javax.servlet.http.Cookie;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -43,13 +43,12 @@ public class TripHelper {
         LocalDate fromDate = dateTripHelper.getDate();
         dateTripHelper.init("2022-12-12");
         LocalDate toDate = dateTripHelper.getDate();
-        //@todo
-//        schedule = new Schedule(1, fromDate, toDate, "odd", null);
-//        List<DateTrip> dates = new ArrayList<>();
-//        trip = new Trip(1, bus, fromStation, toStation, "12:30", "23:51", 30, false, schedule, dates);
-//
-//        dates.add(dateTripHelper.getDateTrip(trip));
-//        trip.setDates(dates);
+        schedule = new Schedule(1, fromDate, toDate, "odd", null);
+        List<DateTrip> dates = new ArrayList<>();
+        trip = new Trip(1, bus, fromStation, toStation, LocalTime.of(12, 30), LocalTime.of(23, 51), 30, false, schedule, dates);
+
+        dates.add(dateTripHelper.getDateTrip(trip));
+        trip.setDates(dates);
     }
 
     public static int insertTrip(TripDtoRequest requestTrip, Cookie cookie, MockMvc mvc, ObjectMapper mapper) throws Exception {

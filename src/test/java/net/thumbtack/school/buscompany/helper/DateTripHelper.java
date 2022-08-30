@@ -8,10 +8,7 @@ import net.thumbtack.school.buscompany.model.DateTrip;
 import net.thumbtack.school.buscompany.model.Trip;
 import org.springframework.stereotype.Component;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Locale;
 
 @Getter
 @Setter
@@ -26,12 +23,7 @@ public class DateTripHelper {
     }
 
     public void init(String dateString) {
-        //@todo
-//        try {
-//            date = (new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)).parse(dateString);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
+        date = LocalDate.parse(dateString);
     }
 
     public DateTrip getDateTrip(Trip trip) {

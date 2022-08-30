@@ -1,44 +1,118 @@
 package net.thumbtack.school.buscompany.service.account;
 
 import net.thumbtack.school.buscompany.daoImpl.account.AccountDaoImpl;
+import net.thumbtack.school.buscompany.daoImpl.account.SessionDaoImpl;
+import net.thumbtack.school.buscompany.dto.request.account.*;
+import net.thumbtack.school.buscompany.dto.response.account.*;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
+import net.thumbtack.school.buscompany.mappers.dto.account.AdminMapper;
+import net.thumbtack.school.buscompany.mappers.dto.account.ClientMapper;
+import net.thumbtack.school.buscompany.model.Session;
 import net.thumbtack.school.buscompany.model.account.Account;
 import net.thumbtack.school.buscompany.model.account.Admin;
 import net.thumbtack.school.buscompany.model.account.Client;
 import net.thumbtack.school.buscompany.utils.UserTypeEnum;
-import org.apache.commons.collections4.BidiMap;
-import org.apache.commons.collections4.bidimap.DualHashBidiMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class AccountService {
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class);
     @Autowired
     private AccountDaoImpl accountDao;
+    @Autowired
+    private SessionDaoImpl sessionDao;
 
-    private final BidiMap<Account, UUID> authUsers = new DualHashBidiMap<>();
+    @Value("${user_idle_timeout}")
+    private int userIdleTimeout;
 
-
-    public Admin registrationAdmin(Admin account) {
-        account.setUserType(UserTypeEnum.ADMIN);
-        account.setPassword(convertToMd5(account.getPassword()));
-        return (Admin) accountDao.insert(account);
+    public RegistrationAdminDtoResponse registrationAdmin(RegistrationAdminDtoRequest request, HttpServletResponse response) throws ServerException {
+        Admin admin = AdminMapper.INSTANCE.registrationAdminDtoToAccount(request);
+        admin.setUserType(UserTypeEnum.ADMIN);
+        admin.setPassword(convertToMd5(admin.getPassword()));
+        accountDao.insert(admin);
+        LOGGER.debug("administrator registered");
+        LoginDtoRequest loginDtoRequest = new LoginDtoRequest(admin.getLogin(), admin.getPassword());
+        Session session = getSessionByLogin(loginDtoRequest.getLogin());
+        response.addCookie(new Cookie("JAVASESSIONID", session.getSessionId()));
+        return AdminMapper.INSTANCE.accountToDto(admin);
     }
 
-    public Client registrationClient(Client account) {
-        account.setUserType(UserTypeEnum.CLIENT);
-        account.setPassword(convertToMd5(account.getPassword()));
-        return (Client) accountDao.insert(account);
+    public RegistrationClientDtoResponse registrationClient(RegistrationClientDtoRequest request, HttpServletResponse response) throws ServerException {
+        Client client = ClientMapper.INSTANCE.registrationDtoToAccount(request);
+        client.setUserType(UserTypeEnum.CLIENT);
+        client.setPassword(convertToMd5(client.getPassword()));
+        accountDao.insert(client);
+        LOGGER.debug("client registered");
+        LoginDtoRequest loginDtoRequest = new LoginDtoRequest(client.getLogin(), client.getPassword());
+        Session session = getSessionByLogin(loginDtoRequest.getLogin());
+        response.addCookie(new Cookie("JAVASESSIONID", session.getSessionId()));
+        return ClientMapper.INSTANCE.accountToDto(client);
+    }
+
+    public BaseAccountInfoDtoResponse getInfo(String javaSessionId) throws ServerException {
+        Account account = getAuthAccount(javaSessionId);
+
+        if (account.getUserType() == UserTypeEnum.CLIENT) {
+            return ClientMapper.INSTANCE.accountToDtoInfo(findClient(account));
+        } else if (account.getUserType() == UserTypeEnum.ADMIN) {
+            return AdminMapper.INSTANCE.accountToDtoInfo(findAdmin(account));
+        } else {
+            throw new ServerException(ServerErrorCode.USER_NOT_AUTHORIZATION);
+        }
+    }
+
+    public List<InfoClientDtoResponse> getClients() throws ServerException {
+        List<InfoClientDtoResponse> result = new ArrayList<>();
+
+        List<Client> accountsClient = accountDao.findClients();
+        for (Account acc : accountsClient) {
+            result.add(ClientMapper.INSTANCE.accountToDtoInfo(findClient(acc)));
+        }
+        return result;
+    }
+
+    public EditAdministratorDtoResponse updateAdmin(EditAdministratorDtoRequest request, String javaSessionId) throws ServerException {
+        Account account = getAuthAccount(javaSessionId);
+        if (account.getUserType() != UserTypeEnum.ADMIN) {
+            throw new ServerException(ServerErrorCode.ACTION_FORBIDDEN);
+        }
+        Admin admin = findAdmin(account);
+
+        AdminMapper.INSTANCE.update(admin, request, this);
+        updateAccount(admin);
+        LOGGER.debug("admin updated");
+        return AdminMapper.INSTANCE.accountEditToDto(admin);
+    }
+
+    public EditClientDtoResponse updateClient(EditClientDtoRequest request, String javaSessionId) throws ServerException {
+        Account account = getAuthAccount(javaSessionId);
+        if (account.getUserType() != UserTypeEnum.CLIENT) {
+            throw new ServerException(ServerErrorCode.ACTION_FORBIDDEN);
+        }
+        Client client = findClient(getAuthAccount(javaSessionId));
+        ClientMapper.INSTANCE.update(client, request, this);
+        updateAccount(client);
+        LOGGER.debug("client updated");
+        return ClientMapper.INSTANCE.accountEditToDto(client);
+    }
+
+    public EmptyDtoResponse deleteAccount(String javaSessionId) throws ServerException {
+        Account account = getAuthAccount(javaSessionId);
+        logout(javaSessionId);
+        deleteAccount(account);
+        return new EmptyDtoResponse();
     }
 
     public void updateAccount(Account account) {
@@ -62,7 +136,11 @@ public class AccountService {
     }
 
     public Account getAuthAccount(String uuid) throws ServerException {
-        Account account = authUsers.getKey(UUID.fromString(uuid));
+        Session session = getSession(uuid);
+        if (session == null) {
+            throw new ServerException(ServerErrorCode.USER_NOT_AUTHORIZATION);
+        }
+        Account account = session.getAccount();
         if (account == null) {
             throw new ServerException(ServerErrorCode.USER_NOT_AUTHORIZATION);
         }
@@ -77,31 +155,43 @@ public class AccountService {
         return accountDao.findClient(account);
     }
 
+    public BaseAccountDtoResponse login(LoginDtoRequest request, HttpServletResponse response)
+            throws ServerException {
 
-    public List<Client> getClients() throws ServerException {
-        return accountDao.findClients();
+
+        Account account = getAccountByLogin(request.getLogin());
+        checkPassword(account, request.getPassword());
+
+        Session session = getSessionByLogin(request.getLogin());
+
+        response.addCookie(new Cookie("JAVASESSIONID", session.getSessionId()));
+        if (account.getUserType() == UserTypeEnum.ADMIN) {
+            LOGGER.debug("admin log in");
+            return AdminMapper.INSTANCE.accountToDto(findAdmin(account));
+        } else {
+            LOGGER.debug("client log in");
+            return ClientMapper.INSTANCE.accountToDto(findClient(account));
+        }
     }
 
-    public void login(Account user, HttpServletResponse response) {
-        if (user.getId() == 0) {
-            return;
+    public void logout(String javaSessionId) throws ServerException {
+        Session session = sessionDao.findBySessionId(javaSessionId);
+        if (session != null) {
+            sessionDao.remove(session);
         }
-        UUID uuid = UUID.randomUUID();
-        UUID result = authUsers.putIfAbsent(user, uuid);
-        if (result == null) {
-            result = uuid;
-        }
-        Cookie cookie = new Cookie("JAVASESSIONID", result.toString());
-        response.addCookie(cookie);
     }
 
-    public void logout(String javaSessionId) {
-        UUID uuid = UUID.fromString(javaSessionId);
-        if (!authUsers.containsValue(uuid)) {
-            return;
+    public Session getSession(String sessionId) throws ServerException {
+        Session session = sessionDao.findBySessionId(sessionId);
+        if (session != null) {
+            if ((session.getLastAction().plusMinutes(userIdleTimeout).compareTo(LocalDateTime.now())) >= 0) {
+                session.setLastAction(LocalDateTime.now());
+                sessionDao.update(session);
+                return session;
+            }
+            sessionDao.remove(session);
         }
-        LOGGER.debug("User {} logout", authUsers.getKey(uuid).getLogin());
-        authUsers.removeValue(uuid);
+        throw new ServerException(ServerErrorCode.USER_NOT_AUTHORIZATION);
     }
 
     public void checkPassword(Account account, String password) throws ServerException {
@@ -132,15 +222,27 @@ public class AccountService {
         return account.getUserType().getType().equals(UserTypeEnum.CLIENT.getType());
     }
 
-    public boolean isAuth(String javaSessionId) {
-        return authUsers.containsValue(UUID.fromString(javaSessionId));
-    }
-
     public void setPassword(Account account, String newPassword) {
         account.setPassword(convertToMd5(newPassword));
     }
 
     private String convertToMd5(String text) {
         return DigestUtils.md5DigestAsHex(text.getBytes());
+    }
+
+    private Session getSessionByLogin(String login) throws ServerException {
+        Account account = accountDao.findByLogin(login);
+        if (account == null) {
+            throw new ServerException(ServerErrorCode.USER_NOT_FOUND);
+        }
+        Session session = sessionDao.findByAccountId(account.getId());
+        if (session == null) {
+            session = new Session(account);
+            sessionDao.insert(session);
+            return session;
+        }
+        session.setLastAction(LocalDateTime.now());
+        sessionDao.update(session);
+        return session;
     }
 }

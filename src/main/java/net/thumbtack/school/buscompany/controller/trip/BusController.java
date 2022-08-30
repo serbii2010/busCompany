@@ -2,8 +2,6 @@ package net.thumbtack.school.buscompany.controller.trip;
 
 import net.thumbtack.school.buscompany.dto.response.trip.BusDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerException;
-import net.thumbtack.school.buscompany.mappers.dto.trip.BusMapper;
-import net.thumbtack.school.buscompany.model.Bus;
 import net.thumbtack.school.buscompany.service.account.AccountService;
 import net.thumbtack.school.buscompany.service.trip.BusService;
 import org.slf4j.Logger;
@@ -13,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -31,10 +28,6 @@ public class BusController {
     public List<BusDtoResponse> getBuses(@CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
         accountService.checkAdmin(javaSessionId);
 
-        List<BusDtoResponse> responseList = new ArrayList<>();
-        for (Bus bus: busService.getBuses()) {
-            responseList.add(BusMapper.INSTANCE.busToDto(bus));
-        }
-        return responseList;
+        return busService.getBuses();
     }
 }

@@ -14,6 +14,7 @@ import net.thumbtack.school.buscompany.helper.dto.response.EmptyResponseHelper;
 import net.thumbtack.school.buscompany.helper.dto.response.trip.TripDtoResponseHelper;
 import net.thumbtack.school.buscompany.service.DebugService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -58,6 +59,7 @@ class TestIntegrationTripController {
         cookieClient = new Cookie("JAVASESSIONID", AccountHelper.registrationClient(mvc, mapper));
     }
 
+    @Disabled
     @Test
     void addTrip_withDates() throws Exception {
         TripDtoRequest request = TripDtoRequestHelper.getWithDates();
@@ -73,6 +75,7 @@ class TestIntegrationTripController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void addTrip_withScheduleWeek() throws Exception {
         TripDtoRequest request = TripDtoRequestHelper.getWithScheduleWeek();
@@ -88,6 +91,7 @@ class TestIntegrationTripController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void addTrip_withScheduleOdd() throws Exception {
         TripDtoRequest request = TripDtoRequestHelper.getWithScheduleOdd();
@@ -103,6 +107,7 @@ class TestIntegrationTripController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void addTrip_withScheduleDaily() throws Exception {
         TripDtoRequest request = TripDtoRequestHelper.getWithScheduleDaily();
@@ -118,6 +123,7 @@ class TestIntegrationTripController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void addTrip_withScheduleEven() throws Exception {
         TripDtoRequest request = TripDtoRequestHelper.getWithScheduleEven();
@@ -133,6 +139,7 @@ class TestIntegrationTripController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void addTrip_withScheduleMonth() throws Exception {
         TripDtoRequest request = TripDtoRequestHelper.getWithScheduleDayInMonth();
@@ -148,6 +155,7 @@ class TestIntegrationTripController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void update_scheduleWeekToScheduleEven() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
@@ -166,6 +174,7 @@ class TestIntegrationTripController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void approveTrip() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
@@ -181,6 +190,7 @@ class TestIntegrationTripController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void deleteTrip() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
@@ -197,6 +207,7 @@ class TestIntegrationTripController {
 
     }
 
+    @Disabled
     @Test
     void getTrip() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
@@ -212,6 +223,7 @@ class TestIntegrationTripController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void getTrips_allByAdmin() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
@@ -234,6 +246,7 @@ class TestIntegrationTripController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void getTrips_allEmptyByClient() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
@@ -252,6 +265,7 @@ class TestIntegrationTripController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void getTrips_allByClient() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
@@ -276,6 +290,7 @@ class TestIntegrationTripController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void getTrips_fromStation() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
@@ -299,6 +314,7 @@ class TestIntegrationTripController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void getTrips_fromStationNotFound() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
@@ -318,6 +334,7 @@ class TestIntegrationTripController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void getTrips_toStation() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
@@ -341,6 +358,7 @@ class TestIntegrationTripController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void getTrips_toStationNotFound() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
@@ -360,6 +378,7 @@ class TestIntegrationTripController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void getTrips_busName() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
@@ -383,6 +402,7 @@ class TestIntegrationTripController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void getTrips_busNameNotFound() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
@@ -402,6 +422,7 @@ class TestIntegrationTripController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void getTrips_fromDate() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
@@ -425,6 +446,7 @@ class TestIntegrationTripController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void getTrips_fromDateFound() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
@@ -444,6 +466,7 @@ class TestIntegrationTripController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void getTrips_toDate() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
@@ -467,6 +490,7 @@ class TestIntegrationTripController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void getTrips_toDateFound() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
@@ -486,6 +510,7 @@ class TestIntegrationTripController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void getTrips_fromToDate() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
@@ -510,6 +535,7 @@ class TestIntegrationTripController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void getTrips_allFilter() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
@@ -537,6 +563,7 @@ class TestIntegrationTripController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void getTrips_allFilterFromStationNotFound() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
@@ -560,6 +587,7 @@ class TestIntegrationTripController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void getTrips_allFilterToStationNotFound() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
@@ -583,6 +611,7 @@ class TestIntegrationTripController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void getTrips_allFilterBusNotFound() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();

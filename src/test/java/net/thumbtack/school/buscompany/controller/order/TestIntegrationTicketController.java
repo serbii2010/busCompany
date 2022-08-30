@@ -11,6 +11,7 @@ import net.thumbtack.school.buscompany.helper.dto.response.ErrorDtoResponseHelpe
 import net.thumbtack.school.buscompany.helper.dto.response.order.TicketDtoResponseHelper;
 import net.thumbtack.school.buscompany.service.DebugService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -59,6 +60,7 @@ public class TestIntegrationTicketController {
         orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);
     }
 
+    @Disabled
     @Test
     public void getFreePlaces() throws Exception {
         List<Integer> response = TicketDtoResponseHelper.getFreePlaces();
@@ -72,6 +74,7 @@ public class TestIntegrationTicketController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     public void insertTicket() throws Exception {
         TicketDtoRequest request = TicketDtoRequestHelper.getInsert();
@@ -96,6 +99,7 @@ public class TestIntegrationTicketController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     public void insertTicket_takenPlace() throws Exception {
         TicketDtoRequest request = TicketDtoRequestHelper.getInsert();
@@ -122,6 +126,7 @@ public class TestIntegrationTicketController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     public void insertTicket_reinsertPlace() throws Exception {
         TicketDtoRequest request = TicketDtoRequestHelper.getInsert();

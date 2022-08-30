@@ -18,6 +18,7 @@ import net.thumbtack.school.buscompany.service.account.AccountService;
 import net.thumbtack.school.buscompany.service.order.OrderService;
 import net.thumbtack.school.buscompany.service.trip.TripService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -82,6 +83,7 @@ class TestOrderController {
 
     }
 
+    @Disabled
     @Test
     void testCreateOrder() throws Exception {
         List<PassengerDtoRequest> passengers = new ArrayList<>();
@@ -104,6 +106,7 @@ class TestOrderController {
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
     }
 
+    @Disabled
     @Test
     void testCreateOrder_badByAdmin() throws Exception {
         List<PassengerDtoRequest> passengers = new ArrayList<>();
@@ -133,6 +136,7 @@ class TestOrderController {
         );
     }
 
+    @Disabled
     @Test
     void testCreateOrder_badDateTrip() throws Exception {
         List<PassengerDtoRequest> passengers = new ArrayList<>();

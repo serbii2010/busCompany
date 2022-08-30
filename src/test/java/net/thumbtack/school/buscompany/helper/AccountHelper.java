@@ -12,6 +12,8 @@ import net.thumbtack.school.buscompany.helper.dto.request.account.LoginAdminDtoR
 import net.thumbtack.school.buscompany.helper.dto.request.account.LoginClientDtoRequestHelper;
 import net.thumbtack.school.buscompany.helper.dto.request.account.RegistrationAdminDtoRequestHelper;
 import net.thumbtack.school.buscompany.helper.dto.request.account.RegistrationClientDtoRequestHelper;
+import net.thumbtack.school.buscompany.model.Session;
+import net.thumbtack.school.buscompany.model.account.Account;
 import net.thumbtack.school.buscompany.model.account.Admin;
 import net.thumbtack.school.buscompany.model.account.Client;
 import net.thumbtack.school.buscompany.utils.UserTypeEnum;
@@ -21,7 +23,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import javax.servlet.http.Cookie;
+import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -34,6 +38,8 @@ public class AccountHelper {
     private Admin admin;
     private Client client;
     private Cookie cookie;
+    private Session session;
+    private Session sessionClient;
 
     public void init() {
         this.admin = new Admin(
@@ -57,7 +63,10 @@ public class AccountHelper {
                 "88005553535",
                 1);
 
-        this.cookie = new Cookie("JAVASESSIONID", "sessionId");
+        this.cookie = new Cookie("JAVASESSIONID", UUID.randomUUID().toString());
+
+        this.session = new Session(1, admin, cookie.getValue(), LocalDateTime.now());
+        this.sessionClient = new Session(1, client, cookie.getValue(), LocalDateTime.now());
     }
 
     public static String registrationAdmin(String login, MockMvc mvc, ObjectMapper mapper) throws Exception {

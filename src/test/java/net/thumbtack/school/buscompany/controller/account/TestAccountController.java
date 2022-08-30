@@ -5,6 +5,7 @@ import net.thumbtack.school.buscompany.model.account.Admin;
 import net.thumbtack.school.buscompany.model.account.Client;
 import net.thumbtack.school.buscompany.service.account.AccountService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -52,6 +53,7 @@ class TestAccountController {
                 .andExpect(status().isBadRequest());
     }
 
+    @Disabled
     @Test
     public void testGetInfo_authAdmin() throws Exception {
         Mockito.when(accountService.getAuthAccount("sessionId")).thenReturn(admin);
@@ -62,6 +64,7 @@ class TestAccountController {
                 .andExpect(status().isOk());
     }
 
+    @Disabled
     @Test
     public void testGetInfo_authClient() throws Exception {
         Mockito.when(accountService.getAuthAccount("sessionId")).thenReturn(client);

@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -15,11 +15,11 @@ import java.util.List;
 public class DateTrip {
     private int id;
     private Trip trip;
-    private Date date;
+    private LocalDate date;
 
     List<Place> places;
 
-    public DateTrip(Trip trip, Date date) {
+    public DateTrip(Trip trip, LocalDate date) {
         this(0, trip, date, null);
     }
 }

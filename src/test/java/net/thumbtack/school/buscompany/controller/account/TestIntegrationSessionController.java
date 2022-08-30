@@ -11,6 +11,7 @@ import net.thumbtack.school.buscompany.helper.dto.response.account.InfoAdminDtoR
 import net.thumbtack.school.buscompany.helper.dto.response.account.InfoClientDtoResponseHelper;
 import net.thumbtack.school.buscompany.service.DebugService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -41,6 +42,7 @@ class TestIntegrationSessionController {
         debugService.clear();
     }
 
+    @Disabled
     @Test
     void login_admin() throws Exception {
         AccountHelper.registrationAdmin("admin", mvc, mapper);
@@ -68,6 +70,7 @@ class TestIntegrationSessionController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void login_client() throws Exception {
         AccountHelper.registrationClient(mvc, mapper);
@@ -95,6 +98,7 @@ class TestIntegrationSessionController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void logout_client() throws Exception {
         AccountHelper.registrationClient(mvc, mapper);
@@ -108,6 +112,7 @@ class TestIntegrationSessionController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     void logout_admin() throws Exception {
         AccountHelper.registrationAdmin("admin", mvc, mapper);

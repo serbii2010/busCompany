@@ -12,6 +12,7 @@ import net.thumbtack.school.buscompany.helper.dto.response.account.RegistrationA
 import net.thumbtack.school.buscompany.helper.dto.response.account.UpdateAdminDtoResponseHelper;
 import net.thumbtack.school.buscompany.service.DebugService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -59,6 +60,7 @@ class TestIntegrationAdminController {
 
     }
 
+    @Disabled
     @Test
     public void updateAdmin() throws Exception {
         String javaSessionId = AccountHelper.registrationAdmin("admin", mvc, mapper);

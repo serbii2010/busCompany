@@ -8,6 +8,7 @@ import net.thumbtack.school.buscompany.helper.dto.response.account.InfoAdminDtoR
 import net.thumbtack.school.buscompany.helper.dto.response.account.InfoClientDtoResponseHelper;
 import net.thumbtack.school.buscompany.service.DebugService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,7 @@ class TestIntegrationAccountController {
                 .andExpect(status().isBadRequest());
     }
 
+    @Disabled
     @Test
     public void getInfo_admin() throws Exception {
         String javaSessionId = AccountHelper.registrationAdmin("admin", mvc, mapper);
@@ -62,6 +64,7 @@ class TestIntegrationAccountController {
                 .andExpect(content().json(mapper.writeValueAsString(response)));
     }
 
+    @Disabled
     @Test
     public void getInfo_client() throws Exception {
         String javaSessionId = AccountHelper.registrationClient(mvc, mapper);
@@ -75,6 +78,7 @@ class TestIntegrationAccountController {
                 .andExpect(content().json(mapper.writeValueAsString(response)));
     }
 
+    @Disabled
     @Test
     public void deleteAccount_admin() throws Exception {
         AccountHelper.registrationAdmin("firstAdmin", mvc, mapper);
@@ -88,6 +92,7 @@ class TestIntegrationAccountController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     public void deleteAccount_lastAdmin() throws Exception {
         String javaSessionId = AccountHelper.registrationAdmin("admin", mvc, mapper);
@@ -99,6 +104,7 @@ class TestIntegrationAccountController {
                 .andExpect(status().isBadRequest());
     }
 
+    @Disabled
     @Test
     public void deleteAccount_client() throws Exception {
         String javaSessionId = AccountHelper.registrationClient(mvc, mapper);

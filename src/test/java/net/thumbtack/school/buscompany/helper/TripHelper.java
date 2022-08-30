@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.servlet.http.Cookie;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,15 +40,16 @@ public class TripHelper {
         toStation = new Station(2, "novosibirsk");
 
         dateTripHelper.init("2021-12-12");
-        Date fromDate = dateTripHelper.getDate();
+        LocalDate fromDate = dateTripHelper.getDate();
         dateTripHelper.init("2022-12-12");
-        Date toDate = dateTripHelper.getDate();
-        schedule = new Schedule(1, fromDate, toDate, "odd", null);
-        List<DateTrip> dates = new ArrayList<>();
-        trip = new Trip(1, bus, fromStation, toStation, "12:30", "23:51", 30, false, schedule, dates);
-
-        dates.add(dateTripHelper.getDateTrip(trip));
-        trip.setDates(dates);
+        LocalDate toDate = dateTripHelper.getDate();
+        //@todo
+//        schedule = new Schedule(1, fromDate, toDate, "odd", null);
+//        List<DateTrip> dates = new ArrayList<>();
+//        trip = new Trip(1, bus, fromStation, toStation, "12:30", "23:51", 30, false, schedule, dates);
+//
+//        dates.add(dateTripHelper.getDateTrip(trip));
+//        trip.setDates(dates);
     }
 
     public static int insertTrip(TripDtoRequest requestTrip, Cookie cookie, MockMvc mvc, ObjectMapper mapper) throws Exception {

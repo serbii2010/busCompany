@@ -41,6 +41,18 @@ CREATE TABLE client
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;
 
+CREATE TABLE session
+(
+    id          INT(11)     NOT NULL AUTO_INCREMENT,
+    account_id  INT(11)     NOT NULL,
+    session_id  VARCHAR(36) NOT NULL,
+    last_action DATETIME    NOT NULL,
+    PRIMARY KEY (id),
+    INDEX (session_id),
+    UNIQUE uniq_account (account_id),
+    FOREIGN KEY (account_id) REFERENCES account (id) ON DELETE CASCADE
+);
+
 ####### Tables from tickets ########
 CREATE TABLE bus
 (
@@ -61,8 +73,7 @@ CREATE TABLE station
 (
     id   INT(11)     NOT NULL AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL,
-    UNIQUE KEY login (name),
-    INDEX (name),
+    UNIQUE KEY uniq_station (name),
     PRIMARY KEY (id)
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;
@@ -71,27 +82,12 @@ CREATE TABLE station
 INSERT INTO station (name) VALUE ('Omsk');
 INSERT INTO station (name) VALUE ('Новосибирск');
 
-CREATE TABLE schedule
-(
-    id        INT(11)     NOT NULL AUTO_INCREMENT,
-    from_date DATE        NOT NULL,
-    to_date   DATE        NOT NULL,
-    periods   VARCHAR(30) NOT NULL,
-    PRIMARY KEY (id),
-    UNIQUE KEY uniq_schedule (from_date, to_date, periods),
-    INDEX (from_date),
-    INDEX (to_date),
-    INDEX (periods)
-) ENGINE = INNODB
-  DEFAULT CHARSET = utf8;
-
 CREATE TABLE trip
 (
     id              INT(11)     NOT NULL AUTO_INCREMENT,
     bus_id          INT(11)     NULL     DEFAULT NULL,
     from_station_id INT(11)     NULL     DEFAULT NULL,
     to_station_id   INT(11)     NULL     DEFAULT NULL,
-    schedule_id     INT(11)     NULL     DEFAULT NULL,
     start           VARCHAR(30) NOT NULL,
     duration        VARCHAR(30) NOT NULL,
     price           INT(11),
@@ -99,8 +95,22 @@ CREATE TABLE trip
     PRIMARY KEY (id),
     FOREIGN KEY (bus_id) REFERENCES bus (id) ON DELETE SET NULL,
     FOREIGN KEY (from_station_id) REFERENCES station (id) ON DELETE SET NULL,
-    FOREIGN KEY (to_station_id) REFERENCES station (id) ON DELETE SET NULL,
-    FOREIGN KEY (schedule_id) REFERENCES schedule (id) ON DELETE SET NULL
+    FOREIGN KEY (to_station_id) REFERENCES station (id) ON DELETE SET NULL
+) ENGINE = INNODB
+  DEFAULT CHARSET = utf8;
+
+CREATE TABLE schedule
+(
+    id        INT(11)     NOT NULL AUTO_INCREMENT,
+    from_date DATE        NOT NULL,
+    to_date   DATE        NOT NULL,
+    periods   VARCHAR(30) NOT NULL,
+    trip_id   INT(11)     NOT NULL,
+    PRIMARY KEY (id),
+    INDEX (from_date),
+    INDEX (to_date),
+    INDEX (periods),
+    FOREIGN KEY (trip_id) REFERENCES trip (id) ON DELETE CASCADE
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;
 
@@ -130,9 +140,9 @@ CREATE TABLE passenger
 
 CREATE TABLE orders
 (
-    id         INT(11) NOT NULL AUTO_INCREMENT,
-    date_trip_id    INT(11) NULL DEFAULT NULL,
-    client_id INT(11) NULL DEFAULT NULL,
+    id           INT(11) NOT NULL AUTO_INCREMENT,
+    date_trip_id INT(11) NULL DEFAULT NULL,
+    client_id    INT(11) NULL DEFAULT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (date_trip_id) REFERENCES date_trip (id) ON DELETE CASCADE,
     FOREIGN KEY (client_id) REFERENCES client (id) ON DELETE CASCADE
@@ -153,8 +163,8 @@ CREATE TABLE order_passenger
 
 CREATE TABLE place
 (
-    id      INT(11) NOT NULL AUTO_INCREMENT,
-    number INT(3) NOT NULL,
+    id           INT(11) NOT NULL AUTO_INCREMENT,
+    number       INT(3)  NOT NULL,
     date_trip_id INT(11) NOT NULL,
     passenger_id INT(11) NULL DEFAULT NULL,
     PRIMARY KEY (id),

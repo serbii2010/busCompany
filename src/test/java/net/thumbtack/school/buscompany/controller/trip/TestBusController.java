@@ -1,5 +1,6 @@
 package net.thumbtack.school.buscompany.controller.trip;
 
+import net.thumbtack.school.buscompany.dto.response.trip.BusDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.helper.AccountHelper;
@@ -57,7 +58,7 @@ class TestBusController {
 
     @Test
     void testGetBuses() throws Exception {
-        Mockito.when(busService.getBuses()).thenReturn(Collections.singletonList(bus));
+        Mockito.when(busService.getBuses()).thenReturn(Collections.singletonList(new BusDtoResponse(bus.getName(), bus.getPlaceCount())));
         MvcResult result = mvc.perform(get("/api/buses")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -80,7 +81,7 @@ class TestBusController {
 
     @Test
     void testGetBuses_badCookie() throws Exception {
-        Mockito.when(busService.getBuses()).thenReturn(Collections.singletonList(bus));
+        Mockito.when(busService.getBuses()).thenReturn(Collections.singletonList(new BusDtoResponse(bus.getName(), bus.getPlaceCount())));
         MvcResult result = mvc.perform(get("/api/buses")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))

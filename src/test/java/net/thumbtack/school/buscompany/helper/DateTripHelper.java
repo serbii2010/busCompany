@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Locale;
 
 @Getter
@@ -19,18 +19,19 @@ import java.util.Locale;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DateTripHelper {
-    private Date date;
+    private LocalDate date;
 
     public void init() {
         init("2021-12-12");
     }
 
     public void init(String dateString) {
-        try {
-            date = (new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)).parse(dateString);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        //@todo
+//        try {
+//            date = (new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)).parse(dateString);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public DateTrip getDateTrip(Trip trip) {

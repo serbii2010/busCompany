@@ -2,24 +2,55 @@ package net.thumbtack.school.buscompany.service.order;
 
 import net.thumbtack.school.buscompany.daoImpl.order.PassengerDaoImpl;
 import net.thumbtack.school.buscompany.daoImpl.trip.PlaceDaoImpl;
+import net.thumbtack.school.buscompany.dto.request.order.TicketDtoRequest;
+import net.thumbtack.school.buscompany.dto.response.order.TicketDtoResponse;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
+import net.thumbtack.school.buscompany.mappers.dto.order.TicketMapper;
 import net.thumbtack.school.buscompany.model.DateTrip;
+import net.thumbtack.school.buscompany.model.Order;
 import net.thumbtack.school.buscompany.model.Passenger;
 import net.thumbtack.school.buscompany.model.Place;
+import net.thumbtack.school.buscompany.model.account.Account;
+import net.thumbtack.school.buscompany.model.account.Client;
+import net.thumbtack.school.buscompany.service.account.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TicketService {
+    @Autowired
+    private AccountService accountService;
+    @Autowired
+    private OrderService orderService;
     @Autowired
     private PlaceDaoImpl placeDao;
     @Autowired
     private PassengerDaoImpl passengerDao;
 
-    public Place choose(Place ticket) {
+    public List<Integer> getFreePlace(String javaSessionId, String id) throws ServerException {
+        Account account = accountService.getAuthAccount(javaSessionId);
+        Client client = accountService.findClient(account);
+        Order order = orderService.findById(id);
+        orderService.checkAccount(order, client);
+        return orderService.getFreePlaces(order);
+    }
+
+    public TicketDtoResponse insertTicket(String javaSessionId, TicketDtoRequest request) throws ServerException {
+        Passenger passenger = getPassenger(request.getFirstName(), request.getLastName(), request.getPassport());
+        Order order = orderService.findById(request.getOrderId());
+        Account account = accountService.getAuthAccount(javaSessionId);
+        Client client = accountService.findClient(account);
+        if (!order.getClient().equals(client)) {
+            throw new ServerException(ServerErrorCode.ACTION_FORBIDDEN);
+        }
+        Place ticket = findPlace(Integer.parseInt(request.getPlace()), order.getDateTrip());
+        ticket.setPassenger(passenger);
+
         placeDao.update(ticket);
-        return ticket;
+        return TicketMapper.INSTANCE.tickerToDto(ticket, order, passenger);
     }
 
     public Passenger getPassenger(String firstName, String lastName, String passport) throws ServerException {
@@ -40,4 +71,5 @@ public class TicketService {
         }
         return place;
     }
+
 }

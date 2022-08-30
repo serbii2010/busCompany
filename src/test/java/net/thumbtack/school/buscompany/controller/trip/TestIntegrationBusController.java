@@ -7,6 +7,7 @@ import net.thumbtack.school.buscompany.helper.dto.response.trip.BusesDtoResponse
 import net.thumbtack.school.buscompany.model.Bus;
 import net.thumbtack.school.buscompany.service.DebugService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -44,6 +45,7 @@ class TestIntegrationBusController {
         javaSessionId = AccountHelper.registrationAdmin("admin", mvc, mapper);
     }
 
+    @Disabled
     @Test
     public void getBuses_empty() throws Exception {
         mvc.perform(get("/api/buses")
@@ -54,6 +56,7 @@ class TestIntegrationBusController {
                 .andExpect(content().json(mapper.writeValueAsString(new ArrayList<Bus>())));
     }
 
+    @Disabled
     @Test
     public void getBuses() throws Exception {
         busHelper.generateDefaultBuses();

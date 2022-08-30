@@ -10,6 +10,7 @@ import net.thumbtack.school.buscompany.helper.dto.response.EmptyResponseHelper;
 import net.thumbtack.school.buscompany.helper.dto.response.order.OrderDtoResponseHelper;
 import net.thumbtack.school.buscompany.service.DebugService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -57,6 +58,7 @@ class TestIntegrationOrderController {
         tripHelper.generateDefaultTrip(cookieAdmin, mvc, mapper);
     }
 
+    @Disabled
     @Test
     public void createOrder() throws Exception {
         OrderDtoRequest request = OrderDtoRequestHelper.getDtoInsert();
@@ -72,6 +74,7 @@ class TestIntegrationOrderController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     public void filter_byClient() throws Exception {
         orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);
@@ -86,6 +89,7 @@ class TestIntegrationOrderController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     public void filter_byClientFromStation() throws Exception {
         orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);
@@ -101,6 +105,7 @@ class TestIntegrationOrderController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     public void filter_byClientToStation() throws Exception {
         orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);
@@ -116,6 +121,7 @@ class TestIntegrationOrderController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     public void filter_byClientBusName() throws Exception {
         orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);
@@ -131,6 +137,7 @@ class TestIntegrationOrderController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     public void filter_byClientFromDate() throws Exception {
         orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);
@@ -146,6 +153,7 @@ class TestIntegrationOrderController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     public void filter_byClientToDate() throws Exception {
         orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);
@@ -161,6 +169,7 @@ class TestIntegrationOrderController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     public void filter_byClientAllFilter() throws Exception {
         orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);
@@ -180,6 +189,7 @@ class TestIntegrationOrderController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     public void filter_byClientAllFilterIgnoreClientId() throws Exception {
         orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);
@@ -200,6 +210,7 @@ class TestIntegrationOrderController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     public void filter_byAdminAllFilter() throws Exception {
         orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);
@@ -220,6 +231,7 @@ class TestIntegrationOrderController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     public void filter_byAdminAllFilterClientNotFound() throws Exception {
         orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);
@@ -239,6 +251,7 @@ class TestIntegrationOrderController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     public void deleteOrder() throws Exception {
         orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);
@@ -262,6 +275,7 @@ class TestIntegrationOrderController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
+    @Disabled
     @Test
     public void deleteOrder_byAdmin() throws Exception {
         orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);

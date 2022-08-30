@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Getter
@@ -16,8 +17,8 @@ public class Trip {
     private Bus bus;
     private Station fromStation;
     private Station toStation;
-    private String start;
-    private String duration;
+    private LocalTime start;
+    private LocalTime duration;
     private int price;
     private boolean approved;
     private Schedule schedule;

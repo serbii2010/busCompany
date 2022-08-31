@@ -60,7 +60,6 @@ public class TestIntegrationTicketController {
         orderHelper.generateDefaultOrder(cookieClient, mvc, mapper);
     }
 
-    @Disabled
     @Test
     public void getFreePlaces() throws Exception {
         List<Integer> response = TicketDtoResponseHelper.getFreePlaces();
@@ -74,7 +73,6 @@ public class TestIntegrationTicketController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
-    @Disabled
     @Test
     public void insertTicket() throws Exception {
         TicketDtoRequest request = TicketDtoRequestHelper.getInsert();
@@ -99,7 +97,6 @@ public class TestIntegrationTicketController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
-    @Disabled
     @Test
     public void insertTicket_takenPlace() throws Exception {
         TicketDtoRequest request = TicketDtoRequestHelper.getInsert();
@@ -126,7 +123,6 @@ public class TestIntegrationTicketController {
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
-    @Disabled
     @Test
     public void insertTicket_reinsertPlace() throws Exception {
         TicketDtoRequest request = TicketDtoRequestHelper.getInsert();

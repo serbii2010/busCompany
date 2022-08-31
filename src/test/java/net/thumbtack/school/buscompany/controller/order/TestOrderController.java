@@ -83,7 +83,6 @@ class TestOrderController {
 
     }
 
-    @Disabled
     @Test
     void testCreateOrder() throws Exception {
         List<PassengerDtoRequest> passengers = new ArrayList<>();
@@ -106,7 +105,6 @@ class TestOrderController {
         assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
     }
 
-    @Disabled
     @Test
     void testCreateOrder_badByAdmin() throws Exception {
         List<PassengerDtoRequest> passengers = new ArrayList<>();
@@ -136,7 +134,6 @@ class TestOrderController {
         );
     }
 
-    @Disabled
     @Test
     void testCreateOrder_badDateTrip() throws Exception {
         List<PassengerDtoRequest> passengers = new ArrayList<>();

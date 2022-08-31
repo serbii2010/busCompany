@@ -27,6 +27,7 @@ public class OrderDtoResponseHelper {
                 "Ikarus",
                 "2023-01-08",
                 "23:51",
+                "12:30",
                 30,
                 60,
                 new ArrayList<>(Arrays.asList(passenger1, passenger2))
@@ -53,6 +54,7 @@ public class OrderDtoResponseHelper {
                 "Ikarus",
                 "2023-01-08",
                 "23:51",
+                "12:30",
                 30,
                 60,
                 new ArrayList<>(Arrays.asList(passenger1, passenger2))
@@ -76,6 +78,7 @@ public class OrderDtoResponseHelper {
                 "Пазик",
                 "2023-01-13",
                 "12:30",
+                "23:51",
                 20,
                 40,
                 new ArrayList<>(Arrays.asList(passenger21, passenger22))
@@ -104,6 +107,7 @@ public class OrderDtoResponseHelper {
                 "Ikarus",
                 "2023-01-08",
                 "23:51",
+                "12:30",
                 30,
                 60,
                 new ArrayList<>(Arrays.asList(passenger1, passenger2))
@@ -133,6 +137,7 @@ public class OrderDtoResponseHelper {
                 "Пазик",
                 "2023-01-13",
                 "12:30",
+                "23:51",
                 20,
                 40,
                 new ArrayList<>(Arrays.asList(passenger21, passenger22))

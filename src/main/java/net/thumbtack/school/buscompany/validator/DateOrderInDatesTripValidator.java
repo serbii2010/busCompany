@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 
 public class DateOrderInDatesTripValidator implements ConstraintValidator<DateOrderInDatesTrip, Object> {
     @Autowired
@@ -22,9 +23,8 @@ public class DateOrderInDatesTripValidator implements ConstraintValidator<DateOr
 
         try {
             Trip trip = tripService.findById(String.valueOf(tripId));
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             for (DateTrip dateTrip: trip.getDates()) {
-                if (date.equals( format.format(dateTrip.getDate())) )  {
+                if (date.equals( dateTrip.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))) )  {
                     return true;
                 }
             }

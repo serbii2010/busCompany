@@ -17,6 +17,7 @@ public class OrderDtoResponse {
     private String busName;
     private String date;
     private String start;
+    private String duration;
     private int price;
     private int totalPrice;
     List<PassengerDtoResponse> passengers;

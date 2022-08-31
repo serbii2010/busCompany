@@ -30,7 +30,7 @@
                      column="from_station_id" select="selectStation"/>
         <association property="toStation" javaType="net.thumbtack.school.buscompany.model.Station"
                      column="to_station_id" select="selectStation"/>
-        <association property="schedule" javaType="net.thumbtack.school.buscompany.model.Schedule" column="schedule_id"
+        <association property="schedule" javaType="net.thumbtack.school.buscompany.model.Schedule" column="id"
                      select="selectSchedule"/>
 
         <collection property="dates" column="id" javaType="java.util.List"
@@ -71,7 +71,7 @@
         JOIN bus ON bus.id = trip.bus_id
         JOIN station as from_station ON from_station.id = trip.from_station_id
         JOIN station as to_station ON to_station.id = trip.to_station_id
-        LEFT JOIN schedule ON schedule.id = trip.schedule_id
+        LEFT JOIN schedule ON schedule.trip_id = trip.id
         LEFT JOIN order_passenger ON order_passenger.order_id = orders.id
         RIGHT JOIN passenger ON order_passenger.passenger_id = passenger.id
         <where>

@@ -31,7 +31,8 @@ public class TicketController {
     public TicketDtoResponse insertTicket(@Valid @RequestBody TicketDtoRequest request,
                                           @CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
         accountService.checkClient(javaSessionId);
-        return ticketService.insertTicket(javaSessionId, request);
+        TicketDtoResponse response = ticketService.insertTicket(javaSessionId, request);
+        return response;
     }
 
 }

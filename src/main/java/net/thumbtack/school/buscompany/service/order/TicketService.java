@@ -41,6 +41,9 @@ public class TicketService {
     public TicketDtoResponse insertTicket(String javaSessionId, TicketDtoRequest request) throws ServerException {
         Passenger passenger = getPassenger(request.getFirstName(), request.getLastName(), request.getPassport());
         Order order = orderService.findById(request.getOrderId());
+        if (order == null) {
+            throw new ServerException(ServerErrorCode.ORDER_NOT_FOUND);
+        }
         Account account = accountService.getAuthAccount(javaSessionId);
         Client client = accountService.findClient(account);
         if (!order.getClient().equals(client)) {

@@ -67,7 +67,7 @@ CREATE TABLE bus
 INSERT INTO bus (name, place_count)
 VALUES ('Пазик', 21);
 INSERT INTO bus (name, place_count)
-VALUES ('Икарус', 41);
+VALUES ('Ikarus', 41);
 
 CREATE TABLE station
 (

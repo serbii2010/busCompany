@@ -31,9 +31,10 @@ public interface OrderMapper {
     @Mapping(target = "fromStation", source = "dateTrip.trip.fromStation.name")
     @Mapping(target = "toStation", source = "dateTrip.trip.toStation.name")
     @Mapping(target = "busName", source = "dateTrip.trip.bus.name")
-    @Mapping(target = "start", source = "dateTrip.trip.start")
+    @Mapping(target = "start", source = "dateTrip.trip.start", dateFormat = "HH:mm")
+    @Mapping(target = "duration", source = "dateTrip.trip.duration", dateFormat = "HH:mm")
     @Mapping(target = "price", source = "dateTrip.trip.price")
-    @Mapping(target = "date", expression = "java(new SimpleDateFormat(\"yyyy-MM-dd\").format( object.getDateTrip().getDate()))")
+    @Mapping(target = "date", source = "dateTrip.date", dateFormat = "yyyy-MM-dd")
     @Mapping(target = "totalPrice",
             expression = "java(object.getPassengers().size()*object.getDateTrip().getTrip().getPrice())")
 

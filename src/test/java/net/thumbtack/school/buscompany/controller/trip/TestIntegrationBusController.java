@@ -45,7 +45,6 @@ class TestIntegrationBusController {
         javaSessionId = AccountHelper.registrationAdmin("admin", mvc, mapper);
     }
 
-    @Disabled
     @Test
     public void getBuses_empty() throws Exception {
         mvc.perform(get("/api/buses")
@@ -56,7 +55,6 @@ class TestIntegrationBusController {
                 .andExpect(content().json(mapper.writeValueAsString(new ArrayList<Bus>())));
     }
 
-    @Disabled
     @Test
     public void getBuses() throws Exception {
         busHelper.generateDefaultBuses();

@@ -104,12 +104,12 @@ CREATE TABLE schedule
     id        INT(11)     NOT NULL AUTO_INCREMENT,
     from_date DATE        NOT NULL,
     to_date   DATE        NOT NULL,
-    periods   VARCHAR(30) NOT NULL,
+    `period`   VARCHAR(30) NOT NULL,
     trip_id   INT(11)     NOT NULL,
     PRIMARY KEY (id),
     INDEX (from_date),
     INDEX (to_date),
-    INDEX (periods),
+    INDEX (period),
     FOREIGN KEY (trip_id) REFERENCES trip (id) ON DELETE CASCADE
 ) ENGINE = INNODB
   DEFAULT CHARSET = utf8;

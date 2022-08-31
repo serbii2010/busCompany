@@ -85,6 +85,8 @@ public class TripDaoImpl extends DaoImplBase implements Dao<Trip> {
         try (SqlSession sqlSession = getSession()) {
             try {
                 getTripMapper(sqlSession).update(trip);
+
+                getScheduleMapper(sqlSession).update(trip.getSchedule());
                 getDateTripMapper(sqlSession).deleteByTripId(String.valueOf(trip.getId()));
                 insertDateTrip(sqlSession, trip);
             } catch (RuntimeException ex) {

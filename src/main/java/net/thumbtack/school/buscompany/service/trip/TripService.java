@@ -42,23 +42,21 @@ public class TripService {
     private DateTripDaoImpl dateTripDao;
 
     public TripAdminDtoResponse addTrip(TripDtoRequest request) throws ServerException {
-        Trip trip = TripMapper.INSTANCE.tripDtoToTrip(request, stationService, busService, scheduleService);
+        Trip trip = TripMapper.INSTANCE.tripDtoToTrip(request, stationService, busService);
         insert(trip);
-
         return TripMapper.INSTANCE.tripAdminToDtoResponse(trip);
     }
 
     public TripAdminDtoResponse getTrip(String id) throws ServerException {
         Trip trip = findById(id);
-
         return TripMapper.INSTANCE.tripAdminToDtoResponse(trip);
     }
 
     public TripAdminDtoResponse update(String id, TripDtoRequest tripDtoRequest) throws ServerException {
         Trip trip = findById(id);
         checkNotApproved(trip);
-        TripMapper.INSTANCE.update(trip, tripDtoRequest, stationService, busService, scheduleService, this);
-
+        TripMapper.INSTANCE.update(trip, tripDtoRequest, stationService, busService, this);
+        trip.getSchedule().setTrip(trip);
         tripDao.update(trip);
         return TripMapper.INSTANCE.tripAdminToDtoResponse(trip);
     }
@@ -130,15 +128,14 @@ public class TripService {
 
     public Trip insert(Trip trip) {
         if (trip.getDates() == null) {
-            try {
-                scheduleDao.find(trip.getSchedule());
-            } catch (ServerException exception) {
-                scheduleDao.insert(trip.getSchedule());
-            }
             List<DateTrip> dates = this.generateDates(trip);
             trip.setDates(dates);
         }
         tripDao.insert(trip);
+        if (trip.getSchedule() != null) {
+            trip.getSchedule().setTrip(trip);
+            scheduleDao.insert(trip.getSchedule());
+        }
         return trip;
     }
 

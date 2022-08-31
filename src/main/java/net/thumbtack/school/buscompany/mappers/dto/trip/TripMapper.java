@@ -17,6 +17,11 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.util.Formatter;
 import java.util.List;
 
 @Mapper(componentModel = "spring", imports = {StationService.class, BusService.class,
@@ -27,13 +32,10 @@ public interface TripMapper {
     @Mapping(target = "bus", expression = "java(busService.findByName(request.getBusName()))")
     @Mapping(target = "fromStation", expression = "java(stationService.findStationByName(request.getFromStation()))")
     @Mapping(target = "toStation", expression = "java(stationService.findStationByName(request.getToStation()))")
-    @Mapping(target = "schedule", expression =
-            "java(scheduleService.findOrInsert(ScheduleMapper.INSTANCE.scheduleDtoToSchedule(request.getSchedule())))")
     @Mapping(target = "dates", dateFormat = "yyyy-MM-dd")
     Trip tripDtoToTrip(TripDtoRequest request,
                        @Context StationService stationService,
-                       @Context BusService busService,
-                       @Context ScheduleService scheduleService) throws ServerException;
+                       @Context BusService busService) throws ServerException;
 
 
     @Mapping(target = "fromStation", source = "fromStation.name")
@@ -62,19 +64,20 @@ public interface TripMapper {
     @Mapping(target = "bus", expression = "java(busService.findByName(request.getBusName()))")
     @Mapping(target = "fromStation", expression = "java(stationService.findStationByName(request.getFromStation()))")
     @Mapping(target = "toStation", expression = "java(stationService.findStationByName(request.getToStation()))")
-    @Mapping(target = "schedule", expression =
-            "java(scheduleService.findOrInsert(ScheduleMapper.INSTANCE.scheduleDtoToSchedule(request.getSchedule())))")
     @Mapping(target = "dates", expression = "java(tripService.updateDates(trip))")
     void update(@MappingTarget Trip trip, TripDtoRequest request,
                 @Context StationService stationService,
                 @Context BusService busService,
-                @Context ScheduleService scheduleService,
                 @Context TripService tripService) throws ServerException;
 
     @Mapping(target = "date", dateFormat = "yyyy-MM-dd")
     DateTrip stringToDate(String date);
 
+    default String setTime(LocalTime time) {
+        return time.format(DateTimeFormatter.ofPattern("HH:mm"));
+    }
+
     default String map(DateTrip value) {
-        return new SimpleDateFormat("yyyy-MM-dd").format(value.getDate());
+        return value.getDate().toString();
     }
 }

@@ -13,27 +13,24 @@ public class DebugDaoImpl extends DaoImplBase {
         LOGGER.debug("DAO clear database");
         try (SqlSession sqlSession = getSession()) {
             try {
-                getPlaceMapper(sqlSession).deleteAll();
-                getPlaceMapper(sqlSession).resetAutoIncrement();
-                getOrderMapper(sqlSession).deleteAll();
-                getOrderMapper(sqlSession).resetAutoIncrement();
                 getPassengerMapper(sqlSession).deleteAll();
-                getPassengerMapper(sqlSession).resetAutoIncrement();
-                getPassengerMapper(sqlSession).resetAutoIncrementFromOrderPassenger();
-                getDateTripMapper(sqlSession).deleteAll();
-                getDateTripMapper(sqlSession).resetAutoIncrement();
                 getTripMapper(sqlSession).deleteAll();
-                getTripMapper(sqlSession).resetAutoIncrement();
-                getScheduleMapper(sqlSession).deleteAll();
-                getScheduleMapper(sqlSession).resetAutoIncrement();
                 getStationMapper(sqlSession).deleteAll();
-                getStationMapper(sqlSession).resetAutoIncrement();
                 getBusMapper(sqlSession).deleteAll();
-                getBusMapper(sqlSession).resetAutoIncrement();
                 getAccountMapper(sqlSession).deleteAll();
+
+                getScheduleMapper(sqlSession).resetAutoIncrement();
+                getStationMapper(sqlSession).resetAutoIncrement();
+                getBusMapper(sqlSession).resetAutoIncrement();
                 getAccountMapper(sqlSession).resetAutoIncrement();
                 getAdminMapper(sqlSession).resetAutoIncrement();
                 getClientMapper(sqlSession).resetAutoIncrement();
+                getPlaceMapper(sqlSession).resetAutoIncrement();
+                getOrderMapper(sqlSession).resetAutoIncrement();
+                getTripMapper(sqlSession).resetAutoIncrement();
+                getPassengerMapper(sqlSession).resetAutoIncrement();
+                getPassengerMapper(sqlSession).resetAutoIncrementFromOrderPassenger();
+                getDateTripMapper(sqlSession).resetAutoIncrement();
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't clear database");
                 sqlSession.rollback();

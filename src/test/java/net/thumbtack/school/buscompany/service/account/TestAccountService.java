@@ -131,6 +131,7 @@ class TestAccountService {
         Account client = accountHelper.getSessionClient().getAccount();
         client.setPassword(DigestUtils.md5DigestAsHex("password".getBytes()));
         Mockito.when(accountDao.findByLogin(request.getLogin())).thenReturn(client);
+        Mockito.when(accountDao.findClient(client)).thenReturn(this.client);
 
         accountService.login(request, response);
 
@@ -143,6 +144,30 @@ class TestAccountService {
                     assertNotEquals(accountHelper.getSessionClient().getSessionId(), cookieSessionId.getValue());
                 }
         );
+    }
+
+    @Test
+    public void testLogin_badLogin() throws Exception {
+        Mockito.when(accountDao.findByLogin("admin")).thenReturn(null);
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        LoginDtoRequest request = new LoginDtoRequest(
+                "admin",
+                "password"
+        );
+
+        assertThrows(ServerException.class, () -> accountService.login(request, response));
+    }
+
+    @Test
+    public void testLogin_badPassword() throws Exception {
+        Mockito.when(accountDao.findByLogin("admin")).thenReturn(admin);
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        LoginDtoRequest request = new LoginDtoRequest(
+                "admin",
+                "password"
+        );
+
+        assertThrows(ServerException.class, () -> accountService.login(request, response));
     }
 
     @Test

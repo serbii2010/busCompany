@@ -157,9 +157,8 @@ public class AccountService {
 
     public BaseAccountDtoResponse login(LoginDtoRequest request, HttpServletResponse response)
             throws ServerException {
-
-
         Account account = getAccountByLogin(request.getLogin());
+        checkDelete(account);
         checkPassword(account, request.getPassword());
 
         Session session = getSessionByLogin(request.getLogin());
@@ -172,6 +171,16 @@ public class AccountService {
             LOGGER.debug("client log in");
             return ClientMapper.INSTANCE.accountToDto(findClient(account));
         }
+    }
+
+    private void checkDelete(Account account) throws ServerException {
+        if (account.getUserType() == UserTypeEnum.CLIENT && accountDao.findClient(account) != null) {
+            return;
+        }
+        if (account.getUserType() == UserTypeEnum.ADMIN && accountDao.findAdmin(account) != null) {
+            return;
+        }
+        throw new ServerException(ServerErrorCode.USER_NOT_FOUND);
     }
 
     public void logout(String javaSessionId) throws ServerException {

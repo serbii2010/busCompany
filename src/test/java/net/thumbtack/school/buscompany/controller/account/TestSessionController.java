@@ -2,13 +2,10 @@ package net.thumbtack.school.buscompany.controller.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.thumbtack.school.buscompany.dto.request.account.LoginDtoRequest;
-import net.thumbtack.school.buscompany.exception.ServerErrorCode;
-import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.helper.AccountHelper;
 import net.thumbtack.school.buscompany.model.account.Admin;
 import net.thumbtack.school.buscompany.service.account.AccountService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -61,39 +58,6 @@ class TestSessionController {
                 .cookie(cookie)
                 .content(mapper.writeValueAsString(request)))
                 .andExpect(status().isOk());
-    }
-
-    @Disabled
-    @Test
-    public void testLogin_badLogin() throws Exception {
-        Mockito.when(accountService.getAccountByLogin("admin")).thenThrow(new ServerException(ServerErrorCode.USER_NOT_FOUND));
-        LoginDtoRequest request = new LoginDtoRequest(
-                "admin",
-                "password"
-        );
-        mvc.perform(post("/api/session")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .cookie(cookie)
-                .content(mapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Disabled
-    @Test
-    public void testLogin_badPassword() throws Exception {
-        Mockito.when(accountService.getAccountByLogin("admin")).thenReturn(admin);
-        Mockito.doThrow(new ServerException(ServerErrorCode.BAD_PASSWORD)).when(accountService).checkPassword(admin, "password");
-        LoginDtoRequest request = new LoginDtoRequest(
-                "admin",
-                "password"
-        );
-        mvc.perform(post("/api/session")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .cookie(cookie)
-                .content(mapper.writeValueAsString(request)))
-                .andExpect(status().isBadRequest());
     }
 
     @Test

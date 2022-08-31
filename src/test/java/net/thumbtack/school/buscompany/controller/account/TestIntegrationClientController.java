@@ -12,7 +12,6 @@ import net.thumbtack.school.buscompany.helper.dto.response.account.RegistrationC
 import net.thumbtack.school.buscompany.helper.dto.response.account.UpdateClientDtoResponseHelper;
 import net.thumbtack.school.buscompany.service.DebugService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -57,7 +56,6 @@ public class TestIntegrationClientController {
                 .andExpect(cookie().exists("JAVASESSIONID"));
     }
 
-    @Disabled
     @Test
     public void updateClient() throws Exception {
         String javaSessionId = AccountHelper.registrationClient(mvc, mapper);

@@ -5,7 +5,6 @@ import net.thumbtack.school.buscompany.model.account.Admin;
 import net.thumbtack.school.buscompany.model.account.Client;
 import net.thumbtack.school.buscompany.service.account.AccountService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -53,10 +52,10 @@ class TestAccountController {
                 .andExpect(status().isBadRequest());
     }
 
-    @Disabled
     @Test
     public void testGetInfo_authAdmin() throws Exception {
-        Mockito.when(accountService.getAuthAccount("sessionId")).thenReturn(admin);
+        Mockito.when(accountService.getAuthAccount(cookie.getValue())).thenReturn(admin);
+        Mockito.when(accountService.getInfo(cookie.getValue())).thenCallRealMethod();
         mvc.perform(get("/api/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -64,10 +63,10 @@ class TestAccountController {
                 .andExpect(status().isOk());
     }
 
-    @Disabled
     @Test
     public void testGetInfo_authClient() throws Exception {
-        Mockito.when(accountService.getAuthAccount("sessionId")).thenReturn(client);
+        Mockito.when(accountService.getAuthAccount(cookie.getValue())).thenReturn(client);
+        Mockito.when(accountService.getInfo(cookie.getValue())).thenCallRealMethod();
         mvc.perform(get("/api/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -77,7 +76,8 @@ class TestAccountController {
 
     @Test
     public void testDeleteAccount() throws Exception {
-        Mockito.when(accountService.getAuthAccount("sessionId")).thenReturn(client);
+        Mockito.when(accountService.getAuthAccount(cookie.getValue())).thenReturn(client);
+        Mockito.when(accountService.deleteAccount(cookie.getValue())).thenCallRealMethod();
         mvc.perform(delete("/api/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -87,7 +87,8 @@ class TestAccountController {
 
     @Test
     public void testDeleteAccount_noAuth() throws Exception {
-        Mockito.when(accountService.getAuthAccount("sessionId")).thenReturn(client);
+        Mockito.when(accountService.getAuthAccount(cookie.getValue())).thenReturn(client);
+        Mockito.when(accountService.deleteAccount(cookie.getValue())).thenCallRealMethod();
         mvc.perform(delete("/api/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))

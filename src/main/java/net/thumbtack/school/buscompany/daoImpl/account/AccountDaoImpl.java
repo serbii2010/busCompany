@@ -4,10 +4,10 @@ import net.thumbtack.school.buscompany.dao.Dao;
 import net.thumbtack.school.buscompany.daoImpl.DaoImplBase;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
+import net.thumbtack.school.buscompany.model.UserType;
 import net.thumbtack.school.buscompany.model.account.Account;
 import net.thumbtack.school.buscompany.model.account.Admin;
 import net.thumbtack.school.buscompany.model.account.Client;
-import net.thumbtack.school.buscompany.utils.UserTypeEnum;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +50,7 @@ public class AccountDaoImpl extends DaoImplBase implements Dao<Account> {
     }
 
     @Override
-    public Account insert(Account account) {
+    public Account insert(Account account) throws ServerException {
         // REVU а если такой логин уже есть ?
         // тест такой есть ?
         // тогда будет в ex.cause Mysqlintegrityconstraintviolationexception
@@ -78,7 +78,7 @@ public class AccountDaoImpl extends DaoImplBase implements Dao<Account> {
                 // которого у СВас, кстати, нет
                 // вот тут хороший список обработчиков
                 // http://rsdn.org/forum/java/8264492.1
-                throw ex;
+                throw new ServerException(ServerErrorCode.DATABASE_ERROR);
             }
             sqlSession.commit();
         }
@@ -86,26 +86,26 @@ public class AccountDaoImpl extends DaoImplBase implements Dao<Account> {
     }
 
     @Override
-    public void remove(Account account) {
+    public void remove(Account account) throws ServerException {
         LOGGER.debug("DAO delete Account {}", account);
         try (SqlSession sqlSession = getSession()) {
             try {
-                if (account.getUserType() == UserTypeEnum.CLIENT) {
+                if (account.getUserType() == UserType.CLIENT) {
                     getClientMapper(sqlSession).deleteByAccount(account);
-                } else if (account.getUserType() == UserTypeEnum.ADMIN) {
+                } else if (account.getUserType() == UserType.ADMIN) {
                     getAdminMapper(sqlSession).deleteByAccount(account);
                 }
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't delete account {} {}", account, ex);
                 sqlSession.rollback();
-                throw ex;
+                throw new ServerException(ServerErrorCode.DATABASE_ERROR);
             }
             sqlSession.commit();
         }
     }
 
     @Override
-    public void update(Account account) {
+    public void update(Account account) throws ServerException {
         LOGGER.debug("DAO update Account {}", account);
         try (SqlSession sqlSession = getSession()) {
             try {
@@ -121,7 +121,7 @@ public class AccountDaoImpl extends DaoImplBase implements Dao<Account> {
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't update account {} {}", account, ex);
                 sqlSession.rollback();
-                throw ex;
+                throw new ServerException(ServerErrorCode.DATABASE_ERROR);
             }
             sqlSession.commit();
         }

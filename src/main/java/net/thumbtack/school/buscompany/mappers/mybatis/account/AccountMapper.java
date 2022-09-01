@@ -2,7 +2,7 @@ package net.thumbtack.school.buscompany.mappers.mybatis.account;
 
 import net.thumbtack.school.buscompany.model.account.Account;
 import net.thumbtack.school.buscompany.model.account.Client;
-import net.thumbtack.school.buscompany.utils.UserTypeEnum;
+import net.thumbtack.school.buscompany.model.UserType;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public interface AccountMapper {
     @Results(value = {
             @Result(property = "firstName", column = "first_name"),
             @Result(property = "lastName", column = "last_name"),
-            @Result(property = "userType", javaType = UserTypeEnum.class, column = "user_type")
+            @Result(property = "userType", javaType = UserType.class, column = "user_type")
     })
     Account getById(String id);
 
@@ -26,7 +26,7 @@ public interface AccountMapper {
     @Results(value = {
             @Result(property = "firstName", column = "first_name"),
             @Result(property = "lastName", column = "last_name"),
-            @Result(property = "userType", javaType = UserTypeEnum.class, column = "user_type")
+            @Result(property = "userType", javaType = UserType.class, column = "user_type")
     })
     List<Client> getClients();
 

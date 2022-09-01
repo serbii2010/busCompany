@@ -2,7 +2,7 @@ package net.thumbtack.school.buscompany.mappers.mybatis.order;
 
 import net.thumbtack.school.buscompany.model.*;
 import net.thumbtack.school.buscompany.model.account.Client;
-import net.thumbtack.school.buscompany.utils.UserTypeEnum;
+import net.thumbtack.school.buscompany.model.UserType;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -53,7 +53,7 @@ public interface OrderMapper {
             @Result(property = "lastName", column = "last_name"),
             @Result(property = "patronymic", column = "patronymic"),
             @Result(property = "accountId", column = "account_id"),
-            @Result(property = "userType", javaType = UserTypeEnum.class, column = "user_type")
+            @Result(property = "userType", javaType = UserType.class, column = "user_type")
     })
     Client selectClient(String id);
 

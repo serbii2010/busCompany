@@ -1,8 +1,8 @@
 package net.thumbtack.school.buscompany.mappers.mybatis.account;
 
+import net.thumbtack.school.buscompany.model.UserType;
 import net.thumbtack.school.buscompany.model.account.Account;
 import net.thumbtack.school.buscompany.model.account.Client;
-import net.thumbtack.school.buscompany.utils.UserTypeEnum;
 import org.apache.ibatis.annotations.*;
 
 public interface ClientMapper {
@@ -18,7 +18,7 @@ public interface ClientMapper {
             @Result(property = "lastName", column = "last_name"),
             @Result(property = "patronymic", column = "patronymic"),
             @Result(property = "accountId", column = "account_id"),
-            @Result(property = "userType", javaType = UserTypeEnum.class, column = "user_type")
+            @Result(property = "userType", javaType = UserType.class, column = "user_type")
     })
     Client findClient(Account account);
 

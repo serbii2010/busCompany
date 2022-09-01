@@ -13,10 +13,9 @@ import net.thumbtack.school.buscompany.helper.dto.request.account.LoginClientDto
 import net.thumbtack.school.buscompany.helper.dto.request.account.RegistrationAdminDtoRequestHelper;
 import net.thumbtack.school.buscompany.helper.dto.request.account.RegistrationClientDtoRequestHelper;
 import net.thumbtack.school.buscompany.model.Session;
-import net.thumbtack.school.buscompany.model.account.Account;
+import net.thumbtack.school.buscompany.model.UserType;
 import net.thumbtack.school.buscompany.model.account.Admin;
 import net.thumbtack.school.buscompany.model.account.Client;
-import net.thumbtack.school.buscompany.utils.UserTypeEnum;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.MockMvc;
@@ -48,7 +47,7 @@ public class AccountHelper {
                 "first",
                 "last",
                 "patronymic",
-                UserTypeEnum.ADMIN,
+                UserType.ADMIN,
                 "тестировщик",
                 1);
 
@@ -58,7 +57,7 @@ public class AccountHelper {
                 "first",
                 "last",
                 "patronymic",
-                UserTypeEnum.CLIENT,
+                UserType.CLIENT,
                 "a@a.a",
                 "88005553535",
                 1);

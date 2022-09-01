@@ -2,7 +2,7 @@ package net.thumbtack.school.buscompany.mappers.mybatis.account;
 
 import net.thumbtack.school.buscompany.model.Session;
 import net.thumbtack.school.buscompany.model.account.Account;
-import net.thumbtack.school.buscompany.utils.UserTypeEnum;
+import net.thumbtack.school.buscompany.model.UserType;
 import org.apache.ibatis.annotations.*;
 
 public interface SessionMapper {
@@ -45,7 +45,7 @@ public interface SessionMapper {
             @Result(property = "lastName", column = "last_name"),
             @Result(property = "patronymic", column = "patronymic"),
             @Result(property = "accountId", column = "account_id"),
-            @Result(property = "userType", javaType = UserTypeEnum.class, column = "user_type")
+            @Result(property = "userType", javaType = UserType.class, column = "user_type")
     })
     Account selectAccount(String id);
 }

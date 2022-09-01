@@ -16,7 +16,7 @@ import net.thumbtack.school.buscompany.helper.dto.request.account.RegistrationCl
 import net.thumbtack.school.buscompany.model.account.Account;
 import net.thumbtack.school.buscompany.model.account.Admin;
 import net.thumbtack.school.buscompany.model.account.Client;
-import net.thumbtack.school.buscompany.utils.UserTypeEnum;
+import net.thumbtack.school.buscompany.model.UserType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -69,7 +69,7 @@ class TestAccountService {
         assertAll(
                 "admin",
                 () -> assertEquals("имя", registrationAdminDtoResponse.getFirstName()),
-                () -> assertEquals(UserTypeEnum.ADMIN.getType(), registrationAdminDtoResponse.getUserType())
+                () -> assertEquals(UserType.ADMIN.getType(), registrationAdminDtoResponse.getUserType())
         );
     }
 
@@ -83,7 +83,7 @@ class TestAccountService {
         assertAll(
                 "client",
                 () -> assertEquals("имя-клиента", newClient.getFirstName()),
-                () -> assertEquals(UserTypeEnum.CLIENT.getType(), newClient.getUserType())
+                () -> assertEquals(UserType.CLIENT.getType(), newClient.getUserType())
         );
     }
 

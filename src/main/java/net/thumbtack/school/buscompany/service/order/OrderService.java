@@ -14,11 +14,13 @@ import net.thumbtack.school.buscompany.service.account.AccountService;
 import net.thumbtack.school.buscompany.service.trip.TripService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class OrderService {
     @Autowired
     private AccountService accountService;
@@ -28,6 +30,7 @@ public class OrderService {
     private OrderDaoImpl orderDao;
 
     public OrderDtoResponse createOrder(OrderDtoRequest request, String javaSessionId) throws ServerException {
+        accountService.checkClient(javaSessionId);
         Account account = accountService.getAuthAccount(javaSessionId);
         Client client = accountService.findClient(account);
 

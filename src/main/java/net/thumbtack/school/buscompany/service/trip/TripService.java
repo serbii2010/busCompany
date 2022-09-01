@@ -15,6 +15,7 @@ import net.thumbtack.school.buscompany.model.Trip;
 import net.thumbtack.school.buscompany.service.account.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.TextStyle;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Locale;
 
 @Service
+@Transactional
 public class TripService {
     @Autowired
     private AccountService accountService;

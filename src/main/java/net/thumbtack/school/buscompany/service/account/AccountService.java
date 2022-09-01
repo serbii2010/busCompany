@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import javax.servlet.http.Cookie;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class AccountService {
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class);
     @Autowired
@@ -48,7 +50,7 @@ public class AccountService {
         // и тогда можно будет использовать в сервисе @Transactional
         accountDao.insert(admin);
         LOGGER.debug("administrator registered");
-        Session session = getSessionByLogin(admin.getLogin());
+        Session session = openSession(admin.getLogin());
         response.addCookie(new Cookie("JAVASESSIONID", session.getSessionId()));
         return AdminMapper.INSTANCE.accountToDto(admin);
     }
@@ -59,7 +61,7 @@ public class AccountService {
         client.setPassword(convertToMd5(client.getPassword()));
         accountDao.insert(client);
         LOGGER.debug("client registered");
-        Session session = getSessionByLogin(client.getLogin());
+        Session session = openSession(client.getLogin());
         response.addCookie(new Cookie("JAVASESSIONID", session.getSessionId()));
         return ClientMapper.INSTANCE.accountToDto(client);
     }
@@ -165,16 +167,21 @@ public class AccountService {
         checkDelete(account);
         checkPassword(account, request.getPassword());
 
-        Session session = getSessionByLogin(request.getLogin());
+        Session session = openSession(request.getLogin());
 
         response.addCookie(new Cookie("JAVASESSIONID", session.getSessionId()));
-        if (account.getUserType() == UserType.ADMIN) {
-            LOGGER.debug("admin log in");
-            return AdminMapper.INSTANCE.accountToDto(findAdmin(account));
-        } else {
-            LOGGER.debug("client log in");
-            return ClientMapper.INSTANCE.accountToDto(findClient(account));
+
+        switch (account.getUserType()) {
+            case ADMIN: {
+                LOGGER.debug("admin log in");
+                return AdminMapper.INSTANCE.accountToDto(findAdmin(account));
+            }
+            case CLIENT: {
+                LOGGER.debug("client log in");
+                return ClientMapper.INSTANCE.accountToDto(findClient(account));
+            }
         }
+        throw new ServerException(ServerErrorCode.USER_TYPE_ERROR);
     }
 
     private void checkDelete(Account account) throws ServerException {
@@ -243,9 +250,7 @@ public class AccountService {
         return DigestUtils.md5DigestAsHex(text.getBytes());
     }
 
-    // REVU смените имя. get методы ничего не создают
-    // insertSession или просто login
-    private Session getSessionByLogin(String login) throws ServerException {
+    private Session openSession(String login) throws ServerException {
         Account account = accountDao.findByLogin(login);
         if (account == null) {
             throw new ServerException(ServerErrorCode.USER_NOT_FOUND);

@@ -41,8 +41,14 @@ public class AccountService {
         Admin admin = AdminMapper.INSTANCE.registrationAdminDtoToAccount(request);
         admin.setUserType(UserTypeEnum.ADMIN);
         admin.setPassword(convertToMd5(admin.getPassword()));
+        // REVU не будет трансакции
+        // если getSessionByLogin провалится, аккаунт так и останется
+        // либо делать все в одном методе dao
+        // либо подключить mybatis-spring
+        // и тогда можно будет использовать в сервисе @Transactional
         accountDao.insert(admin);
         LOGGER.debug("administrator registered");
+        // REVU зачем Вы создали LoginDtoRequest, он Вам тут совсем не нужен
         LoginDtoRequest loginDtoRequest = new LoginDtoRequest(admin.getLogin(), admin.getPassword());
         Session session = getSessionByLogin(loginDtoRequest.getLogin());
         response.addCookie(new Cookie("JAVASESSIONID", session.getSessionId()));
@@ -66,6 +72,8 @@ public class AccountService {
 
         if (account.getUserType() == UserTypeEnum.CLIENT) {
             return ClientMapper.INSTANCE.accountToDtoInfo(findClient(account));
+            // REVU else не нужен
+            // а вообще-то лучше switch
         } else if (account.getUserType() == UserTypeEnum.ADMIN) {
             return AdminMapper.INSTANCE.accountToDtoInfo(findAdmin(account));
         } else {
@@ -239,6 +247,8 @@ public class AccountService {
         return DigestUtils.md5DigestAsHex(text.getBytes());
     }
 
+    // REVU смените имя. get методы ничего не создают
+    // insertSession или просто login
     private Session getSessionByLogin(String login) throws ServerException {
         Account account = accountDao.findByLogin(login);
         if (account == null) {

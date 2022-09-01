@@ -51,6 +51,13 @@ public class AccountDaoImpl extends DaoImplBase implements Dao<Account> {
 
     @Override
     public Account insert(Account account) {
+        // REVU а если такой логин уже есть ?
+        // тест такой есть ?
+        // тогда будет в ex.cause Mysqlintegrityconstraintviolationexception
+        // и его надо ловить
+        // альтернатива - подключить mybatis-spring
+        // и тогда ловить
+        // https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/dao/DuplicateKeyException.html
         LOGGER.debug("DAO insert Account {}", account);
         try (SqlSession sqlSession = getSession()) {
             try {
@@ -65,6 +72,12 @@ public class AccountDaoImpl extends DaoImplBase implements Dao<Account> {
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't insert account {} {}", account, ex);
                 sqlSession.rollback();
+                // REVU лучше выбросить тут свой исключение ServerException с кодом DATABASE_EROOR
+                // тогда в GlobalErrorHandler для этого случая сработает обработчик ServerException
+                // а всякие неожиданные RuntimeException пусть идут в обработчик для Throwable
+                // которого у СВас, кстати, нет
+                // вот тут хороший список обработчиков
+                // http://rsdn.org/forum/java/8264492.1
                 throw ex;
             }
             sqlSession.commit();

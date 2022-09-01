@@ -147,6 +147,9 @@ public class TripService {
     }
 
     private List<DateTrip> generateDates(Trip trip) {
+        // REVU есть ли проверка на то, что итоговый список не пуст ?
+        // есть ли проверка на дубликаты во входных данных
+        // или на некорректные входные данные ? (например, 30 февраля ) ?
         List<DateTrip> dates = new ArrayList<>();
 
         LocalDate dateStart = trip.getSchedule().getFromDate();

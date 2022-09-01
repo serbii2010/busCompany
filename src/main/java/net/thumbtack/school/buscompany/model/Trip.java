@@ -18,12 +18,7 @@ public class Trip {
     private Station fromStation;
     private Station toStation;
     private LocalTime start;
-    // REVU нет, здесь int
-    // с LocalTime Вы создадите себе проблемы, если, например, продолжительность 25 часов
-    // можно взять
-    // https://docs.oracle.com/javase/8/docs/api/java/time/Period.html
-    // но для него нет хэндлера при записи в БД и придется вручную преобразовывать
-    private LocalTime duration;
+    private int duration;
     private int price;
     private boolean approved;
     private Schedule schedule;

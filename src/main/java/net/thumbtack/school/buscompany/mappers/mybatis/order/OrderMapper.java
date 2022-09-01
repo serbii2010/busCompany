@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 public interface OrderMapper {
-    @Select("SELECT * FROM orders WHERE id=#{id}")
+    @Select("SELECT * FROM `order` WHERE id=#{id}")
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "passengers", javaType = List.class, column = "id",
@@ -66,19 +66,19 @@ public interface OrderMapper {
     @Select("SELECT * FROM station WHERE id=#{id}")
     Station selectStation(String id);
 
-    @Insert("INSERT INTO orders (date_trip_id, client_id) " +
+    @Insert("INSERT INTO `order` (date_trip_id, client_id) " +
             "VALUES (#{dateTrip.id}, #{client.id})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     Integer insert(Order order);
 
-    @Select("DELETE FROM orders WHERE id = #{id}")
+    @Select("DELETE FROM `order` WHERE id = #{id}")
     Integer delete(Order order);
 
-    @Delete("DELETE FROM orders")
+    @Delete("DELETE FROM `order`")
     Integer deleteAll();
 
     List<Order> filter(String fromStation, String toStation, String busName, String fromDate, String toDate, String clientId);
 
-    @Update("ALTER TABLE orders AUTO_INCREMENT = 1")
+    @Update("ALTER TABLE `order` AUTO_INCREMENT = 1")
     void resetAutoIncrement();
 }

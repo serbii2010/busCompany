@@ -33,9 +33,11 @@ public interface TripMapper {
     @Mapping(target = "fromStation", expression = "java(stationService.findStationByName(request.getFromStation()))")
     @Mapping(target = "toStation", expression = "java(stationService.findStationByName(request.getToStation()))")
     @Mapping(target = "dates", dateFormat = "yyyy-MM-dd")
+    @Mapping(target = "duration", expression = "java(Integer.parseInt(request.getDuration().split(\":\")[0])*60 + Integer.parseInt(request.getDuration().split(\":\")[1]) )")
     Trip tripDtoToTrip(TripDtoRequest request,
                        @Context StationService stationService,
                        @Context BusService busService) throws ServerException;
+
 
 
     @Mapping(target = "fromStation", source = "fromStation.name")
@@ -45,6 +47,7 @@ public interface TripMapper {
     @Mapping(target = "bus.places", source = "bus.placeCount")
     @Mapping(target = "schedule.fromDate", dateFormat = "yyyy-MM-dd")
     @Mapping(target = "schedule.toDate", dateFormat = "yyyy-MM-dd")
+    @Mapping(target = "duration", expression = "java( String.format(\"%d:%d\", trip.getDuration()/60, trip.getDuration()%60) )")
     TripAdminDtoResponse tripAdminToDtoResponse(Trip trip);
 
     List<TripAdminDtoResponse> tripListAdminToDtoResponse(List<Trip> trips);
@@ -56,6 +59,7 @@ public interface TripMapper {
     @Mapping(target = "bus.places", source = "bus.placeCount")
     @Mapping(target = "schedule.fromDate", dateFormat = "yyyy-MM-dd")
     @Mapping(target = "schedule.toDate", dateFormat = "yyyy-MM-dd")
+    @Mapping(target = "duration", expression = "java( String.format(\"%d:%d\", trip.getDuration()/60, trip.getDuration()%60) )")
     TripClientDtoResponse tripClientToDtoResponse(Trip trip);
 
     List<TripClientDtoResponse> tripListClientToDtoResponse(List<Trip> trips);
@@ -65,6 +69,7 @@ public interface TripMapper {
     @Mapping(target = "fromStation", expression = "java(stationService.findStationByName(request.getFromStation()))")
     @Mapping(target = "toStation", expression = "java(stationService.findStationByName(request.getToStation()))")
     @Mapping(target = "dates", expression = "java(tripService.updateDates(trip))")
+    @Mapping(target = "duration", expression = "java(Integer.parseInt(request.getDuration().split(\":\")[0])*60 + Integer.parseInt(request.getDuration().split(\":\")[1]) )")
     void update(@MappingTarget Trip trip, TripDtoRequest request,
                 @Context StationService stationService,
                 @Context BusService busService,

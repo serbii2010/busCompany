@@ -45,7 +45,7 @@ public class TripHelper {
         LocalDate toDate = dateTripHelper.getDate();
         schedule = new Schedule(1, fromDate, toDate, "odd", null);
         List<DateTrip> dates = new ArrayList<>();
-        trip = new Trip(1, bus, fromStation, toStation, LocalTime.of(12, 30), LocalTime.of(23, 51), 30, false, schedule, dates);
+        trip = new Trip(1, bus, fromStation, toStation, LocalTime.of(12, 30), 23*60 + 51, 30, false, schedule, dates);
 
         dates.add(dateTripHelper.getDateTrip(trip));
         trip.setDates(dates);
@@ -76,5 +76,6 @@ public class TripHelper {
         approveTrip(tripId1, cookie, mvc);
         int tripId2 = insertTrip(TripDtoRequestHelper.getUpdateToScheduleEven(), cookie, mvc, mapper);
         approveTrip(tripId2, cookie, mvc);
+
     }
 }

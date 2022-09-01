@@ -65,14 +65,14 @@
     <select id="filter" resultMap="resultOrder">
         SELECT
         *
-        FROM orders
-        JOIN date_trip ON orders.date_trip_id = date_trip.id
+        FROM `order`
+        JOIN date_trip ON `order`.date_trip_id = date_trip.id
         JOIN trip on date_trip.trip_id = trip.id
         JOIN bus ON bus.id = trip.bus_id
         JOIN station as from_station ON from_station.id = trip.from_station_id
         JOIN station as to_station ON to_station.id = trip.to_station_id
         LEFT JOIN schedule ON schedule.trip_id = trip.id
-        LEFT JOIN order_passenger ON order_passenger.order_id = orders.id
+        LEFT JOIN order_passenger ON order_passenger.order_id = `order`.id
         RIGHT JOIN passenger ON order_passenger.passenger_id = passenger.id
         <where>
             <if test="clientId != null">

@@ -8,11 +8,13 @@ import net.thumbtack.school.buscompany.model.UserType;
 import net.thumbtack.school.buscompany.model.account.Account;
 import net.thumbtack.school.buscompany.model.account.Admin;
 import net.thumbtack.school.buscompany.model.account.Client;
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 @Component
@@ -51,13 +53,6 @@ public class AccountDaoImpl extends DaoImplBase implements Dao<Account> {
 
     @Override
     public Account insert(Account account) throws ServerException {
-        // REVU а если такой логин уже есть ?
-        // тест такой есть ?
-        // тогда будет в ex.cause Mysqlintegrityconstraintviolationexception
-        // и его надо ловить
-        // альтернатива - подключить mybatis-spring
-        // и тогда ловить
-        // https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/dao/DuplicateKeyException.html
         LOGGER.debug("DAO insert Account {}", account);
         try (SqlSession sqlSession = getSession()) {
             try {
@@ -69,6 +64,14 @@ public class AccountDaoImpl extends DaoImplBase implements Dao<Account> {
                     getAdminMapper(sqlSession).insert((Admin) account);
                 }
                 account.setId(idAccount);
+            } catch (PersistenceException ex) {
+                // DuplicateKeyException почему-то не отлавливается
+                // а вообще оно сюда не должно попадать, так как уникальность логина проверяется на уровне валидатора
+                if (ex.getCause().getClass().equals(SQLIntegrityConstraintViolationException.class)) {
+                    LOGGER.info(ex.getCause().getMessage());
+                    throw new ServerException(ServerErrorCode.LOGIN_NOT_UNIQUE, "Логин не уникален!");
+                }
+                throw new ServerException(ServerErrorCode.DATABASE_ERROR);
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't insert account {} {}", account, ex);
                 sqlSession.rollback();

@@ -1,13 +1,16 @@
 package net.thumbtack.school.buscompany.controller.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.thumbtack.school.buscompany.controller.GlobalErrorHandler;
 import net.thumbtack.school.buscompany.dto.request.account.EditClientDtoRequest;
 import net.thumbtack.school.buscompany.dto.request.account.RegistrationClientDtoRequest;
 import net.thumbtack.school.buscompany.dto.response.account.EditClientDtoResponse;
 import net.thumbtack.school.buscompany.dto.response.account.RegistrationClientDtoResponse;
+import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.helper.AccountHelper;
 import net.thumbtack.school.buscompany.helper.dto.request.account.RegistrationClientDtoRequestHelper;
 import net.thumbtack.school.buscompany.helper.dto.request.account.UpdateClientDtoRequestHelper;
+import net.thumbtack.school.buscompany.helper.dto.response.ErrorDtoResponseHelper;
 import net.thumbtack.school.buscompany.helper.dto.response.account.RegistrationClientDtoResponseHelper;
 import net.thumbtack.school.buscompany.helper.dto.response.account.UpdateClientDtoResponseHelper;
 import net.thumbtack.school.buscompany.service.DebugService;
@@ -24,6 +27,7 @@ import javax.servlet.http.Cookie;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -54,6 +58,23 @@ public class TestIntegrationClientController {
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(response)))
                 .andExpect(cookie().exists("JAVASESSIONID"));
+    }
+
+    @Test
+    public void insertClient_notUnique() throws Exception {
+        AccountHelper.registrationClient(mvc, mapper);
+
+        RegistrationClientDtoRequest request = RegistrationClientDtoRequestHelper.get();
+        GlobalErrorHandler.MyError response = ErrorDtoResponseHelper.getDtoResponseError(ServerErrorCode.LOGIN_NOT_UNIQUE, "login", "Login not unique");
+
+        mvc.perform(post("/api/clients")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(request)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json(mapper.writeValueAsString(response)))
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
     @Test

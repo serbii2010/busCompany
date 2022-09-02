@@ -27,7 +27,7 @@ public class GlobalErrorHandler {
         final MyError error = new MyError();
         ErrorDtoResponse dtoResponse = new ErrorDtoResponse();
         dtoResponse.setErrorCode(exception.getErrorCode().getErrorString());
-        dtoResponse.setMessage(exception.getErrorCode().getErrorString());
+        dtoResponse.setMessage(exception.getMessage());
         error.getErrors().add(dtoResponse);
         return error;
     }

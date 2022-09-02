@@ -17,7 +17,8 @@ public enum ServerErrorCode {
     PLACE_NOT_FOUND("PLACE_NOT_FOUND"),
     PLACE_TAKEN("PLACE_TAKEN"),
     DATABASE_ERROR("DATABASE_ERROR"),
-    USER_TYPE_ERROR("USER_TYPE_ERROR");
+    USER_TYPE_ERROR("USER_TYPE_ERROR"),
+    LOGIN_NOT_UNIQUE("UniqueLogin");
 
     private String error;
 

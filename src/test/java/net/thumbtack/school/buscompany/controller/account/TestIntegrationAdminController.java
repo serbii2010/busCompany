@@ -1,13 +1,16 @@
 package net.thumbtack.school.buscompany.controller.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.thumbtack.school.buscompany.controller.GlobalErrorHandler;
 import net.thumbtack.school.buscompany.dto.request.account.EditAdministratorDtoRequest;
 import net.thumbtack.school.buscompany.dto.request.account.RegistrationAdminDtoRequest;
 import net.thumbtack.school.buscompany.dto.response.account.EditAdministratorDtoResponse;
 import net.thumbtack.school.buscompany.dto.response.account.RegistrationAdminDtoResponse;
+import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.helper.AccountHelper;
 import net.thumbtack.school.buscompany.helper.dto.request.account.RegistrationAdminDtoRequestHelper;
 import net.thumbtack.school.buscompany.helper.dto.request.account.UpdateAdminDtoRequestHelper;
+import net.thumbtack.school.buscompany.helper.dto.response.ErrorDtoResponseHelper;
 import net.thumbtack.school.buscompany.helper.dto.response.account.RegistrationAdminDtoResponseHelper;
 import net.thumbtack.school.buscompany.helper.dto.response.account.UpdateAdminDtoResponseHelper;
 import net.thumbtack.school.buscompany.service.DebugService;
@@ -56,7 +59,23 @@ class TestIntegrationAdminController {
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(response)))
                 .andExpect(cookie().exists("JAVASESSIONID"));
+    }
 
+    @Test
+    public void insertAdmin_notUnique() throws Exception {
+        AccountHelper.registrationAdmin("admin", mvc, mapper);
+
+        RegistrationAdminDtoRequest request = RegistrationAdminDtoRequestHelper.get("admin");
+        GlobalErrorHandler.MyError response = ErrorDtoResponseHelper.getDtoResponseError(ServerErrorCode.LOGIN_NOT_UNIQUE, "login", "Login not unique");
+
+        mvc.perform(post("/api/admins")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(request)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json(mapper.writeValueAsString(response)))
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
     @Test

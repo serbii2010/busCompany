@@ -7,17 +7,18 @@ import net.thumbtack.school.buscompany.mappers.mybatis.account.SessionMapper;
 import net.thumbtack.school.buscompany.mappers.mybatis.order.OrderMapper;
 import net.thumbtack.school.buscompany.mappers.mybatis.order.PassengerMapper;
 import net.thumbtack.school.buscompany.mappers.mybatis.trip.*;
-import net.thumbtack.school.buscompany.utils.MyBatisUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class DaoImplBase {
+    @Autowired
+    private SqlSessionFactory sqlSessionFactory;
 
     protected SqlSession getSession() {
-        SqlSessionFactory factory = MyBatisUtils.getSqlSessionFactory();
-        return factory.openSession();
+        return sqlSessionFactory.openSession();
     }
 
     protected AccountMapper getAccountMapper(SqlSession sqlSession) {

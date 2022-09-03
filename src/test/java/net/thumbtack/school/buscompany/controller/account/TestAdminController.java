@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -61,6 +62,8 @@ class TestAdminController {
                 "admin",
                 "password"
         );
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        Mockito.when(accountService.registrationAdmin(request, response)).thenCallRealMethod();
         mvc.perform(post("/api/admins")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)

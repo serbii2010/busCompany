@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -59,6 +60,8 @@ class TestClientController {
                 "client",
                 "password"
         );
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        Mockito.when(accountService.registrationClient(request, response)).thenCallRealMethod();
         mvc.perform(post("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -433,8 +436,10 @@ class TestClientController {
     }
 
     @Test
-    public void testGetClients_badAuth() throws Exception {
-        Mockito.doThrow(new ServerException(ServerErrorCode.ACTION_FORBIDDEN)).when(accountService).checkAdmin(cookie.getValue());
+    public void testGetClients_badAuthByAdmin() throws Exception {
+        Mockito.doThrow(new ServerException(ServerErrorCode.ACTION_FORBIDDEN)).when(accountService).checkAdmin(accountHelper.getClient());
+        Mockito.when(accountService.getClients(cookie.getValue())).thenCallRealMethod();
+        Mockito.when(accountService.getAuthAccount(cookie.getValue())).thenReturn(accountHelper.getClient());
         mvc.perform(get("/api/clients")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)

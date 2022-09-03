@@ -29,6 +29,7 @@ public class TripHelper {
     private DateTripHelper dateTripHelper;
 
     private Trip trip;
+    private Trip tripApproved;
     private Bus bus;
     private Schedule schedule;
     private Station fromStation;
@@ -46,7 +47,7 @@ public class TripHelper {
         schedule = new Schedule(1, fromDate, toDate, "odd", null);
         List<DateTrip> dates = new ArrayList<>();
         trip = new Trip(1, bus, fromStation, toStation, LocalTime.of(12, 30), 23*60 + 51, 30, false, schedule, dates);
-
+        tripApproved= new Trip(1, bus, fromStation, toStation, LocalTime.of(12, 30), 23*60 + 51, 30, true, schedule, dates);
         dates.add(dateTripHelper.getDateTrip(trip));
         trip.setDates(dates);
     }

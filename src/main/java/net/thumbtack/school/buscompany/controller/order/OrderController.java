@@ -24,13 +24,6 @@ public class OrderController {
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public OrderDtoResponse createOrder(@Valid @RequestBody OrderDtoRequest request,
                                         @CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
-        // REVU если уж делаете так, тоо надо бы сделать, чтобы
-        // accountService.checkClient вернул Client, а в orderService.createOrder
-        // передать этот Client, а не javaSessionId
-        // клиент же делает заказ, а не кука
-        // здесь и везде
-        accountService.checkClient(javaSessionId);
-
         return orderService.createOrder(request, javaSessionId);
     }
 
@@ -50,8 +43,6 @@ public class OrderController {
     @DeleteMapping(path = "/{orderId}",produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public EmptyDtoResponse deleteOrder(@PathVariable String orderId,
                                          @CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
-        accountService.checkClient(javaSessionId);
-
-        return orderService.delete(orderId);
+        return orderService.delete(javaSessionId, orderId);
     }
 }

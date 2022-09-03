@@ -6,6 +6,8 @@ import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.mappers.dto.trip.BusMapper;
 import net.thumbtack.school.buscompany.model.Bus;
+import net.thumbtack.school.buscompany.model.account.Account;
+import net.thumbtack.school.buscompany.service.account.AccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +24,13 @@ public class BusService {
 
     @Autowired
     private BusDaoImpl busDao;
+    @Autowired
+    private AccountService accountService;
 
-    public List<BusDtoResponse> getBuses() {
+    public List<BusDtoResponse> getBuses(String javaSessionId) throws ServerException {
+        Account account = accountService.getAuthAccount(javaSessionId);
+        accountService.checkAdmin(account);
+
         List<BusDtoResponse> responseList = new ArrayList<>();
         for (Bus bus: busDao.findAll()) {
             responseList.add(BusMapper.INSTANCE.busToDto(bus));

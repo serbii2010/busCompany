@@ -12,6 +12,7 @@ import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.mappers.dto.trip.TripMapper;
 import net.thumbtack.school.buscompany.model.DateTrip;
 import net.thumbtack.school.buscompany.model.Trip;
+import net.thumbtack.school.buscompany.model.account.Account;
 import net.thumbtack.school.buscompany.service.account.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,18 +44,25 @@ public class TripService {
     @Autowired
     private DateTripDaoImpl dateTripDao;
 
-    public TripAdminDtoResponse addTrip(TripDtoRequest request) throws ServerException {
+    public TripAdminDtoResponse addTrip(String javaSessionId, TripDtoRequest request) throws ServerException {
+        Account account = accountService.getAuthAccount(javaSessionId);
+        accountService.checkAdmin(account);
         Trip trip = TripMapper.INSTANCE.tripDtoToTrip(request, stationService, busService);
         insert(trip);
         return TripMapper.INSTANCE.tripAdminToDtoResponse(trip);
     }
 
-    public TripAdminDtoResponse getTrip(String id) throws ServerException {
+    public TripAdminDtoResponse getTrip(String javaSessionId, String id) throws ServerException {
+        Account account = accountService.getAuthAccount(javaSessionId);
+        accountService.checkAdmin(account);
+
         Trip trip = findById(id);
         return TripMapper.INSTANCE.tripAdminToDtoResponse(trip);
     }
 
-    public TripAdminDtoResponse update(String id, TripDtoRequest tripDtoRequest) throws ServerException {
+    public TripAdminDtoResponse update(String javaSessionId, String id, TripDtoRequest tripDtoRequest) throws ServerException {
+        accountService.checkAdmin(accountService.getAuthAccount(javaSessionId));
+
         Trip trip = findById(id);
         checkNotApproved(trip);
         TripMapper.INSTANCE.update(trip, tripDtoRequest, stationService, busService, this);
@@ -63,14 +71,18 @@ public class TripService {
         return TripMapper.INSTANCE.tripAdminToDtoResponse(trip);
     }
 
-    public TripAdminDtoResponse approved(String id) throws ServerException {
+    public TripAdminDtoResponse approved(String javaSessionId, String id) throws ServerException {
+        Account account = accountService.getAuthAccount(javaSessionId);
+        accountService.checkAdmin(account);
         Trip trip = findById(id);
         trip.setApproved(true);
         tripDao.update(trip);
         return TripMapper.INSTANCE.tripAdminToDtoResponse(trip);
     }
 
-    public EmptyDtoResponse delete(String id) throws ServerException {
+    public EmptyDtoResponse delete(String javaSessionId, String id) throws ServerException {
+        Account account = accountService.getAuthAccount(javaSessionId);
+        accountService.checkAdmin(account);
         Trip trip = findById(id);
         checkNotApproved(trip);
         tripDao.remove(trip);
@@ -79,10 +91,11 @@ public class TripService {
 
     public List<? extends BaseTripDtoResponse> filter(String javaSessionId, String fromStation, String toStation, String busName, String fromDate, String toDate)  throws ServerException {
         List<? extends BaseTripDtoResponse> result;
-        if (accountService.isAdmin(javaSessionId)) {
+        Account account = accountService.getAuthAccount(javaSessionId);
+        if (accountService.isAdmin(account)) {
             List<Trip> listTrip = getListTripByAdmin(fromStation, toStation, busName, fromDate, toDate);
             result = TripMapper.INSTANCE.tripListAdminToDtoResponse(listTrip);
-        } else if (accountService.isClient(javaSessionId)) {
+        } else if (accountService.isClient(account)) {
             List<Trip> listTrip = getListTripByClient(fromStation, toStation, busName, fromDate, toDate);
             result = TripMapper.INSTANCE.tripListClientToDtoResponse(listTrip);
         } else {

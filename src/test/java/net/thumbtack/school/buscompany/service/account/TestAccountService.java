@@ -204,55 +204,55 @@ class TestAccountService {
     public void testCheckAdmin() throws Exception {
         String cookieSessionId = accountHelper.getSession().getSessionId();
         Mockito.when(sessionDao.findBySessionId(cookieSessionId)).thenReturn(accountHelper.getSession());
-        assertDoesNotThrow(() -> accountService.checkAdmin(cookieSessionId));
+        assertDoesNotThrow(() -> accountService.checkAdmin(accountHelper.getAdmin()));
     }
 
     @Test
     public void testCheckAdmin_bad() throws Exception {
         String cookieSessionId = accountHelper.getSessionClient().getSessionId();
         Mockito.when(sessionDao.findBySessionId(cookieSessionId)).thenReturn(accountHelper.getSessionClient());
-        assertThrows(ServerException.class, () -> accountService.checkAdmin(cookieSessionId));
+        assertThrows(ServerException.class, () -> accountService.checkAdmin(accountHelper.getClient()));
     }
 
     @Test
     public void testCheckClient() throws Exception {
         String cookieSessionId = accountHelper.getSessionClient().getSessionId();
         Mockito.when(sessionDao.findBySessionId(cookieSessionId)).thenReturn(accountHelper.getSessionClient());
-        assertDoesNotThrow(() -> accountService.checkClient(cookieSessionId));
+        assertDoesNotThrow(() -> accountService.checkClient(accountHelper.getClient()));
     }
 
     @Test
     public void testCheckClientBad() throws Exception {
         String cookieSessionId = accountHelper.getSession().getSessionId();
         Mockito.when(sessionDao.findBySessionId(cookieSessionId)).thenReturn(accountHelper.getSession());
-        assertThrows(ServerException.class, () -> accountService.checkClient(cookieSessionId));
+        assertThrows(ServerException.class, () -> accountService.checkClient(accountHelper.getAdmin()));
     }
 
     @Test
     public void testIsAdmin() throws Exception {
         String cookieSessionId = accountHelper.getSession().getSessionId();
         Mockito.when(sessionDao.findBySessionId(cookieSessionId)).thenReturn(accountHelper.getSession());
-        assertTrue(accountService.isAdmin(cookieSessionId));
+        assertTrue(accountService.isAdmin(accountHelper.getAdmin()));
     }
 
     @Test
     public void testIsAdmin_bad() throws Exception {
         String cookieSessionId = accountHelper.getSessionClient().getSessionId();
         Mockito.when(sessionDao.findBySessionId(cookieSessionId)).thenReturn(accountHelper.getSessionClient());
-        assertFalse(accountService.isAdmin(cookieSessionId));
+        assertFalse(accountService.isAdmin(accountHelper.getClient()));
     }
 
     @Test
     public void testIsClient() throws Exception {
         String cookieSessionId = accountHelper.getSessionClient().getSessionId();
         Mockito.when(sessionDao.findBySessionId(cookieSessionId)).thenReturn(accountHelper.getSessionClient());
-        assertTrue(accountService.isClient(cookieSessionId));
+        assertTrue(accountService.isClient(accountHelper.getClient()));
     }
 
     @Test
     public void testIsClient_bad() throws Exception {
         String cookieSessionId = accountHelper.getSession().getSessionId();
         Mockito.when(sessionDao.findBySessionId(cookieSessionId)).thenReturn(accountHelper.getSession());
-        assertFalse(accountService.isClient(cookieSessionId));
+        assertFalse(accountService.isClient(accountHelper.getAdmin()));
     }
 }

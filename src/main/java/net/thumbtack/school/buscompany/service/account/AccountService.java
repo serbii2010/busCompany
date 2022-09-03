@@ -79,7 +79,10 @@ public class AccountService {
         }
     }
 
-    public List<InfoClientDtoResponse> getClients() throws ServerException {
+    public List<InfoClientDtoResponse> getClients(String javaSessionId) throws ServerException {
+        Account account = getAuthAccount(javaSessionId);
+        checkAdmin(account);
+
         List<InfoClientDtoResponse> result = new ArrayList<>();
 
         List<Client> accountsClient = accountDao.findClients();
@@ -91,9 +94,8 @@ public class AccountService {
 
     public EditAdministratorDtoResponse updateAdmin(EditAdministratorDtoRequest request, String javaSessionId) throws ServerException {
         Account account = getAuthAccount(javaSessionId);
-        if (account.getUserType() != UserType.ADMIN) {
-            throw new ServerException(ServerErrorCode.ACTION_FORBIDDEN);
-        }
+        checkAdmin(account);
+
         Admin admin = findAdmin(account);
 
         AdminMapper.INSTANCE.update(admin, request, this);
@@ -104,9 +106,8 @@ public class AccountService {
 
     public EditClientDtoResponse updateClient(EditClientDtoRequest request, String javaSessionId) throws ServerException {
         Account account = getAuthAccount(javaSessionId);
-        if (account.getUserType() != UserType.CLIENT) {
-            throw new ServerException(ServerErrorCode.ACTION_FORBIDDEN);
-        }
+        checkClient(account);
+
         Client client = findClient(getAuthAccount(javaSessionId));
         ClientMapper.INSTANCE.update(client, request, this);
         updateAccount(client);
@@ -220,25 +221,23 @@ public class AccountService {
         }
     }
 
-    public void checkAdmin(String javaSessionId) throws ServerException {
-        if (!isAdmin(javaSessionId)) {
+    public void checkAdmin(Account account) throws ServerException {
+        if (!isAdmin(account)) {
             throw new ServerException(ServerErrorCode.ACTION_FORBIDDEN);
         }
     }
 
-    public void checkClient(String javaSessionId) throws ServerException {
-        if (!isClient(javaSessionId)) {
+    public void checkClient(Account account) throws ServerException {
+        if (!isClient(account)) {
             throw new ServerException(ServerErrorCode.ACTION_FORBIDDEN);
         }
     }
 
-    public boolean isAdmin(String javaSessionId) throws ServerException {
-        Account account = getAuthAccount(javaSessionId);
+    public boolean isAdmin(Account account) throws ServerException {
         return account.getUserType().getType().equals(UserType.ADMIN.getType());
     }
 
-    public boolean isClient(String javaSessionId) throws ServerException {
-        Account account = getAuthAccount(javaSessionId);
+    public boolean isClient(Account account) throws ServerException {
         return account.getUserType().getType().equals(UserType.CLIENT.getType());
     }
 

@@ -44,7 +44,7 @@ public class ClientController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public List<InfoClientDtoResponse> getClients(@CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
-        accountService.checkAdmin(javaSessionId);
-        return accountService.getClients();
+
+        return accountService.getClients(javaSessionId);
     }
 }

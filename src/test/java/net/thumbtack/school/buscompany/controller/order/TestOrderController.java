@@ -106,35 +106,6 @@ class TestOrderController {
     }
 
     @Test
-    void testCreateOrder_badByAdmin() throws Exception {
-        List<PassengerDtoRequest> passengers = new ArrayList<>();
-        passengers.add(new PassengerDtoRequest("имя", "фамилия", "номер паспорта"));
-        passengers.add(new PassengerDtoRequest("имя2", "фамилия2", "номер паспорта2"));
-        OrderDtoRequest request = new OrderDtoRequest(
-                1,
-                "2021-12-12",
-                passengers
-        );
-        Mockito.doThrow(new ServerException(ServerErrorCode.ACTION_FORBIDDEN)).when(accountService).checkClient(cookie.getValue());
-        Mockito.when(tripService.findById("1")).thenReturn(trip);
-        Mockito.when(tripService.findDateTrip("1", "2021-12-12")).thenReturn(dateTripHelper.getDateTrip(trip));
-        MvcResult result = mvc.perform(post("/api/orders")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(request))
-                .cookie(cookie))
-                .andReturn();
-        String responseContent = result.getResponse().getContentAsString();
-        GlobalErrorHandler.MyError errorResponse = mapper.readValue(responseContent, GlobalErrorHandler.MyError.class);
-        ServerErrorCode errorCode = ServerErrorCode.valueOf(errorResponse.getErrors().get(0).getErrorCode());
-        assertAll(
-                "head",
-                () -> assertEquals(result.getResponse().getStatus(), HttpStatus.BAD_REQUEST.value()),
-                () -> assertEquals(ServerErrorCode.ACTION_FORBIDDEN, errorCode)
-        );
-    }
-
-    @Test
     void testCreateOrder_badDateTrip() throws Exception {
         List<PassengerDtoRequest> passengers = new ArrayList<>();
         passengers.add(new PassengerDtoRequest("имя", "фамилия", "номер паспорта"));

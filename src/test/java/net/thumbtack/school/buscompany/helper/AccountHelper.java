@@ -62,7 +62,7 @@ public class AccountHelper {
                 "88005553535",
                 1);
 
-        this.cookie = new Cookie("JAVASESSIONID", UUID.randomUUID().toString());
+        this.cookie = new Cookie("JAVASESSIONID", "123456789");
 
         this.session = new Session(1, admin, cookie.getValue(), LocalDateTime.now());
         this.sessionClient = new Session(1, client, cookie.getValue(), LocalDateTime.now());

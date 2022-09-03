@@ -51,8 +51,6 @@ class TestTripController {
     private AccountHelper accountHelper;
 
     @MockBean
-    private AccountService accountService;
-    @MockBean
     private StationService stationService;
     @MockBean
     private TripService tripService;
@@ -60,6 +58,8 @@ class TestTripController {
     private BusService busService;
     @MockBean
     private ScheduleService scheduleService;
+    @MockBean
+    private AccountService accountService;
 
     private Cookie cookie;
     private Client client;
@@ -333,38 +333,6 @@ class TestTripController {
         assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
     }
 
-
-    @Test
-    void testAddTrip_scheduleNotAdmin() throws Exception {
-        TripDtoRequest request = new TripDtoRequest(
-                "Пазик",
-                "Omsk",
-                "Новосибирск",
-                "12:30",
-                "23:51",
-                20,
-                new ScheduleDtoRequest(
-                        "2022-12-01",
-                        "2022-12-25",
-                        "odd"
-                ),
-                null
-        );
-
-        Mockito.when(scheduleService.checkPeriod("odd")).thenReturn(true);
-        Mockito.when(tripService.insert(trip)).thenReturn(trip);
-        Mockito.when(scheduleService.findOrInsert(schedule)).thenReturn(schedule);
-        Mockito.doThrow(new ServerException(ServerErrorCode.ACTION_FORBIDDEN)).when(accountService).checkAdmin(cookie.getValue());
-
-        MvcResult result = mvc.perform(post("/api/trips")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(request))
-                .cookie(cookie))
-                .andReturn();
-        assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
-    }
-
     @Test
     void testUpdate() throws Exception {
         TripDtoRequest request = new TripDtoRequest(
@@ -386,30 +354,7 @@ class TestTripController {
                 .andExpect(status().isOk());
     }
 
-    @Test
-    void testUpdate_notAdmin() throws Exception {
-        TripDtoRequest request = new TripDtoRequest(
-                "Пазик",
-                "Omsk",
-                "Новосибирск",
-                "12:30",
-                "23:51",
-                20,
-                null,
-                Collections.singletonList("2022-12-12")
-        );
 
-        Mockito.when(tripService.findById("1")).thenReturn(tripHelper.getTrip());
-        Mockito.doThrow(new ServerException(ServerErrorCode.ACTION_FORBIDDEN)).when(accountService).checkAdmin(cookie.getValue());
-
-        MvcResult result = mvc.perform(put("/api/trips/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(request))
-                .cookie(cookie))
-                .andReturn();
-        assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
-    }
 
     @Test
     void testUpdate_badBusName() throws Exception {
@@ -546,31 +491,6 @@ class TestTripController {
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
     }
 
-    @Test
-    void testApproveTrip_tripNotFound() throws Exception {
-        Mockito.when(tripService.approved("1")).thenCallRealMethod();
-        Mockito.when(tripService.findById("1")).thenThrow(new ServerException(ServerErrorCode.TRIP_NOT_FOUND));
-
-        MvcResult result = mvc.perform(put("/api/trips/1/approve")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .cookie(cookie))
-                .andReturn();
-        assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
-    }
-
-    @Test
-    void testApproveTrip_notAdmin() throws Exception {
-        Mockito.when(tripService.findById("1")).thenReturn(tripHelper.getTrip());
-        Mockito.doThrow(new ServerException(ServerErrorCode.ACTION_FORBIDDEN)).when(accountService).checkAdmin(cookie.getValue());
-
-        MvcResult result = mvc.perform(put("/api/trips/1/approve")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .cookie(cookie))
-                .andReturn();
-        assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
-    }
 
     @Test
     void testDeleteTrip() throws Exception {
@@ -582,83 +502,21 @@ class TestTripController {
                 .cookie(cookie))
                 .andReturn();
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
+
+        Mockito.verify(tripService).delete(cookie.getValue(), "1");
     }
 
-    @Test
-    void testDeleteTrip_notAdmin() throws Exception {
-        Mockito.when(tripService.findById("1")).thenReturn(tripHelper.getTrip());
-        Mockito.doThrow(new ServerException(ServerErrorCode.ACTION_FORBIDDEN)).when(accountService).checkAdmin(cookie.getValue());
-
-        MvcResult result = mvc.perform(delete("/api/trips/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .cookie(cookie))
-                .andReturn();
-        assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
-    }
-
-    @Test
-    void testDeleteTrip_notFoundTrip() throws Exception {
-        Mockito.when(tripService.delete("1")).thenCallRealMethod();
-        Mockito.when(tripService.findById("1")).thenThrow(new ServerException(ServerErrorCode.TRIP_NOT_FOUND));
-
-        MvcResult result = mvc.perform(delete("/api/trips/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .cookie(cookie))
-                .andReturn();
-        assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
-    }
-
-    @Test
-    void testDeleteTrip_approvedTrip() throws Exception {
-        Mockito.when(tripService.delete("1")).thenCallRealMethod();
-        Mockito.when(tripService.findById("1")).thenReturn(tripHelper.getTrip());
-        Mockito.doThrow(new ServerException(ServerErrorCode.ACTION_FORBIDDEN)).when(tripService).checkNotApproved(tripHelper.getTrip());
-
-        MvcResult result = mvc.perform(delete("/api/trips/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .cookie(cookie))
-                .andReturn();
-        assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
-    }
 
     @Test
     void testGetTrip() throws Exception {
-        Mockito.when(tripService.findById("1")).thenReturn(tripHelper.getTrip());
-
         MvcResult result = mvc.perform(get("/api/trips/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .cookie(cookie))
                 .andReturn();
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
+
+        Mockito.verify(tripService).getTrip(cookie.getValue(), "1");
     }
 
-    @Test
-    void testGetTrip_notAdmin() throws Exception {
-        Mockito.when(tripService.findById("1")).thenReturn(tripHelper.getTrip());
-        Mockito.doThrow(new ServerException(ServerErrorCode.ACTION_FORBIDDEN)).when(accountService).checkAdmin(cookie.getValue());
-
-        MvcResult result = mvc.perform(get("/api/trips/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .cookie(cookie))
-                .andReturn();
-        assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
-    }
-
-    @Test
-    void testGetTrip_notFoundTrip() throws Exception {
-        Mockito.when(tripService.getTrip("1")).thenCallRealMethod();
-        Mockito.when(tripService.findById("1")).thenThrow(new ServerException(ServerErrorCode.ACTION_FORBIDDEN));
-
-        MvcResult result = mvc.perform(get("/api/trips/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .cookie(cookie))
-                .andReturn();
-        assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
-    }
 }

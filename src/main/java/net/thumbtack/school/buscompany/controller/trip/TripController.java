@@ -29,41 +29,38 @@ public class TripController {
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public TripAdminDtoResponse addTrip(@Valid @RequestBody TripDtoRequest request,
                                         @CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
-        accountService.checkAdmin(javaSessionId);
-
-        return tripService.addTrip(request);
+        return tripService.addTrip(javaSessionId, request);
     }
 
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public TripAdminDtoResponse update(@Valid @RequestBody TripDtoRequest tripDtoRequest,
                                        @PathVariable String id,
                                        @CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
-        accountService.checkAdmin(javaSessionId);
-        return tripService.update(id, tripDtoRequest);
+        return tripService.update(javaSessionId, id, tripDtoRequest);
     }
 
     @PutMapping(path = "/{id}/approve", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public TripAdminDtoResponse approveTrip(@PathVariable String id,
                                             @CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
-        accountService.checkAdmin(javaSessionId);
 
-        return tripService.approved(id);
+
+        return tripService.approved(javaSessionId, id);
     }
 
     @DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public EmptyDtoResponse deleteTrip(@PathVariable String id,
                                        @CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
-        accountService.checkAdmin(javaSessionId);
 
-        return tripService.delete(id);
+
+        return tripService.delete(javaSessionId, id);
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public TripAdminDtoResponse getTrip(@PathVariable String id,
                                         @CookieValue("JAVASESSIONID") String javaSessionId) throws ServerException {
-        accountService.checkAdmin(javaSessionId);
 
-        return tripService.getTrip(id);
+
+        return tripService.getTrip(javaSessionId, id);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

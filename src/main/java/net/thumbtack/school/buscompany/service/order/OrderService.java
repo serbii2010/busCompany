@@ -30,8 +30,8 @@ public class OrderService {
     private OrderDaoImpl orderDao;
 
     public OrderDtoResponse createOrder(OrderDtoRequest request, String javaSessionId) throws ServerException {
-        accountService.checkClient(javaSessionId);
         Account account = accountService.getAuthAccount(javaSessionId);
+        accountService.checkClient(account);
         Client client = accountService.findClient(account);
 
         Order order = OrderMapper.INSTANCE.dtoToOrder(request, tripService, client);
@@ -43,7 +43,7 @@ public class OrderService {
     public List<OrderDtoResponse> filter(String javaSessionId, String fromStation, String toStation, String busName, String fromDate, String toDate, String clientId)  throws ServerException {
         Account account = accountService.getAuthAccount(javaSessionId);
         List<Order> orderList = new ArrayList<>();
-        if (accountService.isAdmin(javaSessionId)) {
+        if (accountService.isAdmin(account)) {
             orderList.addAll(getListOrder(fromStation, toStation, busName, fromDate, toDate, clientId));
         } else {
             Client client = accountService.findClient(account);
@@ -52,7 +52,10 @@ public class OrderService {
         return OrderMapper.INSTANCE.orderListToDtoResponse(orderList);
     }
 
-    public EmptyDtoResponse delete(String orderId) throws ServerException {
+    public EmptyDtoResponse delete(String javaSessionId, String orderId) throws ServerException {
+        Account account = accountService.getAuthAccount(javaSessionId);
+        accountService.checkClient(account);
+
         Order order = findById(orderId);
         orderDao.remove(order);
 

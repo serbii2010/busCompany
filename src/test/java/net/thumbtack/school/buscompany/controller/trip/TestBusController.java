@@ -1,8 +1,5 @@
 package net.thumbtack.school.buscompany.controller.trip;
 
-import net.thumbtack.school.buscompany.dto.response.trip.BusDtoResponse;
-import net.thumbtack.school.buscompany.exception.ServerErrorCode;
-import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.helper.AccountHelper;
 import net.thumbtack.school.buscompany.helper.DateTripHelper;
 import net.thumbtack.school.buscompany.helper.TripHelper;
@@ -16,18 +13,15 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import javax.servlet.http.Cookie;
 import java.text.ParseException;
-import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = {BusController.class, AccountHelper.class, TripHelper.class, DateTripHelper.class})
@@ -58,34 +52,20 @@ class TestBusController {
 
     @Test
     void testGetBuses() throws Exception {
-        Mockito.when(busService.getBuses()).thenReturn(Collections.singletonList(new BusDtoResponse(bus.getName(), bus.getPlaceCount())));
-        MvcResult result = mvc.perform(get("/api/buses")
+        mvc.perform(get("/api/buses")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .cookie(cookie))
-                .andReturn();
-        assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
-    }
+                .andExpect(status().isOk());
 
-    @Test
-    void testGetBuses_byClient() throws Exception {
-        Mockito.doThrow(new ServerException(ServerErrorCode.ACTION_FORBIDDEN)).when(accountService).checkAdmin(cookie.getValue());
-
-        MvcResult result = mvc.perform(get("/api/buses")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .cookie(cookie))
-                .andReturn();
-        assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
+        Mockito.verify(busService).getBuses(cookie.getValue());
     }
 
     @Test
     void testGetBuses_badCookie() throws Exception {
-        Mockito.when(busService.getBuses()).thenReturn(Collections.singletonList(new BusDtoResponse(bus.getName(), bus.getPlaceCount())));
-        MvcResult result = mvc.perform(get("/api/buses")
+        mvc.perform(get("/api/buses")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-                .andReturn();
-        assertEquals(HttpStatus.BAD_REQUEST.value(), result.getResponse().getStatus());
+                .andExpect(status().isBadRequest());
     }
 }

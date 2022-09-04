@@ -3,6 +3,7 @@ package net.thumbtack.school.buscompany.service;
 import net.thumbtack.school.buscompany.daoImpl.DebugDaoImpl;
 import net.thumbtack.school.buscompany.daoImpl.trip.BusDaoImpl;
 import net.thumbtack.school.buscompany.daoImpl.trip.StationDaoImpl;
+import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.Bus;
 import net.thumbtack.school.buscompany.model.Station;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +22,15 @@ public class DebugService {
     @Autowired
     private StationDaoImpl stationDao;
 
-    public void clear() {
+    public void clear() throws ServerException {
         debugDao.clear();
     }
 
-    public void insertBus(Bus bus) {
+    public void insertBus(Bus bus) throws ServerException {
         busDao.insert(bus);
     }
 
-    public void insertStation(Station station) {
+    public void insertStation(Station station) throws ServerException {
         stationDao.insert(station);
     }
 }

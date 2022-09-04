@@ -5,8 +5,6 @@ import net.thumbtack.school.buscompany.daoImpl.DaoImplBase;
 import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.Session;
-import net.thumbtack.school.buscompany.model.account.Admin;
-import net.thumbtack.school.buscompany.model.account.Client;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +51,7 @@ public class SessionDaoImpl extends DaoImplBase implements Dao<Session> {
     }
 
     @Override
-    public Session insert(Session session) {
+    public Session insert(Session session) throws ServerException {
         LOGGER.debug("DAO insert Session {}", session);
         try (SqlSession sqlSession = getSession()) {
             try {
@@ -61,7 +59,7 @@ public class SessionDaoImpl extends DaoImplBase implements Dao<Session> {
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't insert session {} {}", session, ex);
                 sqlSession.rollback();
-                throw ex;
+                throw new ServerException(ServerErrorCode.DATABASE_ERROR);
             }
             sqlSession.commit();
         }
@@ -69,7 +67,7 @@ public class SessionDaoImpl extends DaoImplBase implements Dao<Session> {
     }
 
     @Override
-    public void remove(Session session) {
+    public void remove(Session session) throws ServerException {
         LOGGER.debug("DAO delete Session {}", session);
         try (SqlSession sqlSession = getSession()) {
             try {
@@ -77,14 +75,14 @@ public class SessionDaoImpl extends DaoImplBase implements Dao<Session> {
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't delete session {} {}", session, ex);
                 sqlSession.rollback();
-                throw ex;
+                throw new ServerException(ServerErrorCode.DATABASE_ERROR);
             }
             sqlSession.commit();
         }
     }
 
     @Override
-    public void update(Session session) {
+    public void update(Session session) throws ServerException {
         LOGGER.debug("DAO update session {}", session);
         try (SqlSession sqlSession = getSession()) {
             try {
@@ -92,7 +90,7 @@ public class SessionDaoImpl extends DaoImplBase implements Dao<Session> {
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't update session {} {}", session, ex);
                 sqlSession.rollback();
-                throw ex;
+                throw new ServerException(ServerErrorCode.DATABASE_ERROR);
             }
             sqlSession.commit();
         }

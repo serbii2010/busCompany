@@ -37,7 +37,7 @@ public class ScheduleDaoImpl extends DaoImplBase implements Dao<Schedule> {
     }
 
     @Override
-    public Schedule insert(Schedule schedule) {
+    public Schedule insert(Schedule schedule) throws ServerException {
         LOGGER.debug("DAO insert Schedule {}", schedule);
         try (SqlSession sqlSession = getSession()) {
             try {
@@ -45,7 +45,7 @@ public class ScheduleDaoImpl extends DaoImplBase implements Dao<Schedule> {
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't insert Schedule {} {}", schedule, ex);
                 sqlSession.rollback();
-                throw ex;
+                throw new ServerException(ServerErrorCode.DATABASE_ERROR);
             }
             sqlSession.commit();
         }

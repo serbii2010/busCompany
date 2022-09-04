@@ -1,5 +1,6 @@
 package net.thumbtack.school.buscompany.controller;
 
+import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.service.DebugService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
@@ -15,7 +16,7 @@ public class DebugController {
     private DebugService debugService;
 
     @PostMapping(path = "/clear")
-    public void clear() {
+    public void clear() throws ServerException {
         debugService.clear();
     }
 }

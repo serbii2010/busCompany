@@ -16,12 +16,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.util.Formatter;
 import java.util.List;
 
 @Mapper(componentModel = "spring", imports = {StationService.class, BusService.class,

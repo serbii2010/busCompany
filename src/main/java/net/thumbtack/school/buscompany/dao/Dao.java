@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface Dao<T> {
     T findById(String id) throws ServerException;
-    List<T> findAll();
+    List<T> findAll() throws ServerException;
     T insert(T object) throws ServerException;
     void remove(T object) throws ServerException;
     void update(T object) throws ServerException;

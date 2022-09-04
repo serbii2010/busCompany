@@ -2,6 +2,7 @@ package net.thumbtack.school.buscompany.daoImpl.trip;
 
 import net.thumbtack.school.buscompany.dao.Dao;
 import net.thumbtack.school.buscompany.daoImpl.DaoImplBase;
+import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.DateTrip;
 import net.thumbtack.school.buscompany.model.Place;
@@ -10,12 +11,13 @@ import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-@Component
+@Repository
 public class TripDaoImpl extends DaoImplBase implements Dao<Trip> {
     private static final Logger LOGGER = LoggerFactory.getLogger(TripDaoImpl.class);
 
@@ -26,17 +28,17 @@ public class TripDaoImpl extends DaoImplBase implements Dao<Trip> {
             return getTripMapper(sqlSession).findById(id);
         } catch (RuntimeException ex) {
             LOGGER.info("Can't get Trip by Id {} {}", id, ex);
-            throw ex;
+            throw new ServerException(ServerErrorCode.DATABASE_ERROR);
         }
     }
 
-    public List<Trip> filter(String fromStation, String toStation, String busName, String fromDate, String toDate, Boolean approved) {
+    public List<Trip> filter(String fromStation, String toStation, String busName, String fromDate, String toDate, Boolean approved) throws ServerException {
         LOGGER.debug("DAO get Trip list from filter");
         try (SqlSession sqlSession = getSession()) {
             return getTripMapper(sqlSession).filterTrip(fromStation, toStation, busName, fromDate, toDate, approved);
         } catch (RuntimeException ex) {
             LOGGER.info("Can't get Trip list from filter");
-            throw ex;
+            throw new ServerException(ServerErrorCode.DATABASE_ERROR);
         }
     }
 
@@ -46,7 +48,7 @@ public class TripDaoImpl extends DaoImplBase implements Dao<Trip> {
     }
 
     @Override
-    public Trip insert(Trip trip) {
+    public Trip insert(Trip trip) throws ServerException {
         LOGGER.debug("DAO insert Trip {}", trip);
         try (SqlSession sqlSession = getSession()) {
             try {
@@ -55,7 +57,7 @@ public class TripDaoImpl extends DaoImplBase implements Dao<Trip> {
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't insert Trip {} {}", trip, ex);
                 sqlSession.rollback();
-                throw ex;
+                throw new ServerException(ServerErrorCode.DATABASE_ERROR);
             }
             sqlSession.commit();
         }
@@ -63,7 +65,7 @@ public class TripDaoImpl extends DaoImplBase implements Dao<Trip> {
     }
 
     @Override
-    public void remove(Trip trip) {
+    public void remove(Trip trip) throws ServerException {
         LOGGER.debug("DAO delete Trip {}", trip);
         try (SqlSession sqlSession = getSession()) {
             try {
@@ -73,14 +75,14 @@ public class TripDaoImpl extends DaoImplBase implements Dao<Trip> {
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't delete Trip {}", ex);
                 sqlSession.rollback();
-                throw ex;
+                throw new ServerException(ServerErrorCode.DATABASE_ERROR);
             }
             sqlSession.commit();
         }
     }
 
     @Override
-    public void update(Trip trip) {
+    public void update(Trip trip) throws ServerException {
         LOGGER.debug("DAO update Account {}", trip);
         try (SqlSession sqlSession = getSession()) {
             try {
@@ -92,7 +94,7 @@ public class TripDaoImpl extends DaoImplBase implements Dao<Trip> {
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't update account {} {}", trip, ex);
                 sqlSession.rollback();
-                throw ex;
+                throw new ServerException(ServerErrorCode.DATABASE_ERROR);
             }
             sqlSession.commit();
         }

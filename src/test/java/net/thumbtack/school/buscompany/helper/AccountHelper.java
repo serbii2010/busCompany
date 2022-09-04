@@ -24,7 +24,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import javax.servlet.http.Cookie;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 

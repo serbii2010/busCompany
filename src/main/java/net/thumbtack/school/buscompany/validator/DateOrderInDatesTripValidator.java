@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 
 public class DateOrderInDatesTripValidator implements ConstraintValidator<DateOrderInDatesTrip, Object> {

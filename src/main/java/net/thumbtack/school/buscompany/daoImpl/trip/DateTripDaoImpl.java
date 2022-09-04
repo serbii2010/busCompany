@@ -37,7 +37,7 @@ public class DateTripDaoImpl  extends DaoImplBase implements Dao<DateTrip> {
     }
 
     @Override
-    public DateTrip insert(DateTrip date) {
+    public DateTrip insert(DateTrip date) throws ServerException {
         LOGGER.debug("DAO insert DateTrip {}", date);
         try (SqlSession sqlSession = getSession()) {
             try {
@@ -45,7 +45,7 @@ public class DateTripDaoImpl  extends DaoImplBase implements Dao<DateTrip> {
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't insert DateTrip {} {}", date, ex);
                 sqlSession.rollback();
-                throw ex;
+                throw new ServerException(ServerErrorCode.DATABASE_ERROR);
             }
             sqlSession.commit();
         }

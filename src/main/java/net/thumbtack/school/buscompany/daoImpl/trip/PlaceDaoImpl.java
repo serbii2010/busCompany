@@ -2,6 +2,7 @@ package net.thumbtack.school.buscompany.daoImpl.trip;
 
 import net.thumbtack.school.buscompany.dao.Dao;
 import net.thumbtack.school.buscompany.daoImpl.DaoImplBase;
+import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.DateTrip;
 import net.thumbtack.school.buscompany.model.Place;
@@ -20,7 +21,7 @@ public class PlaceDaoImpl extends DaoImplBase implements Dao<Place> {
         return null;
     }
 
-    public Place find(int number, DateTrip dateTrip) {
+    public Place find(int number, DateTrip dateTrip) throws ServerException {
         LOGGER.debug("DAO find Place ");
         try (SqlSession sqlSession = getSession()) {
             try {
@@ -28,7 +29,7 @@ public class PlaceDaoImpl extends DaoImplBase implements Dao<Place> {
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't find Place {}", ex);
                 sqlSession.rollback();
-                throw ex;
+                throw new ServerException(ServerErrorCode.DATABASE_ERROR);
             }
         }
     }
@@ -39,7 +40,7 @@ public class PlaceDaoImpl extends DaoImplBase implements Dao<Place> {
     }
 
     @Override
-    public Place insert(Place place) {
+    public Place insert(Place place) throws ServerException {
         LOGGER.debug("DAO insert Place {}", place);
         try (SqlSession sqlSession = getSession()) {
             try {
@@ -47,14 +48,14 @@ public class PlaceDaoImpl extends DaoImplBase implements Dao<Place> {
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't insert Place {} {}", place, ex);
                 sqlSession.rollback();
-                throw ex;
+                throw new ServerException(ServerErrorCode.DATABASE_ERROR);
             }
             sqlSession.commit();
         }
         return place;
     }
 
-    public Place insertFree(Place place) {
+    public Place insertFree(Place place) throws ServerException {
         LOGGER.debug("DAO insert Place {}", place);
         try (SqlSession sqlSession = getSession()) {
             try {
@@ -62,7 +63,7 @@ public class PlaceDaoImpl extends DaoImplBase implements Dao<Place> {
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't insert Place {} {}", place, ex);
                 sqlSession.rollback();
-                throw ex;
+                throw new ServerException(ServerErrorCode.DATABASE_ERROR);
             }
             sqlSession.commit();
         }
@@ -75,7 +76,7 @@ public class PlaceDaoImpl extends DaoImplBase implements Dao<Place> {
     }
 
     @Override
-    public void update(Place place) {
+    public void update(Place place) throws ServerException {
         LOGGER.debug("DAO update Place {}", place);
         try (SqlSession sqlSession = getSession()) {
             try {
@@ -84,7 +85,7 @@ public class PlaceDaoImpl extends DaoImplBase implements Dao<Place> {
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't update Place {} {}", place, ex);
                 sqlSession.rollback();
-                throw ex;
+                throw new ServerException(ServerErrorCode.DATABASE_ERROR);
             }
             sqlSession.commit();
         }

@@ -1,5 +1,7 @@
 package net.thumbtack.school.buscompany.daoImpl;
 
+import net.thumbtack.school.buscompany.exception.ServerErrorCode;
+import net.thumbtack.school.buscompany.exception.ServerException;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +11,7 @@ import org.springframework.stereotype.Repository;
 public class DebugDaoImpl extends DaoImplBase {
     private static final Logger LOGGER = LoggerFactory.getLogger(DebugDaoImpl.class);
 
-    public void clear() {
+    public void clear() throws ServerException {
         LOGGER.debug("DAO clear database");
         try (SqlSession sqlSession = getSession()) {
             try {
@@ -34,7 +36,7 @@ public class DebugDaoImpl extends DaoImplBase {
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't clear database");
                 sqlSession.rollback();
-                throw ex;
+                throw new ServerException(ServerErrorCode.DATABASE_ERROR);
             }
             sqlSession.commit();
         }

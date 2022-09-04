@@ -2,6 +2,7 @@ package net.thumbtack.school.buscompany.daoImpl.order;
 
 import net.thumbtack.school.buscompany.dao.Dao;
 import net.thumbtack.school.buscompany.daoImpl.DaoImplBase;
+import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.exception.ServerException;
 import net.thumbtack.school.buscompany.model.Order;
 import net.thumbtack.school.buscompany.model.Passenger;
@@ -23,17 +24,17 @@ public class OrderDaoImpl extends DaoImplBase implements Dao<Order> {
             return getOrderMapper(sqlSession).findById(id);
         } catch (RuntimeException ex) {
             LOGGER.info("Can't get Order by Id {} {}", id, ex);
-            throw ex;
+            throw new ServerException(ServerErrorCode.DATABASE_ERROR);
         }
     }
 
-    public List<Integer> getFreePlaces(Order order) {
+    public List<Integer> getFreePlaces(Order order) throws ServerException {
         LOGGER.debug("DAO get Order by Id {}", order);
         try (SqlSession sqlSession = getSession()) {
             return getOrderMapper(sqlSession).findFreePlaces(order);
         } catch (RuntimeException ex) {
             LOGGER.info("Can't get Order by Id {} {}", order, ex);
-            throw ex;
+            throw new ServerException(ServerErrorCode.DATABASE_ERROR);
         }
     }
 
@@ -43,12 +44,12 @@ public class OrderDaoImpl extends DaoImplBase implements Dao<Order> {
     }
 
     @Override
-    public Order insert(Order order) {
+    public Order insert(Order order) throws ServerException {
         LOGGER.debug("DAO insert Order {}", order);
         try (SqlSession sqlSession = getSession()) {
             try {
                 getOrderMapper(sqlSession).insert(order);
-                for (Passenger passenger: order.getPassengers()) {
+                for (Passenger passenger : order.getPassengers()) {
                     Passenger newPassenger = getPassengerMapper(sqlSession).find(passenger);
                     if (newPassenger == null) {
                         getPassengerMapper(sqlSession).insert(passenger);
@@ -59,7 +60,7 @@ public class OrderDaoImpl extends DaoImplBase implements Dao<Order> {
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't insert Order {} {}", order, ex);
                 sqlSession.rollback();
-                throw ex;
+                throw new ServerException(ServerErrorCode.DATABASE_ERROR);
             }
             sqlSession.commit();
         }
@@ -67,7 +68,7 @@ public class OrderDaoImpl extends DaoImplBase implements Dao<Order> {
     }
 
     @Override
-    public void remove(Order order) {
+    public void remove(Order order) throws ServerException {
         LOGGER.debug("DAO delete Order {}", order);
         try (SqlSession sqlSession = getSession()) {
             try {
@@ -76,7 +77,7 @@ public class OrderDaoImpl extends DaoImplBase implements Dao<Order> {
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't delete Order {}", ex);
                 sqlSession.rollback();
-                throw ex;
+                throw new ServerException(ServerErrorCode.DATABASE_ERROR);
             }
             sqlSession.commit();
         }
@@ -87,13 +88,14 @@ public class OrderDaoImpl extends DaoImplBase implements Dao<Order> {
 
     }
 
-    public List<Order> filter(String fromStation, String toStation, String busName, String fromDate, String toDate, String clientId) {
+    public List<Order> filter(String fromStation, String toStation, String busName, String fromDate, String toDate, String clientId)
+            throws ServerException {
         LOGGER.debug("DAO get Order list from filter");
         try (SqlSession sqlSession = getSession()) {
             return getOrderMapper(sqlSession).filter(fromStation, toStation, busName, fromDate, toDate, clientId);
         } catch (RuntimeException ex) {
             LOGGER.info("Can't get Order list from filter");
-            throw ex;
+            throw new ServerException(ServerErrorCode.DATABASE_ERROR);
         }
     }
 }

@@ -8,15 +8,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestCookieException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalErrorHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(GlobalErrorHandler.class);
 
@@ -65,6 +66,17 @@ public class GlobalErrorHandler {
             errorDtoResponse.setMessage(err.getDefaultMessage());
             error.getErrors().add(errorDtoResponse);
         });
+        return error;
+    }
+
+    // other errors
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    public MyError systemError(HttpServletRequest request, Exception e) {
+        MyError error = new MyError();
+        error.getErrors().add(new ErrorDtoResponse(ServerErrorCode.INTERNAL_ERROR.getErrorString(), null, null));
+        LOGGER.error(String.format("%s, %s", request, e));
         return error;
     }
 

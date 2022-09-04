@@ -132,16 +132,16 @@ public class TripService {
         return  dateTrip;
     }
 
-    public List<Trip> getListTripByAdmin(String fromStation, String toStation, String busName, String fromDate, String toDate) {
+    public List<Trip> getListTripByAdmin(String fromStation, String toStation, String busName, String fromDate, String toDate) throws ServerException {
         return tripDao.filter(fromStation, toStation, busName, fromDate, toDate, null);
     }
 
-    public List<Trip> getListTripByClient(String fromStation, String toStation, String busName, String fromDate, String toDate) {
+    public List<Trip> getListTripByClient(String fromStation, String toStation, String busName, String fromDate, String toDate) throws ServerException {
         return tripDao.filter(fromStation, toStation, busName, fromDate, toDate, true);
     }
 
 
-    public Trip insert(Trip trip) {
+    public Trip insert(Trip trip) throws ServerException {
         if (trip.getDates() == null) {
             List<DateTrip> dates = this.generateDates(trip);
             trip.setDates(dates);

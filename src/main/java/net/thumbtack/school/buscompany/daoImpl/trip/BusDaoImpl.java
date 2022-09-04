@@ -32,18 +32,18 @@ public class BusDaoImpl extends DaoImplBase implements Dao<Bus> {
     }
 
     @Override
-    public List<Bus> findAll() {
+    public List<Bus> findAll() throws ServerException {
         LOGGER.debug("DAO get Buses");
         try (SqlSession sqlSession = getSession()) {
             return getBusMapper(sqlSession).findAll();
         } catch (RuntimeException ex) {
             LOGGER.info("Can't get Buses {}", ex);
-            throw ex;
+            throw new ServerException(ServerErrorCode.DATABASE_ERROR);
         }
     }
 
     @Override
-    public Bus insert(Bus bus) {
+    public Bus insert(Bus bus) throws ServerException {
         LOGGER.debug("DAO insert Bus {}", bus);
         try (SqlSession sqlSession = getSession()) {
             try {
@@ -51,7 +51,7 @@ public class BusDaoImpl extends DaoImplBase implements Dao<Bus> {
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't insert Bus {} {}", bus, ex);
                 sqlSession.rollback();
-                throw ex;
+                throw new ServerException(ServerErrorCode.DATABASE_ERROR);
             }
             sqlSession.commit();
         }

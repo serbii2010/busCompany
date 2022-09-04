@@ -40,7 +40,8 @@ public class OrderService {
 
         return OrderMapper.INSTANCE.orderToDto(order);
     }
-    public List<OrderDtoResponse> filter(String javaSessionId, String fromStation, String toStation, String busName, String fromDate, String toDate, String clientId)  throws ServerException {
+
+    public List<OrderDtoResponse> filter(String javaSessionId, String fromStation, String toStation, String busName, String fromDate, String toDate, String clientId) throws ServerException {
         Account account = accountService.getAuthAccount(javaSessionId);
         List<Order> orderList = new ArrayList<>();
         if (accountService.isAdmin(account)) {
@@ -70,17 +71,18 @@ public class OrderService {
         return result;
     }
 
-    public void checkApproved(Order order) throws ServerException{
+    public void checkApproved(Order order) throws ServerException {
         if (!order.getDateTrip().getTrip().isApproved()) {
             throw new ServerException(ServerErrorCode.TRIP_NOT_FOUND);
         }
     }
 
-    public List<Order> getListOrder(String fromStation, String toStation, String busName, String fromDate, String toDate, String clientId) {
+    public List<Order> getListOrder(String fromStation, String toStation, String busName, String fromDate, String toDate, String clientId)
+            throws ServerException {
         return orderDao.filter(fromStation, toStation, busName, fromDate, toDate, clientId);
     }
 
-    public List<Integer> getFreePlaces(Order order) {
+    public List<Integer> getFreePlaces(Order order) throws ServerException {
         return orderDao.getFreePlaces(order);
     }
 

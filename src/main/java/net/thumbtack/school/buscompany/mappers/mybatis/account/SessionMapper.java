@@ -1,8 +1,8 @@
 package net.thumbtack.school.buscompany.mappers.mybatis.account;
 
 import net.thumbtack.school.buscompany.model.Session;
-import net.thumbtack.school.buscompany.model.account.Account;
 import net.thumbtack.school.buscompany.model.UserType;
+import net.thumbtack.school.buscompany.model.account.Account;
 import org.apache.ibatis.annotations.*;
 
 public interface SessionMapper {

@@ -37,7 +37,7 @@ public class StationDaoImpl extends DaoImplBase implements Dao<Station> {
     }
 
     @Override
-    public Station insert(Station station) {
+    public Station insert(Station station) throws ServerException {
         LOGGER.debug("DAO insert Station {}", station);
         try (SqlSession sqlSession = getSession()) {
             try {
@@ -45,7 +45,7 @@ public class StationDaoImpl extends DaoImplBase implements Dao<Station> {
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't insert Station {} {}", station, ex);
                 sqlSession.rollback();
-                throw ex;
+                throw new ServerException(ServerErrorCode.DATABASE_ERROR);
             }
             sqlSession.commit();
         }

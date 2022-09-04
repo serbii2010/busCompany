@@ -1,8 +1,8 @@
 package net.thumbtack.school.buscompany.mappers.mybatis.account;
 
+import net.thumbtack.school.buscompany.model.UserType;
 import net.thumbtack.school.buscompany.model.account.Account;
 import net.thumbtack.school.buscompany.model.account.Client;
-import net.thumbtack.school.buscompany.model.UserType;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

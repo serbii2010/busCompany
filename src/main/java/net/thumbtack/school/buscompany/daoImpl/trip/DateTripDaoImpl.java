@@ -53,8 +53,18 @@ public class DateTripDaoImpl  extends DaoImplBase implements Dao<DateTrip> {
     }
 
     @Override
-    public void remove(DateTrip object) {
-
+    public void remove(DateTrip dateTrip) throws ServerException {
+        LOGGER.debug("DAO delete Trip {}", dateTrip);
+        try (SqlSession sqlSession = getSession()) {
+            try {
+                getDateTripMapper(sqlSession).delete(dateTrip);
+            } catch (RuntimeException ex) {
+                LOGGER.info("Can't delete DateTrip {}", ex);
+                sqlSession.rollback();
+                throw new ServerException(ServerErrorCode.DATABASE_ERROR);
+            }
+            sqlSession.commit();
+        }
     }
 
     @Override

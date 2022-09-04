@@ -43,11 +43,7 @@ public class AccountService {
         Admin admin = AdminMapper.INSTANCE.registrationAdminDtoToAccount(request);
         admin.setUserType(UserType.ADMIN);
         admin.setPassword(convertToMd5(admin.getPassword()));
-        // REVU не будет трансакции
-        // если getSessionByLogin провалится, аккаунт так и останется
-        // либо делать все в одном методе dao
-        // либо подключить mybatis-spring
-        // и тогда можно будет использовать в сервисе @Transactional
+
         accountDao.insert(admin);
         LOGGER.debug("administrator registered");
         Session session = openSession(admin.getLogin());

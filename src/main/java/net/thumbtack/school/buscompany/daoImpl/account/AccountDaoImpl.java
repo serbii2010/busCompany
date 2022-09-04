@@ -75,13 +75,6 @@ public class AccountDaoImpl extends DaoImplBase implements Dao<Account> {
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't insert account {} {}", account, ex);
                 sqlSession.rollback();
-                // REVU лучше выбросить тут свой исключение ServerException с кодом DATABASE_EROOR
-                // тогда в GlobalErrorHandler для этого случая сработает обработчик ServerException
-                // а всякие неожиданные RuntimeException пусть идут в обработчик для Throwable
-                // которого у СВас, кстати, нет
-                // вот тут хороший список обработчиков
-                // http://rsdn.org/forum/java/8264492.1
-                throw new ServerException(ServerErrorCode.DATABASE_ERROR);
             }
             sqlSession.commit();
         }

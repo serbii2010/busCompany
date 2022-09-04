@@ -213,4 +213,11 @@ class TestTripService {
         ServerException error = assertThrows(ServerException.class, () -> tripService.addTrip(accountHelper.getCookie().getValue(), request));
         assertEquals(ServerErrorCode.ACTION_FORBIDDEN, error.getErrorCode());
     }
+
+    @Test
+    public void testGenerateDates_notEmptyResult() throws Exception {
+        Trip trip = tripHelper.getTrip();
+
+        assertNotEquals(0, (long) tripService.updateDates(trip).size());
+    }
 }

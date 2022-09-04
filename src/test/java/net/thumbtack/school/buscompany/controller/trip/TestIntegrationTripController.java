@@ -1,8 +1,10 @@
 package net.thumbtack.school.buscompany.controller.trip;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.thumbtack.school.buscompany.controller.GlobalErrorHandler;
 import net.thumbtack.school.buscompany.dto.request.trip.TripDtoRequest;
 import net.thumbtack.school.buscompany.dto.response.account.EmptyDtoResponse;
+import net.thumbtack.school.buscompany.dto.response.account.ErrorDtoResponse;
 import net.thumbtack.school.buscompany.dto.response.trip.TripAdminDtoResponse;
 import net.thumbtack.school.buscompany.dto.response.trip.TripClientDtoResponse;
 import net.thumbtack.school.buscompany.helper.AccountHelper;
@@ -59,7 +61,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void addTrip_withDates() throws Exception {
+    public void addTrip_withDates() throws Exception {
         TripDtoRequest request = TripDtoRequestHelper.getWithDates();
         TripAdminDtoResponse response = TripDtoResponseHelper.getDtoInsertWithDates();
 
@@ -74,7 +76,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void addTrip_withScheduleWeek() throws Exception {
+    public void addTrip_withScheduleWeek() throws Exception {
         TripDtoRequest request = TripDtoRequestHelper.getWithScheduleWeek();
         TripAdminDtoResponse response = TripDtoResponseHelper.getDtoInsertWithScheduleWeek();
 
@@ -89,7 +91,108 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void addTrip_withScheduleOdd() throws Exception {
+    public void addTrip_ToDate30_02() throws Exception {
+        TripDtoRequest request = TripDtoRequestHelper.getWithScheduleWeek();
+        request.getSchedule().setToDate("2023-02-30");
+
+        GlobalErrorHandler.MyError error = new GlobalErrorHandler.MyError();
+        error.getErrors().add(new ErrorDtoResponse("DateFormat", "schedule.toDate", "Bad date format. Set date in format 'yyyy-MM-dd'"));
+
+        mvc.perform(post("/api/trips")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(request))
+                .cookie(cookieAdmin))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json(mapper.writeValueAsString(error)))
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
+    }
+
+    @Test
+    public void addTrip_ToDate29_02() throws Exception {
+        TripDtoRequest request = TripDtoRequestHelper.getWithScheduleWeek();
+        request.getSchedule().setToDate("2023-02-29");
+
+        GlobalErrorHandler.MyError error = new GlobalErrorHandler.MyError();
+        error.getErrors().add(new ErrorDtoResponse("DateFormat", "schedule.toDate", "Bad date format. Set date in format 'yyyy-MM-dd'"));
+
+        mvc.perform(post("/api/trips")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(request))
+                .cookie(cookieAdmin))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json(mapper.writeValueAsString(error)))
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
+    }
+
+    @Test
+    public void addTrip_ToDate2024_29_02() throws Exception {
+        TripDtoRequest request = TripDtoRequestHelper.getWithScheduleWeek();
+        request.getSchedule().setToDate("2024-02-29");
+
+        mvc.perform(post("/api/trips")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(request))
+                .cookie(cookieAdmin))
+                .andExpect(status().isOk())
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
+    }
+
+
+    @Test
+    public void addTrip_FromDate30_02() throws Exception {
+        TripDtoRequest request = TripDtoRequestHelper.getWithScheduleWeek();
+        request.getSchedule().setFromDate("2023-02-30");
+
+        GlobalErrorHandler.MyError error = new GlobalErrorHandler.MyError();
+        error.getErrors().add(new ErrorDtoResponse("DateFormat", "schedule.fromDate", "Bad date format. Set date in format 'yyyy-MM-dd'"));
+
+        mvc.perform(post("/api/trips")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(request))
+                .cookie(cookieAdmin))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json(mapper.writeValueAsString(error)))
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
+    }
+
+    @Test
+    public void addTrip_FromDate29_02() throws Exception {
+        TripDtoRequest request = TripDtoRequestHelper.getWithScheduleWeek();
+        request.getSchedule().setFromDate("2023-02-29");
+
+        GlobalErrorHandler.MyError error = new GlobalErrorHandler.MyError();
+        error.getErrors().add(new ErrorDtoResponse("DateFormat", "schedule.fromDate", "Bad date format. Set date in format 'yyyy-MM-dd'"));
+
+        mvc.perform(post("/api/trips")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(request))
+                .cookie(cookieAdmin))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json(mapper.writeValueAsString(error)))
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
+    }
+
+    @Test
+    public void addTrip_FromDate2024_29_02() throws Exception {
+        TripDtoRequest request = TripDtoRequestHelper.getWithScheduleWeek();
+        request.getSchedule().setFromDate("2024-02-29");
+
+        mvc.perform(post("/api/trips")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(request))
+                .cookie(cookieAdmin))
+                .andExpect(status().isOk())
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
+    }
+
+    @Test
+    public void addTrip_withScheduleOdd() throws Exception {
         TripDtoRequest request = TripDtoRequestHelper.getWithScheduleOdd();
         TripAdminDtoResponse response = TripDtoResponseHelper.getDtoInsertWithScheduleOdd();
 
@@ -104,7 +207,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void addTrip_withScheduleDaily() throws Exception {
+    public void addTrip_withScheduleDaily() throws Exception {
         TripDtoRequest request = TripDtoRequestHelper.getWithScheduleDaily();
         TripAdminDtoResponse response = TripDtoResponseHelper.getDtoInsertWithScheduleDaily();
 
@@ -119,7 +222,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void addTrip_withScheduleEven() throws Exception {
+    public void addTrip_withScheduleEven() throws Exception {
         TripDtoRequest request = TripDtoRequestHelper.getWithScheduleEven();
         TripAdminDtoResponse response = TripDtoResponseHelper.getDtoInsertWithScheduleEven();
 
@@ -134,7 +237,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void addTrip_withScheduleMonth() throws Exception {
+    public void addTrip_withScheduleMonth() throws Exception {
         TripDtoRequest request = TripDtoRequestHelper.getWithScheduleDayInMonth();
         TripAdminDtoResponse response = TripDtoResponseHelper.getDtoInsertWithScheduleDayInMonth();
 
@@ -149,7 +252,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void update_scheduleWeekToScheduleEven() throws Exception {
+    public void update_scheduleWeekToScheduleEven() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
         int tripId = TripHelper.insertTrip(requestInsert, cookieAdmin, mvc, mapper);
 
@@ -167,7 +270,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void approveTrip() throws Exception {
+    public void approveTrip() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
         int tripId = TripHelper.insertTrip(requestInsert, cookieAdmin, mvc, mapper);
         TripAdminDtoResponse response = TripDtoResponseHelper.getDtoUpdateApproveWithWeek();
@@ -182,7 +285,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void deleteTrip() throws Exception {
+    public void deleteTrip() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
         int tripId = TripHelper.insertTrip(requestInsert, cookieAdmin, mvc, mapper);
         EmptyDtoResponse response = EmptyResponseHelper.get();
@@ -198,7 +301,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void getTrip() throws Exception {
+    public void getTrip() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
         int tripId = TripHelper.insertTrip(requestInsert, cookieAdmin, mvc, mapper);
         TripAdminDtoResponse response = TripDtoResponseHelper.getDtoInsertWithScheduleWeek();
@@ -213,7 +316,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void getTrips_allByAdmin() throws Exception {
+    public void getTrips_allByAdmin() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
         int tripId1 = TripHelper.insertTrip(requestInsert, cookieAdmin, mvc, mapper);
         requestInsert = TripDtoRequestHelper.getWithScheduleEven();
@@ -235,7 +338,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void getTrips_allEmptyByClient() throws Exception {
+    public void getTrips_allEmptyByClient() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
         int tripId1 = TripHelper.insertTrip(requestInsert, cookieAdmin, mvc, mapper);
         requestInsert = TripDtoRequestHelper.getWithScheduleEven();
@@ -253,7 +356,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void getTrips_allByClient() throws Exception {
+    public void getTrips_allByClient() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
         int tripId1 = TripHelper.insertTrip(requestInsert, cookieAdmin, mvc, mapper);
         TripHelper.approveTrip(tripId1, cookieAdmin, mvc);
@@ -277,7 +380,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void getTrips_fromStation() throws Exception {
+    public void getTrips_fromStation() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
         int tripId1 = TripHelper.insertTrip(requestInsert, cookieAdmin, mvc, mapper);
         requestInsert = TripDtoRequestHelper.getWithScheduleEven();
@@ -300,7 +403,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void getTrips_fromStationNotFound() throws Exception {
+    public void getTrips_fromStationNotFound() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
         TripHelper.insertTrip(requestInsert, cookieAdmin, mvc, mapper);
         requestInsert = TripDtoRequestHelper.getWithScheduleEven();
@@ -319,7 +422,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void getTrips_toStation() throws Exception {
+    public void getTrips_toStation() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
         int tripId1 = TripHelper.insertTrip(requestInsert, cookieAdmin, mvc, mapper);
         requestInsert = TripDtoRequestHelper.getWithScheduleEven();
@@ -342,7 +445,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void getTrips_toStationNotFound() throws Exception {
+    public void getTrips_toStationNotFound() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
         int tripId1 = TripHelper.insertTrip(requestInsert, cookieAdmin, mvc, mapper);
         requestInsert = TripDtoRequestHelper.getWithScheduleEven();
@@ -361,7 +464,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void getTrips_busName() throws Exception {
+    public void getTrips_busName() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
         int tripId1 = TripHelper.insertTrip(requestInsert, cookieAdmin, mvc, mapper);
         requestInsert = TripDtoRequestHelper.getWithScheduleEven();
@@ -384,7 +487,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void getTrips_busNameNotFound() throws Exception {
+    public void getTrips_busNameNotFound() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
         int tripId1 = TripHelper.insertTrip(requestInsert, cookieAdmin, mvc, mapper);
         requestInsert = TripDtoRequestHelper.getWithScheduleEven();
@@ -403,7 +506,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void getTrips_fromDate() throws Exception {
+    public void getTrips_fromDate() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
         int tripId1 = TripHelper.insertTrip(requestInsert, cookieAdmin, mvc, mapper);
         requestInsert = TripDtoRequestHelper.getWithScheduleEven();
@@ -426,7 +529,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void getTrips_fromDateFound() throws Exception {
+    public void getTrips_fromDateFound() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
         int tripId1 = TripHelper.insertTrip(requestInsert, cookieAdmin, mvc, mapper);
         requestInsert = TripDtoRequestHelper.getWithScheduleEven();
@@ -445,7 +548,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void getTrips_toDate() throws Exception {
+    public void getTrips_toDate() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
         int tripId1 = TripHelper.insertTrip(requestInsert, cookieAdmin, mvc, mapper);
         requestInsert = TripDtoRequestHelper.getWithScheduleEven();
@@ -468,7 +571,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void getTrips_toDateFound() throws Exception {
+    public void getTrips_toDateFound() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
         int tripId1 = TripHelper.insertTrip(requestInsert, cookieAdmin, mvc, mapper);
         requestInsert = TripDtoRequestHelper.getWithScheduleEven();
@@ -487,7 +590,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void getTrips_fromToDate() throws Exception {
+    public void getTrips_fromToDate() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
         int tripId1 = TripHelper.insertTrip(requestInsert, cookieAdmin, mvc, mapper);
         requestInsert = TripDtoRequestHelper.getWithScheduleEven();
@@ -511,7 +614,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void getTrips_allFilter() throws Exception {
+    public void getTrips_allFilter() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
         int tripId1 = TripHelper.insertTrip(requestInsert, cookieAdmin, mvc, mapper);
         requestInsert = TripDtoRequestHelper.getWithScheduleEven();
@@ -538,7 +641,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void getTrips_allFilterFromStationNotFound() throws Exception {
+    public void getTrips_allFilterFromStationNotFound() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
         TripHelper.insertTrip(requestInsert, cookieAdmin, mvc, mapper);
         requestInsert = TripDtoRequestHelper.getWithScheduleEven();
@@ -561,7 +664,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void getTrips_allFilterToStationNotFound() throws Exception {
+    public void getTrips_allFilterToStationNotFound() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
         TripHelper.insertTrip(requestInsert, cookieAdmin, mvc, mapper);
         requestInsert = TripDtoRequestHelper.getWithScheduleEven();
@@ -584,7 +687,7 @@ class TestIntegrationTripController {
     }
 
     @Test
-    void getTrips_allFilterBusNotFound() throws Exception {
+    public void getTrips_allFilterBusNotFound() throws Exception {
         TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
         TripHelper.insertTrip(requestInsert, cookieAdmin, mvc, mapper);
         requestInsert = TripDtoRequestHelper.getWithScheduleEven();

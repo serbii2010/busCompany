@@ -64,7 +64,7 @@ public interface TripMapper {
     @Mapping(target = "bus", expression = "java(busService.findByName(request.getBusName()))")
     @Mapping(target = "fromStation", expression = "java(stationService.findStationByName(request.getFromStation()))")
     @Mapping(target = "toStation", expression = "java(stationService.findStationByName(request.getToStation()))")
-    @Mapping(target = "dates", expression = "java(tripService.updateDates(trip))")
+    @Mapping(target = "dates", expression = "java(tripService.updateDates(trip, request.getDates()))")
     @Mapping(target = "duration", expression = "java(Integer.parseInt(request.getDuration().split(\":\")[0])*60 + Integer.parseInt(request.getDuration().split(\":\")[1]) )")
     void update(@MappingTarget Trip trip, TripDtoRequest request,
                 @Context StationService stationService,

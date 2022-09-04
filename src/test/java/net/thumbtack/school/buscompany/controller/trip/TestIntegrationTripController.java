@@ -14,6 +14,8 @@ import net.thumbtack.school.buscompany.helper.TripHelper;
 import net.thumbtack.school.buscompany.helper.dto.request.trip.TripDtoRequestHelper;
 import net.thumbtack.school.buscompany.helper.dto.response.EmptyResponseHelper;
 import net.thumbtack.school.buscompany.helper.dto.response.trip.TripDtoResponseHelper;
+import net.thumbtack.school.buscompany.model.DateTrip;
+import net.thumbtack.school.buscompany.model.Trip;
 import net.thumbtack.school.buscompany.service.DebugService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -72,6 +74,25 @@ class TestIntegrationTripController {
                 .cookie(cookieAdmin))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(response)))
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
+    }
+
+    @Test
+    public void addTrip_withDuplicatedDates() throws Exception {
+        TripDtoRequest request = TripDtoRequestHelper.getWithDates();
+        List<String> dates = new ArrayList<>(Arrays.asList("2022-12-22", "2022-12-23", "2022-12-22"));
+        request.setDates(dates);
+
+        GlobalErrorHandler.MyError error = new GlobalErrorHandler.MyError();
+        error.getErrors().add(new ErrorDtoResponse("DATES_TRIP_DUPLICATED", null, "DATES_TRIP_DUPLICATED"));
+
+        mvc.perform(post("/api/trips")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(request))
+                .cookie(cookieAdmin))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json(mapper.writeValueAsString(error)))
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 
@@ -258,6 +279,24 @@ class TestIntegrationTripController {
 
         TripDtoRequest request = TripDtoRequestHelper.getUpdateToScheduleEven();
         TripAdminDtoResponse response = TripDtoResponseHelper.getDtoUpdateWithEven();
+
+        mvc.perform(put("/api/trips/" + tripId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(request))
+                .cookie(cookieAdmin))
+                .andExpect(status().isOk())
+                .andExpect(content().json(mapper.writeValueAsString(response)))
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
+    }
+
+    @Test
+    public void update_scheduleWeekToDates() throws Exception {
+        TripDtoRequest requestInsert = TripDtoRequestHelper.getWithScheduleWeek();
+        int tripId = TripHelper.insertTrip(requestInsert, cookieAdmin, mvc, mapper);
+
+        TripDtoRequest request = TripDtoRequestHelper.getWithDates();
+        TripAdminDtoResponse response = TripDtoResponseHelper.getDtoInsertWithDates();
 
         mvc.perform(put("/api/trips/" + tripId)
                 .contentType(MediaType.APPLICATION_JSON)

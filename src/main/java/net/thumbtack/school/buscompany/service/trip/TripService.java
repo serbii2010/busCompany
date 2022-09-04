@@ -20,10 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.TextStyle;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -62,11 +60,15 @@ public class TripService {
 
     public TripAdminDtoResponse update(String javaSessionId, String id, TripDtoRequest tripDtoRequest) throws ServerException {
         accountService.checkAdmin(accountService.getAuthAccount(javaSessionId));
-
+        if (tripDtoRequest.getDates() != null) {
+            checkDuplicates(tripDtoRequest.getDates());
+        }
         Trip trip = findById(id);
         checkNotApproved(trip);
         TripMapper.INSTANCE.update(trip, tripDtoRequest, stationService, busService, this);
-        trip.getSchedule().setTrip(trip);
+        if (trip.getSchedule() != null) {
+            trip.getSchedule().setTrip(trip);
+        }
         tripDao.update(trip);
         return TripMapper.INSTANCE.tripAdminToDtoResponse(trip);
     }
@@ -145,6 +147,8 @@ public class TripService {
         if (trip.getDates() == null) {
             List<DateTrip> dates = this.generateDates(trip);
             trip.setDates(dates);
+        } else {
+            checkDuplicates(trip.getDates().stream().map(dateTrip -> dateTrip.getDate().toString()).collect(Collectors.toList()));
         }
         tripDao.insert(trip);
         if (trip.getSchedule() != null) {
@@ -154,15 +158,19 @@ public class TripService {
         return trip;
     }
 
-    public List<DateTrip> updateDates(Trip trip) throws ServerException {
+    public List<DateTrip> updateDates(Trip trip, List<String> datesNew) throws ServerException {
         for (DateTrip dateTrip: trip.getDates()) {
             dateTripDao.remove(dateTrip);
         }
+        if (datesNew != null) {
+            checkDuplicates(datesNew);
+            return datesNew.stream().map(date -> new DateTrip(trip, LocalDate.parse(date))).collect(Collectors.toList());
+        }
+
         return this.generateDates(trip);
     }
 
     private List<DateTrip> generateDates(Trip trip) {
-        // REVU есть ли проверка на дубликаты во входных данных
         List<DateTrip> dates = new ArrayList<>();
 
         LocalDate dateStart = trip.getSchedule().getFromDate();
@@ -195,5 +203,12 @@ public class TripService {
             }
         }
         return dates;
+    }
+
+    private void checkDuplicates(List<String> dates) throws ServerException {
+        Set<String> setDates = new HashSet<>(dates);
+        if (dates.size() > setDates.size()) {
+            throw new ServerException(ServerErrorCode.DATES_TRIP_DUPLICATED);
+        }
     }
 }

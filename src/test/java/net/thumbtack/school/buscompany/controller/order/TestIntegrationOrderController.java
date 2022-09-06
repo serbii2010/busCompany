@@ -1,12 +1,15 @@
 package net.thumbtack.school.buscompany.controller.order;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.thumbtack.school.buscompany.controller.GlobalErrorHandler;
 import net.thumbtack.school.buscompany.dto.request.order.OrderDtoRequest;
 import net.thumbtack.school.buscompany.dto.response.account.EmptyDtoResponse;
 import net.thumbtack.school.buscompany.dto.response.order.OrderDtoResponse;
+import net.thumbtack.school.buscompany.exception.ServerErrorCode;
 import net.thumbtack.school.buscompany.helper.*;
 import net.thumbtack.school.buscompany.helper.dto.request.order.OrderDtoRequestHelper;
 import net.thumbtack.school.buscompany.helper.dto.response.EmptyResponseHelper;
+import net.thumbtack.school.buscompany.helper.dto.response.ErrorDtoResponseHelper;
 import net.thumbtack.school.buscompany.helper.dto.response.order.OrderDtoResponseHelper;
 import net.thumbtack.school.buscompany.service.DebugService;
 import org.junit.jupiter.api.BeforeEach;
@@ -69,6 +72,30 @@ class TestIntegrationOrderController {
                 .cookie(cookieClient))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(response)))
+                .andExpect(cookie().doesNotExist("JAVASESSIONID"));
+    }
+
+    @Test
+    public void createOrder_freePlacesNotFount() throws Exception {
+        for (int i=0; i<20; i++) {
+            OrderDtoRequest request1 = OrderDtoRequestHelper.getDtoInsert();
+            mvc.perform(post("/api/orders")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .content(mapper.writeValueAsString(request1))
+                    .cookie(cookieClient));
+        }
+
+        OrderDtoRequest request = OrderDtoRequestHelper.getDtoInsert();
+        GlobalErrorHandler.MyError error = ErrorDtoResponseHelper.getDtoResponseError(ServerErrorCode.FREE_PLACE_NOT_FOUND);
+
+        mvc.perform(post("/api/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(request))
+                .cookie(cookieClient))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json(mapper.writeValueAsString(error)))
                 .andExpect(cookie().doesNotExist("JAVASESSIONID"));
     }
 

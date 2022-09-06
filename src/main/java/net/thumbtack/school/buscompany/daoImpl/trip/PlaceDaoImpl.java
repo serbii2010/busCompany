@@ -81,7 +81,10 @@ public class PlaceDaoImpl extends DaoImplBase implements Dao<Place> {
         try (SqlSession sqlSession = getSession()) {
             try {
                 getPlaceMapper(sqlSession).setFreePlace(place);
-                getPlaceMapper(sqlSession).update(place);
+                if (getPlaceMapper(sqlSession).update(place) == 0) {
+                    sqlSession.rollback();
+                    throw new ServerException(ServerErrorCode.PLACE_TAKEN);
+                }
             } catch (RuntimeException ex) {
                 LOGGER.info("Can't update Place {} {}", place, ex);
                 sqlSession.rollback();
@@ -90,6 +93,4 @@ public class PlaceDaoImpl extends DaoImplBase implements Dao<Place> {
             sqlSession.commit();
         }
     }
-
-
 }

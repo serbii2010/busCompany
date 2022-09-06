@@ -14,10 +14,11 @@ public class DateTrip {
     private int id;
     private Trip trip;
     private LocalDate date;
+    private int freePlaces;
 
     List<Place> places;
 
     public DateTrip(Trip trip, LocalDate date) {
-        this(0, trip, date, null);
+        this(0, trip, date, trip.getBus().getPlaceCount(), null);
     }
 }

@@ -28,6 +28,6 @@ public class DateTripHelper {
 
     public DateTrip getDateTrip(Trip trip) {
         init();
-        return new DateTrip(1, trip, getDate(), null);
+        return new DateTrip(1, trip, getDate(), trip.getBus().getPlaceCount() , null);
     }
 }

@@ -48,7 +48,9 @@ public class OrderDaoImpl extends DaoImplBase implements Dao<Order> {
         LOGGER.debug("DAO insert Order {}", order);
         try (SqlSession sqlSession = getSession()) {
             try {
-                getOrderMapper(sqlSession).insert(order);
+                if (getOrderMapper(sqlSession).insert(order) == 0) {
+                    throw new ServerException(ServerErrorCode.FREE_PLACE_NOT_FOUND);
+                }
                 for (Passenger passenger : order.getPassengers()) {
                     Passenger newPassenger = getPassengerMapper(sqlSession).find(passenger);
                     if (newPassenger == null) {

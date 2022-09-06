@@ -28,8 +28,8 @@ public interface PlaceMapper {
 
     @Update("UPDATE place SET " +
             "passenger_id=#{passenger.id} " +
-            "WHERE number=#{number} AND date_trip_id=#{dateTrip.id}")
-    void update(Place place);
+            "WHERE number=#{number} AND date_trip_id=#{dateTrip.id} AND passenger_id IS NULL")
+    Integer update(Place place);
 
     @Update("UPDATE place SET " +
             "passenger_id=NULL " +

@@ -1,6 +1,7 @@
 package net.thumbtack.school.buscompany.service.order;
 
 import net.thumbtack.school.buscompany.daoImpl.order.OrderDaoImpl;
+import net.thumbtack.school.buscompany.daoImpl.trip.DateTripDaoImpl;
 import net.thumbtack.school.buscompany.dto.request.order.OrderDtoRequest;
 import net.thumbtack.school.buscompany.dto.response.account.EmptyDtoResponse;
 import net.thumbtack.school.buscompany.dto.response.order.OrderDtoResponse;
@@ -28,6 +29,8 @@ public class OrderService {
     private TripService tripService;
     @Autowired
     private OrderDaoImpl orderDao;
+    @Autowired
+    private DateTripDaoImpl dateTripDao;
 
     public OrderDtoResponse createOrder(OrderDtoRequest request, String javaSessionId) throws ServerException {
         Account account = accountService.getAuthAccount(javaSessionId);
@@ -36,6 +39,7 @@ public class OrderService {
 
         Order order = OrderMapper.INSTANCE.dtoToOrder(request, tripService, client);
         checkApproved(order);
+        dateTripDao.update(order.getDateTrip(), order.getPassengers().size());
         orderDao.insert(order);
 
         return OrderMapper.INSTANCE.orderToDto(order);

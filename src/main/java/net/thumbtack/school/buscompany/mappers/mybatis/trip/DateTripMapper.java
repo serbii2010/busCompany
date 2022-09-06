@@ -9,10 +9,13 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 public interface DateTripMapper {
-    @Insert("INSERT INTO date_trip (trip_id, date) " +
-            "VALUES (#{trip.id}, #{date})")
+    @Insert("INSERT INTO date_trip (trip_id, date, free_places) " +
+            "VALUES (#{trip.id}, #{date}, #{freePlaces})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     Integer insert(DateTrip date);
+
+    @Update("UPDATE date_trip SET free_places=free_places - #{placeCount} WHERE free_places >= #{placeCount} AND id = #{dateTrip.id}")
+    Integer update(@Param("dateTrip") DateTrip dateTrip, @Param("placeCount") int placeCount);
 
     @Delete("DELETE FROM date_trip WHERE id=#{id}")
     void delete(DateTrip dateTrip);

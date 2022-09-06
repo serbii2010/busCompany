@@ -68,7 +68,23 @@ public class DateTripDaoImpl  extends DaoImplBase implements Dao<DateTrip> {
     }
 
     @Override
-    public void update(DateTrip object) {
+    public void update(DateTrip dateTrip) {
 
+    }
+
+    public void update(DateTrip dateTrip, int countPlace) throws ServerException {
+        LOGGER.debug("DAO update Account {}", dateTrip);
+        try (SqlSession sqlSession = getSession()) {
+            try {
+                if (getDateTripMapper(sqlSession).update(dateTrip, countPlace) == 0) {
+                    throw new ServerException(ServerErrorCode.FREE_PLACE_NOT_FOUND);
+                }
+            } catch (RuntimeException ex) {
+                LOGGER.info("Can't update account {} {}", dateTrip, ex);
+                sqlSession.rollback();
+                throw new ServerException(ServerErrorCode.DATABASE_ERROR);
+            }
+            sqlSession.commit();
+        }
     }
 }

@@ -119,6 +119,7 @@ CREATE TABLE date_trip
     id      INT(11) NOT NULL AUTO_INCREMENT,
     trip_id INT(11) NULL DEFAULT NULL,
     date    DATE    NOT NULL,
+    free_places INT(3) NOT NULL DEFAULT 0,
     PRIMARY KEY (id),
     INDEX (trip_id),
     INDEX (date),
